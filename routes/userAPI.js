@@ -1084,10 +1084,7 @@ router.post("/login", async (req, res) => {
           if (check.password != null) {
             if (isMatch) {
               var role = check.role;
-              console.log(
-                `✅  Đăng nhập thành công | vai trò của bạn là: ${role} =========`
-                  .green.bold
-              );
+              console.log(`✅  Đăng nhập thành công`.green.bold);
               req.session.email = check.email;
               req.session._id = check._id;
               req.session.loggedin = true;
@@ -1095,7 +1092,6 @@ router.post("/login", async (req, res) => {
 
               const { _id, loggedin } = req.session;
               const getName = check.name;
-              const getpassword = isMatch;
               const getEmail = check.email;
               const getRole = check.role;
               const getAddress = check.address;
@@ -1110,7 +1106,6 @@ router.post("/login", async (req, res) => {
                 loggedin: loggedin,
                 name: getName,
                 email: getEmail,
-                password: getpassword,
                 role: getRole,
                 address: getAddress,
                 phone: getPhone,
@@ -1124,20 +1119,10 @@ router.post("/login", async (req, res) => {
               console.log(`Sai mật khẩu`.bgRed.white.strikethrough.bold);
             }
           }
-          //   else {
-          //     console.log(
-          //       "Ô nhập mật khẩu đang trống".bgRed.white.strikethrough.bold
-          //     );
-          //   }
         }
-        //  else {
-        //   res.send("Sai email");
-        //   console.log("Sai email".bgRed.white.strikethrough.bold);
-        //   // console.log(req.body);
-        // }
       });
   } catch (err) {
-    res.send("Sai email");
+    res.status(500).send("Sai email");
     console.log("Sai email".bgRed.white.strikethrough.bold);
   }
 });
@@ -1243,38 +1228,40 @@ router.put("/update/:id", upload.single("image"), async (req, res) => {
   }
 });
 //  TODO: Đổi mật khẩu
+// * Nhập mật khẩu cũ để xác thực, nếu đúng sẽ cho đặt mật khẩu mới
 router.put("/change-password/:id", async (req, res) => {
   try {
     const { id } = req.params;
-  let user = await userModels.findById(id);
+    let check = await userModels.findById(id);
+    // const check = await userModels.findOne({
+    //   id,
+    // });
+    //* Mã hoá mật khẩu
+    const oldPass = req.body.oldpassword;
+    const newPass = req.body.password;
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPass, salt);
+    // * Kiểm tra mật khẩu có chính xác hay không
+    const isMatch = await bcrypt.compare(oldPass, check.password);
 
-  //* Mã hoá mật khẩu
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(req.body.password, salt);
-
-  const data = {
-    password: hashedPassword
-  }
-  await userModels
-        .findByIdAndUpdate(id, data)
-        .then((doc) => {
-          res.json({
-            status: "Đổi mật khẩu thành công",
-          });
-          console.log(
-            `✅  Đổi mật khẩu thành công`.green.bold
-          );
-        })
-        .catch((err) => {
-          res.json({
-            status: "Đổi mật khẩu thất bại",
-          });
-          console.log(`❗  ${err}`.bgRed.white.strikethrough.bold);
+    if (isMatch) {
+      const data = {
+        password: hashedPassword,
+      };
+      await userModels.findByIdAndUpdate(id, data).then((doc) => {
+        res.status(200).json({
+          status: "Đổi mật khẩu thành công",
         });
-
+        console.log(`✅  Đổi mật khẩu thành công`.green.bold);
+      });
+    } else {
+      res.json({
+        status: "Mật khẩu cũ của bạn không đúng!",
+      });
+    }
   } catch (error) {
-    res.json({
-      status: "Đổi mật khẩu thất bại",
+    res.status(500).json({
+      status: "Mật khẩu cũ của bạn không đúng, vui lòng nhập lại",
     });
     console.log(`❗  ${error}`.bgRed.white.strikethrough.bold);
   }
@@ -1314,5 +1301,35 @@ router.get("/logout/:id", (req, res) => {
   res.send("Đăng xuất thành công");
   console.log(`✅  Đăng xuất thành công`.green.bold);
 });
+// TODO: Quên mật khẩu
+// TODO: Verify Email
+// TODO: Đặt lại mật khẩu
+//  TODO: Đổi mật khẩu
+// * Nhập mật khẩu cũ để xác thực, nếu đúng sẽ cho đặt mật khẩu mới
+router.put("/reset-password", async (req, res) => {
+  try {
+    const { email } = req.session.emailVerify;
+    console.log("🚀 ~ file: userAPI.js:1340 ~ router.put ~ email:", email);
 
+    //* Mã hoá mật khẩu
+    const newPass = req.body.password;
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPass, salt);
+    // * Kiểm tra mật khẩu có chính xác hay không
+    const data = {
+      password: hashedPassword,
+    };
+    await userModels.findByIdAndUpdate(email, data).then((doc) => {
+      res.status(200).json({
+        status: "Đổi mật khẩu thành công",
+      });
+      console.log(`✅  Đổi mật khẩu thành công`.green.bold);
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "Mật khẩu cũ của bạn không đúng, vui lòng nhập lại",
+    });
+    console.log(`❗  ${error}`.bgRed.white.strikethrough.bold);
+  }
+});
 module.exports = router;

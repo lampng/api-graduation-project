@@ -35,8 +35,7 @@ const userSchema = mongoose.Schema({
     cloudinary_id: {
         type: String,
         require: false
-    }
-    ,
+    },
     active: {
         type: String,
         default: false

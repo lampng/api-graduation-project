@@ -12,9 +12,10 @@ const clientSchema = mongoose.Schema({
         type: String,
         require: false
     },
-    creator:{
-        type: String,
-        require: false
+    creatorID:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'user',
+        require: true
     },
     datejoin: {
         type: Date,
