@@ -40,7 +40,7 @@ route(app)
 app.get("/", (req, res) => {
     res.json({
         status: "API ON",
-        "User:": `http://localhost:${port}/user/`,
+        "User:": `https://api-graduation-project.vercel.app/user/`,
         "Client:": `Đăng phát triển`,
     })
 })
