@@ -41,6 +41,7 @@ app.get("/", (req, res) => {
     res.json({
         status: "API ON",
         "User:": `http://localhost:${port}/user/`,
+        "Client:": `Đăng phát triển`,
     })
 })
 const APIroute = require('./routes/userAPI');
