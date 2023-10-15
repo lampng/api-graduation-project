@@ -1154,7 +1154,7 @@ router.get("/list", async (req, res) => {
     });
   }
 });
-// TODO: Gọi chi tiết người dùng
+// TODO: Gọi chi tiết người dùng ([:id] = id của người dùng)
 router.get("/detail/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -1171,7 +1171,7 @@ router.get("/detail/:id", async (req, res) => {
     );
   }
 });
-// TODO: Chỉnh sửa thông tin người dùng khi chưa kích hoạt tài khoản
+//  TODO: Chỉnh sửa thông tin người dùng khi chưa kích hoạt tài khoản
 router.put("/update/:id", upload.single("image"), async (req, res) => {
   try {
     const { id } = req.params;
@@ -1240,7 +1240,7 @@ router.put("/update/:id", upload.single("image"), async (req, res) => {
     console.log(`❗  Cập nhập thất bại`.bgRed.white.strikethrough.bold);
   }
 });
-// TODO: Xoá người dùng
+// TODO: Xoá người dùng ([:id] = id của người dùng)
 router.delete("/delete/:id", async (req, res) => {
   try {
     const { id } = req.params;

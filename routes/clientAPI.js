@@ -16,7 +16,7 @@ var port = process.env.PORT || 1102;
 
 router.get("/", (req, res) => {
     res.json({
-      status: "Đăng phát triển",
+      status: "Đang phát triển",
     });
   });
 
