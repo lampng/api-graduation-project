@@ -41,7 +41,7 @@ app.get("/", (req, res) => {
     res.json({
         status: "API ON",
         "User:": `https://api-graduation-project.vercel.app/user/`,
-        "Client:": `Đăng phát triển`,
+        "Client:": `https://api-graduation-project.vercel.app/client/`,
     })
 })
 const APIroute = require('./routes/userAPI');
