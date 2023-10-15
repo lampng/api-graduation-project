@@ -27,7 +27,8 @@ router.get("/", (req, res) => {
     "Đăng ký(POST):": `https://api-graduation-project.vercel.app/user/register`,
     "Đăng nhập(POST):": `https://api-graduation-project.vercel.app/user/login`,
     "Đăng xuất(GET):": `https://api-graduation-project.vercel.app/user/logout/:id`, //* lưu ý: sử dụng id của session khi đăng nhập(khi đăng nhập trên điện thoại sẽ tự lưu vào local tạm thời của ứng dụng.)
-    "Cập nhập người dùng(PUT):": `https://api-graduation-project.vercel.app/user/update/:id`,
+    // "Cập nhập người dùng(PUT):": `https://api-graduation-project.vercel.app/user/update/:id`,
+    "Cập nhập người dùng(PUT):": `Đang cập nhập`,
     "Xoá người dùng(DELETE):": `https://api-graduation-project.vercel.app/user/delete/:id`,
     "Gọi danh sách người dùng(GET):": `https://api-graduation-project.vercel.app/user/list`,
     "Gọi chi tiết người dùng(GET):": `https://api-graduation-project.vercel.app/user/detail/:id`,
