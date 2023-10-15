@@ -28,6 +28,7 @@ router.get("/", (req, res) => {
     "Đăng nhập(POST):": `https://api-graduation-project.vercel.app/user/login`,
     "Đăng xuất(GET):": `https://api-graduation-project.vercel.app/user/logout/:id`, //* lưu ý: sử dụng id của session khi đăng nhập(khi đăng nhập trên điện thoại sẽ tự lưu vào local tạm thời của ứng dụng.)
     "Cập nhập người dùng(PUT):": `https://api-graduation-project.vercel.app/user/update/:id`,
+    "Đổi mật khẩu(PUT):": `https://api-graduation-project.vercel.app/user/change-password/:id`,
     "Xoá người dùng(DELETE):": `https://api-graduation-project.vercel.app/user/delete/:id`,
     "Gọi danh sách người dùng(GET):": `https://api-graduation-project.vercel.app/user/list`,
     "Gọi chi tiết người dùng(GET):": `https://api-graduation-project.vercel.app/user/detail/:id`,
@@ -1209,7 +1210,7 @@ router.put("/update/:id", upload.single("image"), async (req, res) => {
         .catch((err) => {
           console.log(`Lỗi catch: `.bgRed, err);
         });
-    // * Cập nhập không có hình ảnh
+      // * Cập nhập không có hình ảnh
     } else {
       const data = {
         name: req.body.name || user.name,
@@ -1239,6 +1240,43 @@ router.put("/update/:id", upload.single("image"), async (req, res) => {
       message: error.message,
     });
     console.log(`❗  Cập nhập thất bại`.bgRed.white.strikethrough.bold);
+  }
+});
+//  TODO: Đổi mật khẩu
+router.put("/change-password/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+  let user = await userModels.findById(id);
+
+  //* Mã hoá mật khẩu
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(req.body.password, salt);
+
+  const data = {
+    password: hashedPassword
+  }
+  await userModels
+        .findByIdAndUpdate(id, data)
+        .then((doc) => {
+          res.json({
+            status: "Đổi mật khẩu thành công",
+          });
+          console.log(
+            `✅  Đổi mật khẩu thành công`.green.bold
+          );
+        })
+        .catch((err) => {
+          res.json({
+            status: "Đổi mật khẩu thất bại",
+          });
+          console.log(`❗  ${err}`.bgRed.white.strikethrough.bold);
+        });
+
+  } catch (error) {
+    res.json({
+      status: "Đổi mật khẩu thất bại",
+    });
+    console.log(`❗  ${error}`.bgRed.white.strikethrough.bold);
   }
 });
 // TODO: Xoá người dùng ([:id] = id của người dùng)
