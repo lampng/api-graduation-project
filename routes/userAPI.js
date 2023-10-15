@@ -27,8 +27,7 @@ router.get("/", (req, res) => {
     "Đăng ký(POST):": `https://api-graduation-project.vercel.app/user/register`,
     "Đăng nhập(POST):": `https://api-graduation-project.vercel.app/user/login`,
     "Đăng xuất(GET):": `https://api-graduation-project.vercel.app/user/logout/:id`, //* lưu ý: sử dụng id của session khi đăng nhập(khi đăng nhập trên điện thoại sẽ tự lưu vào local tạm thời của ứng dụng.)
-    // "Cập nhập người dùng(PUT):": `https://api-graduation-project.vercel.app/user/update/:id`,
-    "Cập nhập người dùng(PUT):": `Đang cập nhập`,
+    "Cập nhập người dùng(PUT):": `https://api-graduation-project.vercel.app/user/update/:id`,
     "Xoá người dùng(DELETE):": `https://api-graduation-project.vercel.app/user/delete/:id`,
     "Gọi danh sách người dùng(GET):": `https://api-graduation-project.vercel.app/user/list`,
     "Gọi chi tiết người dùng(GET):": `https://api-graduation-project.vercel.app/user/detail/:id`,
@@ -1176,9 +1175,9 @@ router.put("/update/:id", upload.single("image"), async (req, res) => {
   try {
     const { id } = req.params;
     let user = await userModels.findById(id);
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+    //* Kiểm tra trong form có hình ảnh không, nếu không sẽ nhảy xuống else
     if (req.file != null) {
+      // * Kiểm tra tài khoản đã có sẵn avatar chưa, nếu có rồi sẽ xoá và cập nhập hình mới
       if (user.cloudinary_id != null) {
         await cloudinary.uploader.destroy(user.cloudinary_id);
       }
@@ -1188,13 +1187,13 @@ router.put("/update/:id", upload.single("image"), async (req, res) => {
       const data = {
         name: req.body.name || user.name,
         email: req.body.email || user.email,
-        password: hashedPassword || user.password,
         address: req.body.address || user.address,
         phone: req.body.phone || user.phone,
+        birthday: req.body.birthday || user.birthday,
         avatar: result.secure_url || user.avatar,
         cloudinary_id: result.public_id || user.cloudinary_id,
+        active: true,
       };
-
       await userModels
         .findByIdAndUpdate(id, data, {
           new: true,
@@ -1210,19 +1209,21 @@ router.put("/update/:id", upload.single("image"), async (req, res) => {
         .catch((err) => {
           console.log(`Lỗi catch: `.bgRed, err);
         });
+    // * Cập nhập không có hình ảnh
     } else {
       const data = {
         name: req.body.name || user.name,
         email: req.body.email || user.email,
-        password: hashedPassword || user.password,
         address: req.body.address || user.address,
         phone: req.body.phone || user.phone,
+        birthday: req.body.birthday || user.birthday,
+        active: true,
       };
       await userModels
         .findByIdAndUpdate(id, data)
         .then((doc) => {
           res.json({
-            status: "Cập nhập người (không hình ảnh) dùng thành công",
+            status: "Cập nhập người dùng (không hình ảnh)  thành công",
           });
           console.log(
             `✅  Cập nhập người (không hình ảnh) dùng thành công`.green.bold
@@ -1272,6 +1273,7 @@ router.delete("/delete/:id", async (req, res) => {
 router.get("/logout/:id", (req, res) => {
   const id = req.params.id;
   req.sessionStore.destroy(id);
+  res.send("Đăng xuất thành công");
   console.log(`✅  Đăng xuất thành công`.green.bold);
 });
 
