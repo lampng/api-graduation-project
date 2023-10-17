@@ -61,9 +61,11 @@ router.post("/register", async (req, res) => {
 
     //* Tạo người dùng mới
     const newUser = new userModels({
+      name: req.body.name,
       email: req.body.email,
       password: hashedPassword,
       role: req.body.role,
+      job: req.body.job,
     });
     try {
       await newUser.save();
