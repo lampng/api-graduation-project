@@ -37,6 +37,23 @@ router.get("/list", async (req, res) => {
     });
   }
 });
+// TODO: Gọi chi tiết khách hàng ([:id] = id của khách hàng)
+router.get("/detail/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const client = await clientModels.findById(id);
+    res.status(200).json(client);
+    console.log(`✅ Gọi chi tiết người dùng thành công`.green.bold);
+  } catch (error) {
+    console.log(`❗  ${error.message}`.bgRed.white.strikethrough.bold);
+    res.status(500).json({
+      message: error.message,
+    });
+    console.log(
+      `❗  Gọi chi tiết người dùng thất bại`.bgRed.white.strikethrough.bold
+    );
+  }
+});
 // TODO: Tạo khách hàng mới
 router.post("/create", async (req, res) => {
   try {
