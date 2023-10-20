@@ -20,6 +20,7 @@ router.get("/", (req, res) => {
     status: "Đang phát triển",
     "Tạo khách hàng mới(POST):": `https://api-graduation-project.vercel.app/client/create`,
     "Gọi danh sách khách hàng(GET):": `https://api-graduation-project.vercel.app/client/list`,
+    "Gọi chi tiết khách hàng(GET):": `https://api-graduation-project.vercel.app/client/detail/:id`,
     "Cập nhập thông tin khách hàng(PUT):": `https://api-graduation-project.vercel.app/client/update/:id`,
     "Xoá khách hàng(DELETE):": `https://api-graduation-project.vercel.app/client/delete/:id`,
   });
