@@ -28,8 +28,22 @@ router.get("/", (req, res) => {
 // TODO: Gọi danh sách khách hàng
 router.get("/list", async (req, res) => {
   try {
-    const client = await clientModels.find({});
-    res.status(200).json(client);
+    const clients = await clientModels.find({});
+    //  * `creatorID` là id nhân viên từ bảng `userModels`.
+    const creatorID = await userModels.find({});
+
+    const creatorMap = {};
+    creatorID.forEach((creator) => { // * - Vòng lặp `forEach` lặp qua từng id trong danh sách và gán tên của họ cho đối ứng với `creatorID` của họ 
+      creatorMap[creator._id] = creator.name;// * trong `creatorMap`. Điều này tạo ra một ánh xạ từ `creatorID` đến tên của người sở hữu.
+    });
+
+    // * Thay thế creatorID bằng tên người sở hữu
+    const updatedClients = clients.map((client) => ({
+      ...client.toObject(),// * Sao chép thông tin từ mục khách hàng ban đầu
+      creatorID: creatorMap[client.creatorID] || client.creatorID, // * Thay thế creatorID bằng tên người sở hữu tương ứng nếu có, nếu không thì giữ nguyên creatorID.
+    }));
+
+    res.status(200).json(updatedClients);
     console.log(`✅ Gọi danh sách khách hàng thành công`.green.bold);
   } catch (error) {
     console.log(`❗  ${error.message}`.bgRed.white.strikethrough.bold);
@@ -107,9 +121,7 @@ router.put("/update/:id", async (req, res) => {
         res.status(200).json({
           status: "Cập nhập khách hàng thành công",
         });
-        console.log(
-          `✅  Cập nhập khách hàng thành công`.green.bold
-        );
+        console.log(`✅  Cập nhập khách hàng thành công`.green.bold);
       })
       .catch((err) => {
         console.log(`❗  Lỗi else`.bgRed.white.strikethrough.bold);
@@ -119,7 +131,9 @@ router.put("/update/:id", async (req, res) => {
     res.status(500).json({
       message: error.message,
     });
-    console.log(`❗  Cập nhập khách hàng thất bại`.bgRed.white.strikethrough.bold);
+    console.log(
+      `❗  Cập nhập khách hàng thất bại`.bgRed.white.strikethrough.bold
+    );
   }
 });
 // TODO: Xoá khách hàng ([:id] = id của khách hàng)
