@@ -29,7 +29,7 @@ router.get("/", (req, res) => {
 router.get("/list", async (req, res) => {
   try {
     const clients = await clientModels.find({});
-    //  * `creatorID` là id nhân viên từ bảng `userModels`.
+    //  * `creatorID` là dữ liệu từ bảng `userModels`.
     const creatorID = await userModels.find({});
 
     const creatorMap = {};
