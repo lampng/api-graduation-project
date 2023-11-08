@@ -1070,7 +1070,10 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     //* Lấy email và password từ phía người dùng khi nhập
-    const { email, password } = req.body;
+    const {
+      email,
+      password
+    } = req.body;
     const check = await userModels.findOne({
       email,
     });
@@ -1092,7 +1095,10 @@ router.post("/login", async (req, res) => {
               req.session.loggedin = true;
               req.session.role = role;
 
-              const { _id, loggedin } = req.session;
+              const {
+                _id,
+                loggedin
+              } = req.session;
               const getName = check.name;
               const getEmail = check.email;
               const getRole = check.role;
@@ -1144,7 +1150,9 @@ router.get("/list", async (req, res) => {
 // TODO: Gọi chi tiết người dùng ([:id] = id của người dùng)
 router.get("/detail/:id", async (req, res) => {
   try {
-    const { id } = req.params;
+    const {
+      id
+    } = req.params;
     const user = await userModels.findById(id);
     res.status(200).json(user);
     console.log(`✅ Gọi chi tiết người dùng thành công`.green.bold);
@@ -1161,7 +1169,9 @@ router.get("/detail/:id", async (req, res) => {
 //  TODO: Chỉnh sửa thông tin người dùng khi chưa kích hoạt tài khoản
 router.put("/update/:id", upload.single("image"), async (req, res) => {
   try {
-    const { id } = req.params;
+    const {
+      id
+    } = req.params;
     let user = await userModels.findById(id);
     //* Kiểm tra trong form có hình ảnh không, nếu không sẽ nhảy xuống else
     if (req.file != null) {
@@ -1233,7 +1243,9 @@ router.put("/update/:id", upload.single("image"), async (req, res) => {
 // * Nhập mật khẩu cũ để xác thực, nếu đúng sẽ cho đặt mật khẩu mới
 router.put("/change-password/:id", async (req, res) => {
   try {
-    const { id } = req.params;
+    const {
+      id
+    } = req.params;
     let check = await userModels.findById(id);
     // const check = await userModels.findOne({
     //   id,
@@ -1271,7 +1283,9 @@ router.put("/change-password/:id", async (req, res) => {
 // TODO: Xoá người dùng ([:id] = id của người dùng)
 router.delete("/delete/:id", async (req, res) => {
   try {
-    const { id } = req.params;
+    const {
+      id
+    } = req.params;
     // Xoá người dùng
     const user = await userModels.findByIdAndDelete(id);
     if (!user) {
@@ -1304,34 +1318,86 @@ router.get("/logout/:id", (req, res) => {
   console.log(`✅  Đăng xuất thành công`.green.bold);
 });
 // TODO: Quên mật khẩu
+router.get("/forgot-password", async (req, res) => {
+  try {
+    const email = req.body.email;
+    // * Kiểm tra email
+    await userModels.findOne({
+      email
+    }).then((data) => {
+      if (data) {
+        // * Gọi hàm random số để làm mã xác thực
+        const VerifyNumber = generateRandomNumberString(6);
+        // Lấy thời gian hiện tại
+        const timenow = new Date();
+        // Tính thời gian hết hạn 5 phút sau
+        const expirationTime = new Date(timenow.getTime() + 5 * 60 * 1000); // 5 phút
+        // Lưu trữ VerifyNumber và expirationTime tạm thời
+        temporaryVerifyNumber = {
+          code: VerifyNumber,
+          expiresAt: expirationTime,
+        };
+        console.log(`✅ ${VerifyNumber}`.green.bold);
+
+        res.status(200).json({
+          Status: "Mã xác thực đã được gửi đến email của bạn, mã xác thực sẽ hết hạn sau 5 phút",
+        });
+      } else {
+        console.log(`❌ Sai mail`.red.bold);
+        res.status(500).json({
+          status: "Sai mail",
+        });
+      }
+    });
+  } catch (error) {}
+});
 // TODO: Verify Email
-// TODO: Đặt lại mật khẩu
+router.post("/verify", async (req, res) => {
+  const {
+    inputVerifyNumber
+  } = req.body;
+
+  if (temporaryVerifyNumber) {
+    const now = new Date();
+    if (inputVerifyNumber === temporaryVerifyNumber.code && now < temporaryVerifyNumber.expiresAt) {
+      // Mã xác thực hợp lệ
+      res.status(200).json({
+        Status: true,
+      });
+    } else {
+      // Mã xác thực đã hết hạn hoặc không hợp lệ
+      res.status(400).json({
+        Status: false,
+      });
+    }
+  } else {
+    // temporaryVerifyNumber không tồn tại
+    res.status(400).json({
+      Status: false,
+    });
+  }
+});
 //  TODO: Đổi mật khẩu
-// * Nhập mật khẩu cũ để xác thực, nếu đúng sẽ cho đặt mật khẩu mới
+// * đặt mật khẩu mới
 router.put("/reset-password", async (req, res) => {
   try {
-    const { email } = req.session.emailVerify;
-    console.log("🚀 ~ file: userAPI.js:1340 ~ router.put ~ email:", email);
 
-    //* Mã hoá mật khẩu
-    const newPass = req.body.password;
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(newPass, salt);
-    // * Kiểm tra mật khẩu có chính xác hay không
-    const data = {
-      password: hashedPassword,
-    };
-    await userModels.findByIdAndUpdate(email, data).then((doc) => {
-      res.status(200).json({
-        status: "Đổi mật khẩu thành công",
-      });
-      console.log(`✅  Đổi mật khẩu thành công`.green.bold);
-    });
   } catch (error) {
-    res.status(500).json({
-      status: "Mật khẩu cũ của bạn không đúng, vui lòng nhập lại",
-    });
+    res.status(500).json(error);
     console.log(`❗  ${error}`.bgRed.white.strikethrough.bold);
   }
 });
+
+// * random number
+function generateRandomNumberString(length) {
+  const numbers = "0123456789";
+  let result = "";
+
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * numbers.length);
+    result += numbers.charAt(randomIndex);
+  }
+
+  return result;
+}
 module.exports = router;

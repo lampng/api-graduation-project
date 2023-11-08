@@ -34,12 +34,12 @@ router.get("/list", async (req, res) => {
 
     const creatorMap = {};
     creatorID.forEach((creator) => { // * - Vòng lặp `forEach` lặp qua từng id trong danh sách và gán tên của họ cho đối ứng với `creatorID` của họ 
-      creatorMap[creator._id] = creator.name;// * trong `creatorMap`. Điều này tạo ra một ánh xạ từ `creatorID` đến tên của người sở hữu.
+      creatorMap[creator._id] = creator.name; // * trong `creatorMap`. Điều này tạo ra một ánh xạ từ `creatorID` đến tên của người sở hữu.
     });
 
     // * Thay thế creatorID bằng tên người sở hữu
     const updatedClients = clients.map((client) => ({
-      ...client.toObject(),// * Sao chép thông tin từ mục khách hàng ban đầu
+      ...client.toObject(), // * Sao chép thông tin từ mục khách hàng ban đầu
       creatorID: creatorMap[client.creatorID] || client.creatorID, // * Thay thế creatorID bằng tên người sở hữu tương ứng nếu có, nếu không thì giữ nguyên creatorID.
     }));
 
@@ -55,7 +55,9 @@ router.get("/list", async (req, res) => {
 // TODO: Gọi chi tiết khách hàng ([:id] = id của khách hàng)
 router.get("/detail/:id", async (req, res) => {
   try {
-    const { id } = req.params;
+    const {
+      id
+    } = req.params;
     const client = await clientModels.findById(id);
     res.status(200).json(client);
     console.log(`✅ Gọi chi tiết người dùng thành công`.green.bold);
@@ -86,6 +88,7 @@ router.post("/create", async (req, res) => {
             name: req.body.name,
             address: req.body.address,
             phone: req.body.phone,
+            citizenIdentityCard: req.body.citizenIdentityCard,
             creatorID: req.body.creatorID,
           });
           try {
@@ -109,11 +112,14 @@ router.post("/create", async (req, res) => {
 // TODO: Cập nhập thông tin khách hàng
 router.put("/update/:id", async (req, res) => {
   try {
-    const { id } = req.params;
+    const {
+      id
+    } = req.params;
     const data = {
       name: req.body.name,
       address: req.body.address,
       phone: req.body.phone,
+      sex: req.body.sex
     };
     await clientModels
       .findByIdAndUpdate(id, data)
@@ -139,7 +145,9 @@ router.put("/update/:id", async (req, res) => {
 // TODO: Xoá khách hàng ([:id] = id của khách hàng)
 router.delete("/delete/:id", async (req, res) => {
   try {
-    const { id } = req.params;
+    const {
+      id
+    } = req.params;
     // Xoá người dùng
     const client = await clientModels.findByIdAndDelete(id);
     if (!client) {

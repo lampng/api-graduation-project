@@ -17,6 +17,14 @@ const clientSchema = mongoose.Schema({
         ref: 'user',
         require: true
     },
+    citizenIdentityCard:{
+        type: String,
+        require: false
+    },
+    sex:{
+        type: String,
+        require: false
+    },
     datejoin: {
         type: Date,
         default: Date.now()

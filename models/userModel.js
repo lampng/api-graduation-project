@@ -3,7 +3,7 @@ const userSchema = mongoose.Schema(
   {
     name: {
       type: String,
-      require: false,
+      require: true,
     },
     email: {
       type: String,
@@ -20,7 +20,7 @@ const userSchema = mongoose.Schema(
 
     job: {
       type: String,
-      require: true,
+      require: false,
     },
     address: {
       type: String,
