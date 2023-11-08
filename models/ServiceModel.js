@@ -12,6 +12,14 @@ const serviceSchema = mongoose.Schema({
         type: Number,
         require: true,
     },
+    image: {
+        type: String,
+        require: false,
+    },
+    cloudinary_id: {
+        type: String,
+        require: false,
+    },
 })
 const service = mongoose.model('service', serviceSchema);
 
