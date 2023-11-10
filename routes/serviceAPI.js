@@ -245,9 +245,9 @@ router.delete("/delete/:id", async (req, res) => {
     console.log(`✅ Xoá thành công`);
     res.status(200).json(service);
   } catch (error) {
-    console.log(`❗  Không tìm thấy người dùng`.bgRed.white.strikethrough.bold);
+    console.log(`❗  Không tìm thấy dịch vụ`.bgRed.white.strikethrough.bold);
     res.status(500).json({
-      message: "Không tìm thấy người dùng",
+      message: "Không tìm thấy dịch vụ",
     });
   }
 });
