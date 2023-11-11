@@ -63,6 +63,7 @@ router.post("/register", async (req, res) => {
     const newUser = new userModels({
       name: req.body.name,
       email: req.body.email,
+      citizenIdentityCard: req.body.citizenIdentityCard,
       password: hashedPassword,
       role: req.body.role,
       job: req.body.job,

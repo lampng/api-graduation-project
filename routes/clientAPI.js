@@ -88,7 +88,7 @@ router.post("/create", async (req, res) => {
             name: req.body.name,
             address: req.body.address,
             phone: req.body.phone,
-            citizenIdentityCard: req.body.citizenIdentityCard,
+            // citizenIdentityCard: req.body.citizenIdentityCard,
             creatorID: req.body.creatorID,
           });
           try {

@@ -17,10 +17,10 @@ const clientSchema = mongoose.Schema({
         ref: 'user',
         require: true
     },
-    citizenIdentityCard:{
-        type: String,
-        require: false
-    },
+    // citizenIdentityCard:{
+    //     type: String,
+    //     require: false
+    // },
     sex:{
         type: String,
         require: false
