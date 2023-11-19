@@ -111,6 +111,7 @@ router.put("/update/:id", upload.single("image"), async (req, res) => {
     });
     let service = await ServiceModels.findById(req.params.id)
     if (check) {
+      // TODO: sử dụng removeDiacriticsAndSpaces để kiểm tra trùng lặp dịch vụ
       if (removeDiacriticsAndSpaces(req.body.name) == removeDiacriticsAndSpaces(service.name)) {
         if (req.file != null) {
           if (service.cloudinary_id != null) {
@@ -123,7 +124,7 @@ router.put("/update/:id", upload.single("image"), async (req, res) => {
             name: req.body.name,
             description: req.body.description,
             price: req.body.price,
-            image: result.secure_url || service.avatar,
+            image: result.secure_url || service.image,
             cloudinary_id: result.public_id || service.cloudinary_id,
           };
           await ServiceModels
