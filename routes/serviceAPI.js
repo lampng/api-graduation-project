@@ -118,7 +118,7 @@ router.put("/update/:id", upload.single("image"), async (req, res) => {
             await cloudinary.uploader.destroy(service.cloudinary_id);
           }
           const result = await cloudinary.uploader.upload(req.file.path, {
-            folder: "api-graduation-project/service",
+            folder: "api-graduation-project/service", 
           });
           const data = {
             name: req.body.name,
