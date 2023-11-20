@@ -845,9 +845,8 @@ router.post("/register", async (req, res) => {
                               >
                                 <tr>
                                   <td align="left">
-                                  <p>
-                                      Sau khi tải ứng dụng và đăng nhập, bạn vui lòng đổi lại mật khẩu và cập nhập thông tin cá nhân của mình
-                                    </p>
+
+                                    <p>Sau khi tải ứng dụng và đăng nhập, bạn vui lòng đổi lại mật khẩu và cập nhập thông tin cá nhân của mình
                                     <p>Cảm ơn.
                                   </td>
                                 </tr>
