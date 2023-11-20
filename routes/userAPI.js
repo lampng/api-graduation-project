@@ -1145,6 +1145,18 @@ router.get("/list", async (req, res) => {
     const user = await userModels.find({});
     res.status(200).json(user);
     console.log(`✅ Get list user Success`.green.bold);
+    // // //* Tạo người dùng mới
+    // const salt = await bcrypt.genSalt(10);
+    // const hashedPassword = await bcrypt.hash("123456", salt);
+    // const newUser = new userModels({
+    //   name: "Nguyễn Thanh Hoàng",
+    //   email: "nguyenthanhhon@gmail.com",
+    //   citizenIdentityCard: "123456789",
+    //   password: hashedPassword,
+    //   role: "Nhân viên",
+    //   job: "Photographer",
+    // });
+    // await newUser.save();
   } catch (error) {
     console.log(`❗  ${error.message}`.bgRed.white.strikethrough.bold);
     res.status(500).json({
