@@ -20,7 +20,9 @@ var port = process.env.PORT || 1102;
 router.get("/", (req, res) => {
   res.json({
     status: "Đang phát triển",
-    "Thêm(POST):": `https://api-graduation-project.vercel.app/cart/addServiceToCart/`
+    "Thêm dịch vụ vào giỏ hàng(POST):": `https://api-graduation-project.vercel.app/cart/addServiceToCart/`,
+    instruct: `"userID": "65315dcbc842e097e852587f",\n
+    "serviceID": "654b9c35deb4b4ef29563dae"`,
   });
 });
 
