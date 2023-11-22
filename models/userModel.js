@@ -28,6 +28,10 @@ const userSchema = mongoose.Schema({
     type: String,
     require: false,
   },
+  gender: {
+    type: String,
+    require: false
+  },
   citizenIdentityCard: {
     type: String,
     require: false
