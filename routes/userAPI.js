@@ -1205,8 +1205,8 @@ router.put("/update/:id", upload.single("image"), async (req, res) => {
         phone: req.body.phone || user.phone,
         birthday: req.body.birthday || user.birthday,
         gender: req.body.gender || user.gender,
-        role: req.body.gender || user.role,
-        job: req.body.gender || user.job,
+        role: req.body.role || user.role,
+        job: req.body.job || user.job,
         avatar: result.secure_url || user.avatar,
         cloudinary_id: result.public_id || user.cloudinary_id,
         active: true,
@@ -1234,6 +1234,9 @@ router.put("/update/:id", upload.single("image"), async (req, res) => {
         address: req.body.address || user.address,
         phone: req.body.phone || user.phone,
         birthday: req.body.birthday || user.birthday,
+        gender: req.body.gender || user.gender,
+        role: req.body.role || user.role,
+        job: req.body.job || user.job,
         active: true,
       };
       await userModels
