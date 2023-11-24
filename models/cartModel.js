@@ -20,9 +20,10 @@ const ItemSchema = mongoose.Schema({
         type: String,
         require: false,
     },
-    deadline: {
-        type: Date, // Ngày hạn
-        required: false, // Tuỳ chọn, tùy thuộc vào yêu cầu của bạn
+    userID: {
+        type: mongoose.Schema.Types.ObjectId,
+        require: false,
+        ref: "user"
     },
     status: {
         type: String, // Trạng thái
@@ -40,19 +41,16 @@ const cartSchema = mongoose.Schema({
         require: true,
         ref: "user"
     },
+    client: {
+        type: mongoose.Schema.Types.ObjectId,
+        require: false,
+        ref: "client"
+    },
     items: [ItemSchema],
+    // * A hòn hiển thị tổng tiền dịch vụ bằng trường subTolal này!
     subTotal: {
         default: 0,
         type: Number,
-    },
-    finalDeadline: {
-        type: Date, // Ngày hạn cuối cùng
-        required: false, // Tuỳ chọn, tùy thuộc vào yêu cầu của bạn
-    },
-    status: {
-        type: String, // Trạng thái
-        enum: ['Chưa thực hiện', 'Đang thực hiện', 'Hoàn thành', 'Không hoàn thành'],
-        default: 'Chưa thực hiện', // Trạng thái mặc định khi thêm vào giỏ hàng
     },
 }, {
     timestamps: true,

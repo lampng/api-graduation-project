@@ -43,6 +43,7 @@ router.post("/create/", upload.single("image"), async (req, res) => {
           name: req.body.name,
           description: req.body.description,
           price: req.body.price,
+          quantityImage: req.body.quantityImage,
           image: result.secure_url,
           cloudinary_id: result.public_id,
         })
@@ -124,6 +125,7 @@ router.put("/update/:id", upload.single("image"), async (req, res) => {
             name: req.body.name,
             description: req.body.description,
             price: req.body.price,
+            quantityImage: req.body.quantityImage,
             image: result.secure_url || service.image,
             cloudinary_id: result.public_id || service.cloudinary_id,
           };
@@ -147,6 +149,7 @@ router.put("/update/:id", upload.single("image"), async (req, res) => {
             name: req.body.name || service.name,
             description: req.body.description || service.name,
             price: req.body.price || service.name,
+            quantityImage: req.body.quantityImage || service.quantityImage,
           };
           await ServiceModels
             .findByIdAndUpdate(service.id, data, {
@@ -204,6 +207,7 @@ router.put("/update/:id", upload.single("image"), async (req, res) => {
           name: req.body.name || service.name,
           description: req.body.description || service.name,
           price: req.body.price || service.name,
+          quantityImage: req.body.quantityImage || service.quantityImage,
         };
         await ServiceModels
           .findByIdAndUpdate(service.id, data, {
