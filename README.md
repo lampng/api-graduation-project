@@ -59,7 +59,7 @@
 ```http
   PUT /user/change-password/${id} = id của người dùng
 ```
-| Parameter | Type     | Description                |
+| Body | Type     | Description                |
 | :-------- | :------- | :------------------------- |
 | `oldpassword` | `string` | **Required**.|
 | `password` | `string` | **Required**.|
