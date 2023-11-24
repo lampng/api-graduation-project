@@ -17,6 +17,7 @@
 | Nếu `role` có giá trị là là `Nhân viên` thì có thêm:|
 | `job` | `string` | **Required**.|
 
+
 - Đăng nhập
 ```http
   POST /user/login
@@ -26,6 +27,7 @@
 | `email` | `string` | **Required**.|
 | `password` | `string` | **Required**.|
 
+
 - Đăng xuất
 ```http
   GET /user/logout/${id} = session id login
@@ -33,6 +35,7 @@
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
 | `id` | `string` | **Required**. |
+
 
 - Cập nhập người dùng
 ```http
@@ -55,6 +58,7 @@
 | `role` | `string` | **Not required**.|
 | `avatar` | `BLOB` | **Not required**.|
 
+
 - Đổi mật khẩu
 ```http
   PUT /user/change-password/${id} = id của người dùng
@@ -64,15 +68,18 @@
 | `oldpassword` | `string` | **Required**.|
 | `password` | `string` | **Required**.|
 
+
 - Xoá người dùng
 ```http
   DELETE /user/delete/${id} = id của người dùng
 ```
 
+
 - Gọi danh sách người dùng
 ```http
   GET /user/list
 ```
+
 
 - Gọi chi tiết người dùng
 ```http
