@@ -5,12 +5,11 @@
 
 #### USER
 
+- Đăng ký - chỉ dành cho quản lý và admin
 ```http
   POST /user/register
 ```
-- Đăng ký - chỉ dành cho quản lý và admin
-
-| Parameter | Type     | Description                |
+| Body | Type     | Description                |
 | :-------- | :------- | :------------------------- |
 | `name` | `string` | **Required**.|
 | `email` | `string` | **Required**.|
@@ -18,31 +17,32 @@
 | Nếu `role` có giá trị là là `Nhân viên` thì có thêm:|
 | `job` | `string` | **Required**.|
 
+- Đăng nhập
 ```http
   POST /user/login
 ```
-- Đăng nhập
-
-| Parameter | Type     | Description                |
+| Body | Type     | Description                |
 | :-------- | :------- | :------------------------- |
 | `email` | `string` | **Required**.|
 | `password` | `string` | **Required**.|
 
-```http
-  GET /user/logout/${id}
-```
 - Đăng xuất
-
+```http
+  GET /user/logout/${id} = session id login
+```
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
-| `id` | `string` | **Required**. session id login|
+| `id` | `string` | **Required**. |
 
+- Cập nhập người dùng
 ```http
   PUT /user/update/${id} = id của người dùng
 ```
-- Cập nhập người dùng
-
 | Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `id` | `string` | **Required**.|
+
+| Body | Type     | Description                |
 | :-------- | :------- | :------------------------- |
 | `name` | `string` | **Not required**.|
 | `email` | `string` | **Not required**.|
@@ -55,27 +55,26 @@
 | `role` | `string` | **Not required**.|
 | `avatar` | `BLOB` | **Not required**.|
 
+- Đổi mật khẩu
 ```http
   PUT /user/change-password/${id} = id của người dùng
 ```
-- Đổi mật khẩu
-
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
 | `oldpassword` | `string` | **Required**.|
 | `password` | `string` | **Required**.|
 
+- Xoá người dùng
 ```http
   DELETE /user/delete/${id} = id của người dùng
 ```
-- Xoá người dùng
 
+- Gọi danh sách người dùng
 ```http
   GET /user/list
 ```
-- Gọi danh sách người dùng
 
+- Gọi chi tiết người dùng
 ```http
   GET /user/list/${id} = id của người dùng
 ```
-- Gọi chi tiết người dùng
