@@ -21,12 +21,19 @@ var port = process.env.PORT || 1102;
 router.get("/", (req, res) => {
     res.json({
         status: "Đang phát triển",
+        "Xác nhận hoá đơn(POST):": `https://api-graduation-project.vercel.app/order/comfirmOrder/`,
+        instruct: `"userID": "...",\n
+    "serviceID": "..."\n
+    "client": "..."\n`,
     });
 });
 
 router.post("/comfirmOrder", async (req, res) => {
     const {
-        userID,note,client,userID_staff
+        userID,
+        note,
+        client,
+        userID_staff
     } = req.body;
     try {
 
@@ -54,13 +61,14 @@ router.post("/comfirmOrder", async (req, res) => {
             note: note,
         })
         await newOrder.save();
-        await cartModels.deleteOne({ userID });
+        await cartModels.deleteOne({
+            userID
+        });
         return res.status(200).json({
             success: true,
             message: 'Hoá đơn đã được tạo thành công.'
         });
     } catch (error) {
-        console.log("🐼 ~ file: orderAPI.js:64 ~ router.post ~ error:", error)
         return res.status(500).json({
             success: false,
             message: 'Đã xảy ra lỗi khi tạo hoá đơn.'
