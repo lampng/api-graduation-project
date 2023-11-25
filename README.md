@@ -80,8 +80,56 @@
   GET /user/list
 ```
 
+### Client
 
-- Gọi chi tiết người dùng
+- Thêm khách hàng mới
 ```http
-  GET /user/list/${id} = id của người dùng
+  POST /client/create
 ```
+| Body | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `name` | `string` | **Required**.|
+| `address` | `string` | **Required**.|
+| `phone` | `string` | **Required**.|
+| `gender` | `string` | **Required**.|
+| `creatorID` | `number` | **Required**.|
+
+
+- Gọi danh sách khách hàng
+```http
+  GET /client/list
+```
+
+
+- Gọi chi tiết khách hàng
+```http
+  GET /client/detail/${id} = id của khách hàng
+```
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `id` | `string` | **Required**.|
+
+
+- Cập nhập khách hàng
+```http
+  PUT /client/update/${id} = id của khách hàng
+```
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `id` | `string` | **Required**.|
+
+| Body | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `name` | `string` | **Required**.|
+| `address` | `string` | **Required**.|
+| `phone` | `string` | **Required**.|
+| `gender` | `string` | **Required**.|
+
+
+- Xoá khách hàng
+```http
+  DELETE /client/delete/${id} = id của khách hàng
+```
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `id` | `string` | **Required**.|
