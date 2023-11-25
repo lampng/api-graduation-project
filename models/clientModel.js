@@ -17,11 +17,7 @@ const clientSchema = mongoose.Schema({
         ref: 'user',
         require: true
     },
-    // citizenIdentityCard:{
-    //     type: String,
-    //     require: false
-    // },
-    sex:{
+    gender:{
         type: String,
         require: false
     },

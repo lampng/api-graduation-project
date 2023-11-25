@@ -88,7 +88,7 @@ router.post("/create", async (req, res) => {
             name: req.body.name,
             address: req.body.address,
             phone: req.body.phone,
-            // citizenIdentityCard: req.body.citizenIdentityCard,
+            gender: req.body.gender,
             creatorID: req.body.creatorID,
           });
           try {
@@ -119,7 +119,7 @@ router.put("/update/:id", async (req, res) => {
       name: req.body.name,
       address: req.body.address,
       phone: req.body.phone,
-      sex: req.body.sex
+      gender: req.body.gender
     };
     await clientModels
       .findByIdAndUpdate(id, data)
@@ -171,5 +171,4 @@ router.delete("/delete/:id", async (req, res) => {
     });
   }
 });
-// TODO: Tìm kiém khách hàng
 module.exports = router;

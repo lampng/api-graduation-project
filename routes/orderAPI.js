@@ -22,9 +22,7 @@ router.get("/", (req, res) => {
     res.json({
         status: "Đang phát triển",
         "Xác nhận hoá đơn(POST):": `https://api-graduation-project.vercel.app/order/comfirmOrder/`,
-        instruct: `"userID": "...",\n
-    "serviceID": "..."\n
-    "client": "..."\n`,
+
     });
 });
 
@@ -75,4 +73,5 @@ router.post("/comfirmOrder", async (req, res) => {
         });
     }
 })
+
 module.exports = router;

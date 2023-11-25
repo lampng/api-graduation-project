@@ -1163,7 +1163,7 @@ router.get("/list", async (req, res) => {
     });
   }
 });
-// TODO: Gọi chi tiết người dùng ([:id] = id của người dùng)
+// TODO: Gọi chi tiết người dùng ([:id] c)
 router.get("/detail/:id", async (req, res) => {
   try {
     const {
