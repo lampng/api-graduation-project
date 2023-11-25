@@ -80,7 +80,7 @@
   GET /user/list
 ```
 
-### Client
+### CLIENT
 
 - Thêm khách hàng mới
 ```http
@@ -133,3 +133,24 @@
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
 | `id` | `string` | **Required**.|
+
+### SERVICE
+
+- Tạo dịch vụ
+```http
+  POST /service/create
+```
+```bash
+  - Khi nhập đủ thông tin vào tạo, sẽ kiểm tra `name` trên cơ sở dữ liệu
+  - Nếu `name` đã tồn tại trên hệ thống thì sẽ báo lỗi
+```
+| Body | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `name` | `string` | **Required**.|
+| `description` | `string` | **Required**.|
+| `price` | `string` | **Required**.|
+| `quantityImage` | `string` | **Required**.|
+| `image` | `string` | **Required**.|
+
+### CART
+### ORDER
