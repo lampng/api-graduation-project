@@ -3,7 +3,7 @@
 
 ## API Reference
 
-##### USER
+### USER
 
 - Đăng ký - chỉ dành cho quản lý và admin
 ```http
