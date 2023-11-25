@@ -260,4 +260,4 @@
 ```
 | Body | Type     | Description                |
 | :-------- | :------- | :------------------------- |
-| `userID` | `string` | **Not required**.|
+| `userID` | `string` | **Required**.|
