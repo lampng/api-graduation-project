@@ -12,7 +12,11 @@ var router = express.Router();
 router.get("/", (req, res) => {
     res.json({
         status: "Đang phát triển",
-        "Xác nhận hoá đơn(POST):": `https://api-graduation-project.vercel.app/order/comfirmOrder/`,
+        "Xác nhận đơn hàng(POST):": `https://api-graduation-project.vercel.app/order/comfirmOrder/`,
+        "Cập nhập đơn hàng(PUT):": `https://api-graduation-project.vercel.app/order/update/:id`,
+        "Xoá đơn hàng(DELETE):": `https://api-graduation-project.vercel.app/order/comfirmOrder/`,
+        "Danh sách đơn hàng(GET):": `https://api-graduation-project.vercel.app/order/list/`,
+        "Danh sách đơn hàng của người dùng(GET):": `https://api-graduation-project.vercel.app/order/listOfUser/`,
     });
 });
 // TODO: Xác nhận đơn hàng
