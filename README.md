@@ -56,7 +56,7 @@
 | `gender` | `string` | **Not required**.|
 | `role` | `string` | **Not required**.|
 | `role` | `string` | **Not required**.|
-| `avatar` | `BLOB` | **Not required**.|
+| `avatar` | `Blob` | **Not required**.|
 
 
 - Đổi mật khẩu
@@ -140,17 +140,124 @@
 ```http
   POST /service/create
 ```
-```bash
-  - Khi nhập đủ thông tin vào tạo, sẽ kiểm tra `name` trên cơ sở dữ liệu
-  - Nếu `name` đã tồn tại trên hệ thống thì sẽ báo lỗi
-```
+
 | Body | Type     | Description                |
 | :-------- | :------- | :------------------------- |
 | `name` | `string` | **Required**.|
 | `description` | `string` | **Required**.|
 | `price` | `string` | **Required**.|
 | `quantityImage` | `string` | **Required**.|
-| `image` | `string` | **Required**.|
+| `image` | `Blob` | **Required**.|
+```bash
+- Khi nhập đủ thông tin vào tạo, sẽ kiểm tra `name` trên cơ sở dữ liệu
+- Nếu `name` đã tồn tại trên hệ thống thì sẽ báo lỗi
+```
+
+- Cập nhập dịch vụ
+```http
+  PUT /service/update/:id = `id` của dịch vụ
+```
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `id` | `string` | **Required**.|
+
+| Body | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `name` | `string` | **Not required**.|
+| `description` | `string` | **Not required**.|
+| `price` | `string` | **Not required**.|
+| `quantityImage` | `string` | **Not required**.|
+| `image` | `Blob` | **Not required**.|
+
+- Xoá dịch vụ
+```http
+  DELETE /service/delete/:id = `id` của dịch vụ
+```
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `id` | `string` | **Required**.|
+
+- Danh sách dịch vụ
+```http
+  GET /service/list/:id = `id` của dịch vụ
+```
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `id` | `string` | **Required**.|
+
+- Chi tiết dịch vụ
+```http
+  GET /service/detail/:id = `id` của dịch vụ
+```
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `id` | `string` | **Required**.|
 
 ### CART
+
+- Thêm dịch vụ vào giỏ hàng
+```http
+  POST /cart/addServiceToCart
+```
+
+| Body | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `userID` | `string` | **Required**.|
+| `serviceID` | `string` | **Required**.|
+```bash
+- Mỗi dịch vụ chỉ duy nhất trong giỏ hàng
+```
+
+- Xoá dịch vụ khỏi giỏ hàng
+```http
+  DELETE /cart/removeServiceFromCart
+```
+
+| Body | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `userID` | `string` | **Required**.|
+| `serviceID` | `string` | **Required**.|
+
 ### ORDER
+
+- Xác nhận đơn hàng
+```http
+  POST /order/comfirmOrder
+```
+
+| Body | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `userID` | `string` | **Required**. userID của người tạo đơn|
+| `client` | `string` | **Required**. khách hàng|
+| `note` | `string` | **Not required**. ghi chú|
+
+- Xoá đơn hàng
+```http
+  DELETE /order/delete/:id = id của đơn hàng
+```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `id` | `string` | **Required**.|
+
+- Cập nhập đơn hàng
+```http
+  PUT /order/update/:id = id của đơn hàng
+```
+
+| Body | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `note` | `string` | **Not required**.|
+
+- Danh sách đơn hàng
+```http
+  GET /order/list
+```
+
+- Danh sách đơn hàng của người dùng
+```http
+  GET /order/listOfUser
+```
+| Body | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `userID` | `string` | **Not required**.|
