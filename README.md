@@ -1,5 +1,5 @@
 # API GRADUATION PROJECT
- - [Base route](https://api-graduation-project.vercel.app/)
+ - API LINK: https://api-graduation-project.vercel.app/
 
 ## API Reference
 
