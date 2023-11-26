@@ -23,6 +23,7 @@ router.get("/", (req, res) => {
     "Thêm dịch vụ vào giỏ hàng(POST):": `https://api-graduation-project.vercel.app/cart/addServiceToCart/`,
 
     "Xoá dịch vụ khỏi giỏ hàng(POST):": `https://api-graduation-project.vercel.app/cart/removeServiceFromCart/`,
+    "Gọi danh sách giỏ hàng của người dùng(GET):": `https://api-graduation-project.vercel.app/cart/list/`,
 
   });
 });
