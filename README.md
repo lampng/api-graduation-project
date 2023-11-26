@@ -221,10 +221,10 @@
 
 - Gọi danh sách giỏ hàng của người dùng
 ```http
-  GET /cart/list
+  GET /cart/list/${id} = id người dùng
 ```
 
-| Body | Type     | Description                |
+| Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
 | `userID` | `string` | **Required**.|
 ### ORDER
@@ -273,6 +273,6 @@
 ```http
   GET /order/listOfUser
 ```
-| Body | Type     | Description                |
+| Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
 | `userID` | `string` | **Required**.|
