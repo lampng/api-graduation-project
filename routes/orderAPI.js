@@ -25,6 +25,8 @@ router.post("/comfirmOrder", async (req, res) => {
         userID,
         note,
         client,
+        deadline,
+        location
     } = req.body;
     try {
 
@@ -49,8 +51,8 @@ router.post("/comfirmOrder", async (req, res) => {
                 status: item.status,
             })),
             priceTotal: cart.subTotal,
-            deadline: req.body.deadline,
-            location: req.body.location,
+            deadline: deadline,
+            location: location,
             note: note,
         })
         await newOrder.save();
@@ -124,6 +126,7 @@ router.put("/update/:id", async (req, res) => {
             note: req.body.note || order.note,
             status: req.body.status || order.status,
             deadline: req.body.deadline || order.deadline,
+            location: req.body.location || order.location,
         }
         await orderModels.findByIdAndUpdate(id, data).then((doc) => {
             res.status(200).json({
