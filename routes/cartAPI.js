@@ -21,11 +21,9 @@ router.get("/", (req, res) => {
   res.json({
     status: "Đang phát triển",
     "Thêm dịch vụ vào giỏ hàng(POST):": `https://api-graduation-project.vercel.app/cart/addServiceToCart/`,
-    instruct: `"userID": "...",\n
-    "serviceID": "..."`,
+
     "Xoá dịch vụ khỏi giỏ hàng(POST):": `https://api-graduation-project.vercel.app/cart/removeServiceFromCart/`,
-    instruct: `"userID": "...",\n
-    "serviceID": "..."`,
+
   });
 });
 
@@ -129,5 +127,28 @@ router.delete("/removeServiceFromCart", async (req, res) => {
     });
   }
 })
-//* 
+// TODO: Giỏ hàng của người dùng
+router.get("/list", async (req, res) => {
+  const {
+      userID
+  } = req.body
+  try {
+      const carts = await cartModels.find({
+          userID
+      });
+      if (!carts) {
+        return res.status(404).json({
+            success: false,
+            message: 'Giỏ hàng không tồn tại.'
+        });
+    }
+      res.status(200).json(carts);
+      console.log(`✅ Gọi giỏ hàng của người dùng thành công`.green.bold);
+  } catch (error) {
+      console.log("🐼 ~ file: orderAPI.js:85 ~ router.get ~ error:", error)
+      res.status(500).json({
+          message: error.message,
+      });
+  }
+});
 module.exports = router;
