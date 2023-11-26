@@ -218,6 +218,14 @@
 | `userID` | `string` | **Required**.|
 | `serviceID` | `string` | **Required**.|
 
+- Gọi danh sách giỏ hàng của người dùng
+```http
+  GET /cart/list
+```
+
+| Body | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `userID` | `string` | **Required**.|
 ### ORDER
 
 - Xác nhận đơn hàng
