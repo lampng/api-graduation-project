@@ -67,6 +67,7 @@ router.post("/register", async (req, res) => {
       password: hashedPassword,
       role: req.body.role,
       job: req.body.job,
+      status: true
     });
     try {
       await newUser.save();
@@ -1211,7 +1212,8 @@ router.put("/update/:id", upload.single("image"), async (req, res) => {
         avatar: result.secure_url || user.avatar,
         cloudinary_id: result.public_id || user.cloudinary_id,
         active: true,
-      };
+        status: req.body.status
+        };
       await userModels
         .findByIdAndUpdate(id, data, {
           new: true,

@@ -49,6 +49,8 @@ router.post("/comfirmOrder", async (req, res) => {
                 status: item.status,
             })),
             priceTotal: cart.subTotal,
+            deadline: req.body.deadline,
+            location: req.body.location,
             note: note,
         })
         await newOrder.save();
@@ -117,8 +119,11 @@ router.put("/update/:id", async (req, res) => {
     const id = req.params.id
     console.log("🐼 ~ file: orderAPI.js:114 ~ router.update ~ req.params.id:", id)
     try {
+        let order = await orderModels.findById(id);
         const data = {
-            note: req.body.note
+            note: req.body.note || order.note,
+            status: req.body.status || order.status,
+            deadline: req.body.deadline || order.deadline,
         }
         await orderModels.findByIdAndUpdate(id, data).then((doc) => {
             res.status(200).json({
