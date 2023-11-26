@@ -57,6 +57,7 @@
 | `role` | `string` | **Not required**.|
 | `role` | `string` | **Not required**.|
 | `avatar` | `Blob` | **Not required**.|
+| `status` | `Boolean` | **Not required**.|
 
 
 - Đổi mật khẩu
@@ -257,6 +258,7 @@
 | :-------- | :------- | :------------------------- |
 | `note` | `string` | **Not required**.|
 | `status` | `string` | **Not required**. Default: 'Chưa thực hiện'|
+| `deadline` | `string` | **Not required**.|
 
 - Danh sách đơn hàng
 ```http
