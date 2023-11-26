@@ -238,6 +238,8 @@
 | :-------- | :------- | :------------------------- |
 | `userID` | `string` | **Required**. userID của người tạo đơn|
 | `client` | `string` | **Required**. khách hàng|
+| `deadline` | `string` | **Required**.|
+| `location` | `string` | **Required**.|
 | `note` | `string` | **Not required**. ghi chú|
 
 - Xoá đơn hàng
@@ -256,9 +258,11 @@
 
 | Body | Type     | Description                |
 | :-------- | :------- | :------------------------- |
-| `note` | `string` | **Not required**.|
 | `status` | `string` | **Not required**. Default: 'Chưa thực hiện'|
-| `deadline` | `string` | **Not required**.|
+| `deadline` | `string` | **Required**.|
+| `location` | `string` | **Required**.|
+| `note` | `string` | **Not required**. ghi chú|
+
 
 - Danh sách đơn hàng
 ```http
