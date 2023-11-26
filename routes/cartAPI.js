@@ -132,7 +132,7 @@ router.delete("/removeServiceFromCart", async (req, res) => {
 router.get("/list", async (req, res) => {
   const {
       userID
-  } = req.body
+  } = req.params
   try {
       const carts = await cartModels.findOne({
           userID
