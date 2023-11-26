@@ -134,7 +134,7 @@ router.get("/list", async (req, res) => {
       userID
   } = req.body
   try {
-      const carts = await cartModels.find({
+      const carts = await cartModels.findOne({
           userID
       });
       if (!carts) {
