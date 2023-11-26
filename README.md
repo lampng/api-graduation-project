@@ -256,6 +256,7 @@
 | Body | Type     | Description                |
 | :-------- | :------- | :------------------------- |
 | `note` | `string` | **Not required**.|
+| `status` | `string` | **Not required**. Default: 'Chưa thực hiện'|
 
 - Danh sách đơn hàng
 ```http
