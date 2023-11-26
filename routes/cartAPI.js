@@ -131,11 +131,11 @@ router.delete("/removeServiceFromCart", async (req, res) => {
 // TODO: Giỏ hàng của người dùng
 router.get("/list/:id", async (req, res) => {
   const {
-      userID
+      id
   } = req.params
   try {
       const carts = await cartModels.findOne({
-          userID
+          "userID": id
       });
       if (!carts) {
         return res.status(404).json({
