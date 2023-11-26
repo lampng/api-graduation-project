@@ -52,7 +52,12 @@ const orderSchema = mongoose.Schema({
     location: {
         type: String,
         require: true
-    }
+    },
+    status: {
+        type: String, // Trạng thái
+        enum: ['Chưa thực hiện', 'Đang thực hiện', 'Hoàn thành', 'Không hoàn thành'],
+        default: 'Chưa thực hiện', // Trạng thái mặc định khi thêm vào giỏ hàng
+    },
 }, {
     timestamps: true,
 });
