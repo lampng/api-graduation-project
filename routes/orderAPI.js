@@ -83,10 +83,10 @@ router.get("/list", async (req, res) => {
     }
 });
 // TODO: Danh sách đơn hàng của người dùng
-router.get("/listOfUser", async (req, res) => {
+router.get("/listOfUser/:id", async (req, res) => {
     const {
         userID
-    } = req.body
+    } = req.params
     try {
         const orders = await orderModels.find({
             userID
