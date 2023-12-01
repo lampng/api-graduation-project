@@ -27,7 +27,6 @@ router.get("/", (req, res) => {
 
   });
 });
-
 // TODO: Thêm dịch vụ vào giỏ hàng
 router.post("/addServiceToCart", async (req, res) => {
   const {
@@ -54,6 +53,7 @@ router.post("/addServiceToCart", async (req, res) => {
         message: 'Dịch vụ không tồn tại.'
       });
     }
+  
     // * Kiểm tra xem dịch vụ đã tồn tại trong giỏ hàng chưa
     const existingServiceIndex = cart.items.findIndex(item => item.serviceID.toString() === serviceID);
     if (existingServiceIndex !== -1) {
@@ -146,10 +146,11 @@ router.get("/list/:id", async (req, res) => {
       res.status(200).json(carts);
       console.log(`✅ Gọi giỏ hàng của người dùng thành công`.green.bold);
   } catch (error) {
-      console.log("🐼 ~ file: orderAPI.js:85 ~ router.get ~ error:", error)
+      console.log(`🐼 ~ file: orderAPI.js:85 ~ router.get ~ error:`, error)
       res.status(500).json({
           message: error.message,
       });
   }
 });
 module.exports = router;
+
