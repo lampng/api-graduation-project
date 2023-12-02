@@ -40,11 +40,11 @@ route(app)
 app.get("/", (req, res) => {
     res.json({
         status: "API ON",
-        "User:": `https://api-graduation-project.vercel.app/user/`,
-        "Client:": `https://api-graduation-project.vercel.app/client/`,
-        "Service:": `https://api-graduation-project.vercel.app/service/`,
-        "Cart:": `https://api-graduation-project.vercel.app/Cart/`,
-        "Order:": `https://api-graduation-project.vercel.app/order/`,
+        "User:": `https://api-graduation-project-production.up.railway.app/user/`,
+        "Client:": `https://api-graduation-project-production.up.railway.app/client/`,
+        "Service:": `https://api-graduation-project-production.up.railway.app/service/`,
+        "Cart:": `https://api-graduation-project-production.up.railway.app/Cart/`,
+        "Order:": `https://api-graduation-project-production.up.railway.app/order/`,
     })
 })
 const APIroute = require('./routes/userAPI');

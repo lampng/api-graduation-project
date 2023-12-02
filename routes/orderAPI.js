@@ -12,11 +12,11 @@ var router = express.Router();
 router.get("/", (req, res) => {
     res.json({
         status: "Đang phát triển",
-        "Xác nhận đơn hàng(POST):": `https://api-graduation-project.vercel.app/order/comfirmOrder/`,
-        "Cập nhập đơn hàng(PUT):": `https://api-graduation-project.vercel.app/order/update/:id`,
-        "Xoá đơn hàng(DELETE):": `https://api-graduation-project.vercel.app/order/comfirmOrder/`,
-        "Danh sách đơn hàng(GET):": `https://api-graduation-project.vercel.app/order/list/`,
-        "Danh sách đơn hàng của người dùng(GET):": `https://api-graduation-project.vercel.app/order/listOfUser/`,
+        "Xác nhận đơn hàng(POST):": `https://api-graduation-project-production.up.railway.app/order/comfirmOrder/`,
+        "Cập nhập đơn hàng(PUT):": `https://api-graduation-project-production.up.railway.app/order/update/:id`,
+        "Xoá đơn hàng(DELETE):": `https://api-graduation-project-production.up.railway.app/order/comfirmOrder/`,
+        "Danh sách đơn hàng(GET):": `https://api-graduation-project-production.up.railway.app/order/list/`,
+        "Danh sách đơn hàng của người dùng(GET):": `https://api-graduation-project-production.up.railway.app/order/listOfUser/`,
     });
 });
 // TODO: Xác nhận đơn hàng

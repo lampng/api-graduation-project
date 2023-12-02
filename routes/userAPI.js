@@ -24,14 +24,14 @@ router.get("/", (req, res) => {
     // "Xoá người dùng(DELETE):": `http://localhost:${port}/user/delete/:id`,
     // "Gọi danh sách người dùng(GET):": `http://localhost:${port}/user/list`,
     // "Gọi chi tiết người dùng(GET):": `http://localhost:${port}/user/detail/:id`,
-    "Đăng ký(POST):": `https://api-graduation-project.vercel.app/user/register`,
-    "Đăng nhập(POST):": `https://api-graduation-project.vercel.app/user/login`,
-    "Đăng xuất(GET):": `https://api-graduation-project.vercel.app/user/logout/:id`, //* lưu ý: sử dụng id của session khi đăng nhập(khi đăng nhập trên điện thoại sẽ tự lưu vào local tạm thời của ứng dụng.)
-    "Cập nhập người dùng(PUT):": `https://api-graduation-project.vercel.app/user/update/:id`,
-    "Đổi mật khẩu(PUT):": `https://api-graduation-project.vercel.app/user/change-password/:id`,
-    "Xoá người dùng(DELETE):": `https://api-graduation-project.vercel.app/user/delete/:id`,
-    "Gọi danh sách người dùng(GET):": `https://api-graduation-project.vercel.app/user/list`,
-    "Gọi chi tiết người dùng(GET):": `https://api-graduation-project.vercel.app/user/detail/:id`,
+    "Đăng ký(POST):": `https://api-graduation-project-production.up.railway.app/user/register`,
+    "Đăng nhập(POST):": `https://api-graduation-project-production.up.railway.app/user/login`,
+    "Đăng xuất(GET):": `https://api-graduation-project-production.up.railway.app/user/logout/:id`, //* lưu ý: sử dụng id của session khi đăng nhập(khi đăng nhập trên điện thoại sẽ tự lưu vào local tạm thời của ứng dụng.)
+    "Cập nhập người dùng(PUT):": `https://api-graduation-project-production.up.railway.app/user/update/:id`,
+    "Đổi mật khẩu(PUT):": `https://api-graduation-project-production.up.railway.app/user/change-password/:id`,
+    "Xoá người dùng(DELETE):": `https://api-graduation-project-production.up.railway.app/user/delete/:id`,
+    "Gọi danh sách người dùng(GET):": `https://api-graduation-project-production.up.railway.app/user/list`,
+    "Gọi chi tiết người dùng(GET):": `https://api-graduation-project-production.up.railway.app/user/detail/:id`,
   });
 });
 // TODO: Đăng ký người dùng

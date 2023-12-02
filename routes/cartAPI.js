@@ -20,11 +20,10 @@ var port = process.env.PORT || 1102;
 router.get("/", (req, res) => {
   res.json({
     status: "Đang phát triển",
-    "Thêm dịch vụ vào giỏ hàng(POST):": `https://api-graduation-project.vercel.app/cart/addServiceToCart/`,
+    "Thêm dịch vụ vào giỏ hàng(POST):": `https://api-graduation-project-production.up.railway.app/cart/addServiceToCart/`,
 
-    "Xoá dịch vụ khỏi giỏ hàng(POST):": `https://api-graduation-project.vercel.app/cart/removeServiceFromCart/`,
-    "Gọi danh sách giỏ hàng của người dùng(GET):": `https://api-graduation-project.vercel.app/cart/list/`,
-
+    "Xoá dịch vụ khỏi giỏ hàng(POST):": `https://api-graduation-project-production.up.railway.app/cart/removeServiceFromCart/`,
+    "Gọi danh sách giỏ hàng của người dùng(GET):": `https://api-graduation-project-production.up.railway.app/cart/list/`,
   });
 });
 // TODO: Thêm dịch vụ vào giỏ hàng

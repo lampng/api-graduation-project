@@ -18,11 +18,11 @@ var port = process.env.PORT || 1102;
 router.get("/", (req, res) => {
   res.json({
     status: "Đang phát triển",
-    "Tạo khách hàng mới(POST):": `https://api-graduation-project.vercel.app/client/create`,
-    "Gọi danh sách khách hàng(GET):": `https://api-graduation-project.vercel.app/client/list`,
-    "Gọi chi tiết khách hàng(GET):": `https://api-graduation-project.vercel.app/client/detail/:id`,
-    "Cập nhập thông tin khách hàng(PUT):": `https://api-graduation-project.vercel.app/client/update/:id`,
-    "Xoá khách hàng(DELETE):": `https://api-graduation-project.vercel.app/client/delete/:id`,
+    "Tạo khách hàng mới(POST):": `https://api-graduation-project-production.up.railway.app/client/create`,
+    "Gọi danh sách khách hàng(GET):": `https://api-graduation-project-production.up.railway.app/client/list`,
+    "Gọi chi tiết khách hàng(GET):": `https://api-graduation-project-production.up.railway.app/client/detail/:id`,
+    "Cập nhập thông tin khách hàng(PUT):": `https://api-graduation-project-production.up.railway.app/client/update/:id`,
+    "Xoá khách hàng(DELETE):": `https://api-graduation-project-production.up.railway.app/client/delete/:id`,
   });
 });
 // TODO: Gọi danh sách khách hàng

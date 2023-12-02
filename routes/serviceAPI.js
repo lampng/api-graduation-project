@@ -17,11 +17,11 @@ var router = express.Router();
 router.get("/", (req, res) => {
   res.json({
     status: "Đang phát triển",
-    "Tạo dịch vụ(POST):": `https://api-graduation-project.vercel.app/service/create/`,
-    "Gọi danh sách dịch vụ(GET):": `https://api-graduation-project.vercel.app/service/list/`,
-    "Gọi chi tiết dịch vụ(GET):": `https://api-graduation-project.vercel.app/service/detail/:id`,
-    "Cập nhập dịch vụ(PUT):": `https://api-graduation-project.vercel.app/service/update/:id`,
-    "Xoá dịch vụ(DELETE):": `https://api-graduation-project.vercel.app/service/delete/:id`,
+    "Tạo dịch vụ(POST):": `https://api-graduation-project-production.up.railway.app/service/create/`,
+    "Gọi danh sách dịch vụ(GET):": `https://api-graduation-project-production.up.railway.app/service/list/`,
+    "Gọi chi tiết dịch vụ(GET):": `https://api-graduation-project-production.up.railway.app/service/detail/:id`,
+    "Cập nhập dịch vụ(PUT):": `https://api-graduation-project-production.up.railway.app/service/update/:id`,
+    "Xoá dịch vụ(DELETE):": `https://api-graduation-project-production.up.railway.app/service/delete/:id`,
   });
 });
 // TODO: Tạo dịch vụ
