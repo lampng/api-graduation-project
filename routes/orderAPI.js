@@ -39,23 +39,29 @@ router.post("/comfirmOrder", async (req, res) => {
                 message: 'Giỏ hàng không tồn tại.'
             });
         }
+
         const newOrder = new orderModels({
             userID: cart.userID, //*Người tạo hoá đơn
             client: client,
-            items: cart.items.map(item => ({
-                serviceID: item.serviceID,
-                name: item.name,
-                description: item.description,
-                price: item.price,
-                image: item.image,
-                status: item.status,
+            services: cart.services.map(service => ({
+                serviceID: service.serviceID,
+            })),
+            staffs: cart.staffs.map(staff => ({
+                staffID: staff.staffID,
             })),
             priceTotal: cart.subTotal,
             deadline: deadline,
             location: location,
             note: note,
         })
-        await newOrder.save();
+        console.log(`❕  ${cart.staffs.map(staff => ({
+            staffID: staff.staffID
+        }))}`.cyan.bold);
+        await newOrder.save().then((doc) => {
+            console.log(`✅ Đơn hàng đã được tạo`.green.bold);
+        }).catch((error) => {
+            console.log("🐼 ~ file: orderAPI.js:76 ~ awaitnewOrder.save ~ error:", error)
+        });
         await cartModels.deleteOne({
             userID
         });
@@ -74,7 +80,23 @@ router.post("/comfirmOrder", async (req, res) => {
 // TODO: Danh sách đơn hàng
 router.get("/list", async (req, res) => {
     try {
-        const orders = await orderModels.find({});
+        const orders = await orderModels.find({})
+            .populate({
+                path: 'client',
+                model: 'client',
+                select: 'name ' // Chọn các trường cần hiển thị từ bảng service
+            })
+            .populate({
+                path: 'services.serviceID',
+                model: 'service',
+                select: 'name description price image ' // Chọn các trường cần hiển thị từ bảng service
+            })
+            .populate({
+                path: 'staffs.staffID',
+                model: 'user',
+                select: 'name email role job address phone gender citizenIdentityCard birthday avatar status' // Chọn các trường cần hiển thị từ bảng user
+            });
+
         res.status(200).json(orders);
         console.log(`✅ Gọi danh sách đơn hàng thành công`.green.bold);
     } catch (error) {

@@ -193,6 +193,7 @@ router.put("/update/:id", upload.single("image"), async (req, res) => {
             new: true,
           })
           .then((doc) => {
+            updateOrdersWithServiceInfo(service.id, data)
             console.log(
               `✅  Cập nhập dịch vụ (hình ảnh) thành công`.green.bold
             );
@@ -257,6 +258,22 @@ router.delete("/delete/:id", async (req, res) => {
     });
   }
 });
+// ! Hàm cập nhật thông tin dịch vụ trong các đơn hàng
+async function updateOrdersWithServiceInfo(serviceID, newServiceInfo) {
+  try {
+      // Tìm và cập nhật các đơn hàng có chứa serviceID
+      const updateResult = await orderModel.updateMany(
+          { "services.serviceID": serviceID }, // Điều kiện tìm đơn hàng có serviceID
+          { $set: { "services.$[elem].serviceID": newServiceInfo } }, // Cập nhật thông tin dịch vụ mới
+          { arrayFilters: [{ "elem.serviceID": serviceID }] } // Lọc các phần tử có serviceID
+      );
+
+      return updateResult;
+  } catch (error) {
+      console.error("Error updating orders with service info:", error);
+      throw error;
+  }
+}
 // ! Hàm loại bỏ dấu và khoảng cách
 function removeDiacriticsAndSpaces(str) {
   return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s/g, '');

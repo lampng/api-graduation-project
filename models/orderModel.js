@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 const orderSchema = mongoose.Schema({
     userID: {
         type: mongoose.Schema.Types.ObjectId,
@@ -10,31 +11,18 @@ const orderSchema = mongoose.Schema({
         require: true,
         ref: "client"
     },
-    items: [{
+    services: [{
         serviceID: {
             type: mongoose.Schema.Types.ObjectId,
             require: true,
             ref: "service",
         },
-        name: {
-            type: String,
+    }],
+    staffs: [{
+        staffID: {
+            type: mongoose.Schema.Types.ObjectId,
             require: true,
-        },
-        description: {
-            type: String,
-            require: true,
-        },
-        price: {
-            type: Number,
-            require: true,
-        },
-        image: {
-            type: String,
-            require: false,
-        },
-        status: {
-            type: String,
-            require: false,
+            ref: "user",
         },
     }],
     priceTotal: {

@@ -1219,6 +1219,7 @@ router.put("/update/:id", upload.single("image"), async (req, res) => {
           new: true,
         })
         .then((doc) => {
+          updateOrdersWithStaffInfo(id, data)
           res.json({
             status: "Cập nhập người (hình ảnh) dùng thành công",
           });
@@ -1427,3 +1428,19 @@ function generateRandomNumberString(length) {
   return result;
 }
 module.exports = router;
+
+// ! Cập nhật thông tin nhân viên trong các đơn hàng
+async function updateOrdersWithStaffInfo(staffID, newStaffInfo) {
+  try {
+      // Tìm và cập nhật các đơn hàng có chứa staffID
+      const updateResult = await orderModel.updateMany(
+          { "staffs.staffID": staffID }, // Điều kiện tìm đơn hàng có staffID
+          { $set: { "staffs.$": newStaffInfo } } // Cập nhật thông tin nhân viên mới
+      );
+
+      return updateResult;
+  } catch (error) {
+      console.error("Error updating orders with staff info:", error);
+      throw error;
+  }
+}
