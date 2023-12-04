@@ -1,5 +1,5 @@
 # API GRADUATION PROJECT
- - API LINK: https://api-graduation-project.vercel.app/
+ - API LINK: https://api-graduation-project-production.up.railway.app/
 
 ## API Reference
 
