@@ -9,22 +9,6 @@ const serviceSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "service",
     },
-    // name: {
-    //     type: String,
-    //     require: true,
-    // },
-    // description: {
-    //     type: String,
-    //     require: true,
-    // },
-    // price: {
-    //     type: Number,
-    //     require: true,
-    // },
-    // image: {
-    //     type: String,
-    //     require: false,
-    // }
 }, {
     timestamps: true,
 });
@@ -42,42 +26,6 @@ const staffSchema = mongoose.Schema({
         require: true,
         ref: "user"
     },
-    // name: {
-    //     type: String,
-    //     require: true
-    // },
-    // job: {
-    //     type: String,
-    //     require: true
-    // },
-    // phone: {
-    //     type: String,
-    //     require: true
-    // },
-    // avatar: {
-    //     type: String,
-    //     require: false,
-    // },
-    // citizenIdentityCard: {
-    //     type: String,
-    //     require: false
-    // },
-    // status: {
-    //     type: Boolean,
-    //     default: true
-    // },
-    // address: {
-    //     type: String,
-    //     require: false,
-    // },
-    // gender: {
-    //     type: String,
-    //     require: false
-    // },
-    // active: {
-    //     type: String,
-    //     default: false,
-    //   },
 }, {
     timestamps: true,
 });
@@ -97,10 +45,10 @@ const cartSchema = mongoose.Schema({
     services: [serviceSchema],
     staffs: [staffSchema],
     // * A hòn hiển thị tổng tiền dịch vụ bằng trường subTolal này!
-    subTotal: {
-        default: 0,
-        type: Number,
-    },
+    // subTotal: {
+    //     type: Number,
+    //     require: true
+    // },
 }, {
     timestamps: true,
 });

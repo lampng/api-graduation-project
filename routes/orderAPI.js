@@ -25,6 +25,7 @@ router.post("/comfirmOrder", async (req, res) => {
         userID,
         note,
         client,
+        started,
         deadline,
         location
     } = req.body;
@@ -50,6 +51,7 @@ router.post("/comfirmOrder", async (req, res) => {
                 staffID: staff.staffID,
             })),
             priceTotal: cart.subTotal,
+            started: started,
             deadline: deadline,
             location: location,
             note: note,
@@ -60,17 +62,22 @@ router.post("/comfirmOrder", async (req, res) => {
         await newOrder.save().then((doc) => {
             console.log(`✅ Đơn hàng đã được tạo`.green.bold);
         }).catch((error) => {
-            console.log("🐼 ~ file: orderAPI.js:76 ~ awaitnewOrder.save ~ error:", error)
+            console.log("🐼 ~ file: orderAPI.js:63 ~ awaitnewOrder.save ~ error:", error)
         });
         await cartModels.deleteOne({
             userID
+        }).then((doc) => {
+            console.log(`✅ Giỏ hàng của người dùng đã được xoá`.green.bold);
+            res.status(200).json({
+                success: true,
+                message: 'Giỏ hàng của người dùng đã được xoá.'
+            });
+        }).catch((error) => {
+            console.log("🐼 ~ file: orderAPI.js:74 ~ router.post ~ error:", error)
         });
-        return res.status(200).json({
-            success: true,
-            message: 'đơn hàng đã được tạo thành công.'
-        });
+
     } catch (error) {
-        console.log("🐼 ~ file: orderAPI.js:60 ~ router.post ~ error:", error)
+        console.log("🐼 ~ file: orderAPI.js:78 ~ router.post ~ error:", error)
         return res.status(500).json({
             success: false,
             message: 'Đã xảy ra lỗi khi tạo đơn hàng.'
@@ -80,7 +87,7 @@ router.post("/comfirmOrder", async (req, res) => {
 // TODO: Danh sách đơn hàng
 router.get("/list", async (req, res) => {
     try {
-        const orders = await orderModels.find({})
+        await orderModels.find({})
             .populate({
                 path: 'client',
                 model: 'client',
@@ -95,10 +102,12 @@ router.get("/list", async (req, res) => {
                 path: 'staffs.staffID',
                 model: 'user',
                 select: 'name email role job address phone gender citizenIdentityCard birthday avatar status' // Chọn các trường cần hiển thị từ bảng user
+            }).then((doc) => {
+                console.log(`✅ Gọi danh sách đơn hàng thành công`.green.bold);
+                res.status(200).json(doc);
+            }).catch((error) => {
+                console.log("🐼 ~ file: orderAPI.js:106 ~ router.get ~ error:", error)
             });
-
-        res.status(200).json(orders);
-        console.log(`✅ Gọi danh sách đơn hàng thành công`.green.bold);
     } catch (error) {
         console.log("🐼 ~ file: orderAPI.js:72 ~ router.get ~ error:", error)
         res.status(500).json({
@@ -110,15 +119,33 @@ router.get("/list", async (req, res) => {
 router.get("/listOfUser/:id", async (req, res) => {
     const {
         userID
-    } = req.params
+    } = req.body
     try {
-        const orders = await orderModels.find({
-            userID
-        });
-        res.status(200).json(orders);
-        console.log(`✅ Gọi danh sách đơn hàng của người dùng thành công`.green.bold);
+        await orderModels.find({
+                "userID": userID
+            })
+            .populate({
+                path: 'client',
+                model: 'client',
+                select: 'name address phone gender creatorID' // Chọn các trường cần hiển thị từ bảng service
+            })
+            .populate({
+                path: 'services.serviceID',
+                model: 'service',
+                select: 'name description price image ' // Chọn các trường cần hiển thị từ bảng service
+            })
+            .populate({
+                path: 'staffs.staffID',
+                model: 'user',
+                select: 'name email role job address phone gender citizenIdentityCard birthday avatar status' // Chọn các trường cần hiển thị từ bảng user
+            }).then((doc) => {
+                console.log(`✅ Gọi danh sách đơn hàng của người dùng thành công`.green.bold);
+                res.status(200).json(doc);
+            }).catch((error) => {
+            console.log("🐼 ~ file: orderAPI.js:150 ~ router.get ~ error:", error)
+            });
     } catch (error) {
-        console.log("🐼 ~ file: orderAPI.js:85 ~ router.get ~ error:", error)
+        console.log("🐼 ~ file: orderAPI.js:153 ~ router.get ~ error:", error)
         res.status(500).json({
             message: error.message,
         });
@@ -127,12 +154,17 @@ router.get("/listOfUser/:id", async (req, res) => {
 // TODO: Xoá đơn hàng
 router.delete("/delete/:id", async (req, res) => {
     try {
-        const orders = await orderModels.findByIdAndDelete(req.params.id);
-
-        console.log(`✅ Xoá đơn hàng thành công`);
-        res.status(200).json(orders);
+        await orderModels.findByIdAndDelete(req.params.id).then((doc) => {
+            console.log(`❎ Xoá nhân viên thực hiện thành công`.green.bold);
+            res.status(200).json({
+                success: true,
+                message: '❎ Xoá nhân viên thực hiện thành công.',
+            });
+        }).catch((error) => {
+        console.log("🐼 ~ file: orderAPI.js:169 ~ awaitorderModels.findByIdAndDelete ~ error:", error)
+        });
     } catch (error) {
-        console.log("🐼 ~ file: orderAPI.js:98 ~ router.delete ~ error:", error)
+        console.log("🐼 ~ file: orderAPI.js:172 ~ router.delete ~ error:", error)
         res.status(500).json({
             message: "Không tìm thấy đơn hàng",
         });
@@ -141,12 +173,12 @@ router.delete("/delete/:id", async (req, res) => {
 // TODO: Cập nhập đơn hàng
 router.put("/update/:id", async (req, res) => {
     const id = req.params.id
-    console.log("🐼 ~ file: orderAPI.js:114 ~ router.update ~ req.params.id:", id)
     try {
         let order = await orderModels.findById(id);
         const data = {
             note: req.body.note || order.note,
             status: req.body.status || order.status,
+            started: req.body.started || order.started,
             deadline: req.body.deadline || order.deadline,
             location: req.body.location || order.location,
         }
@@ -155,7 +187,7 @@ router.put("/update/:id", async (req, res) => {
                 status: "Cập nhập đơn hàng thành công",
             });
         }).catch((err) => {
-            console.log("🐼 ~ file: orderAPI.js:124 ~ awaitorderModels.findByIdAndUpdate ~ err:", err)
+            console.log("🐼 ~ file: orderAPI.js:194 ~ awaitorderModels.findByIdAndUpdate ~ err:", err)
             res.status(500).json({
                 status: "Cập nhập đơn hàng thất bại",
             });
@@ -167,4 +199,7 @@ router.put("/update/:id", async (req, res) => {
         });
     }
 })
+// TODO: Hiển thị công việc của người dùng trong đơn hàng
+
+
 module.exports = router;

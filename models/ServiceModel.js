@@ -16,10 +16,11 @@ const serviceSchema = mongoose.Schema({
         type: String,
         require: false,
     },
-    quantityImage: {
-        type: String,
-        require: true,
-    },
+    // quantityImage: {
+    //     type: Number,
+    //     default: 30,
+    //     require: true,
+    // },
     cloudinary_id: {
         type: String,
         require: false,

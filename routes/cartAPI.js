@@ -65,10 +65,14 @@ router.post("/addServiceToCart", async (req, res) => {
     cart.services.push({
       serviceID: serviceDetail._id,
     });
-    const servicePrice = serviceDetail.price;
-    cart.subTotal += servicePrice;
-    let data = await cart.save();
-    res.status(200).json(data)
+    // const servicePrice = serviceDetail.price;
+    // cart.subTotal += servicePrice;
+    await cart.save().then((doc) => {
+      console.log(`✅ Dịch vụ đã được thêm vào giỏ hàng`.green.bold);
+      res.status(200).json(doc)
+    }).catch((error) => {
+      console.log("🐼 ~ file: cartAPI.js:74 ~ awaitcart.save ~ error:", error)
+    });
   } catch (error) {
     console.log(`❗  ${error}`.bgRed.white.strikethrough.bold);
     res.status(400).json({
@@ -88,7 +92,6 @@ router.delete("/removeServiceFromCart", async (req, res) => {
     let cart = await cartModels.findOne({
       userID: userID
     })
-    console.log("🐼 ~ file: cartAPI.js:91 ~ router.delete ~ cart:", cart)
     if (!cart) {
       return res.status(404).json({
         success: false,
@@ -103,19 +106,21 @@ router.delete("/removeServiceFromCart", async (req, res) => {
         message: 'Dịch vụ không tồn tại trong giỏ hàng.'
       });
     }
-    // const removedServicePrice = cart.services.serviceID[serviceIndex].price;
-    // cart.subTotal -= removedServicePrice;
-    //* Xoá dịch vụ khỏi mảng services
+    // //* Xoá dịch vụ khỏi mảng services
     cart.services.splice(serviceIndex, 1);
-    
+
     // Lưu giỏ hàng mới vào cơ sở dữ liệu
-    await cart.save();
-    return res.status(200).json({
-      success: true,
-      message: 'Dịch vụ đã được xoá khỏi giỏ hàng.'
+    await cart.save().then((doc) => {
+      console.log(`❎ Dịch vụ đã được xoá khỏi giỏ hàng`.green.bold);
+      res.status(200).json({
+        success: true,
+        message: 'Dịch vụ đã được xoá khỏi giỏ hàng.'
+      });
+    }).catch((error) => {
+      console.log("🐼 ~ file: cartAPI.js:120 ~ awaitcart.save ~ error:", error)
     });
   } catch (error) {
-    console.log("🐼 ~ file: cartAPI.js:116 ~ router.delete ~ error:", error)
+    console.log("🐼 ~ file: cartAPI.js:123 ~ router.delete ~ error:", error)
     return res.status(500).json({
       success: false,
       message: 'Đã xảy ra lỗi khi xoá dịch vụ khỏi giỏ hàng.'
@@ -161,16 +166,17 @@ router.post("/addStaffToCart", async (req, res) => {
     cart.staffs.push({
       staffID: staffDetail._id,
     });
-    let data = await cart.save().then((doc) => {
+    await cart.save().then((doc) => {
       console.log(`✅ Thêm nhân viên thực hiện thành công`.green.bold);
+      res.status(200).json({
+        success: true,
+        message: 'Nhân viên đã được thêm vào giỏ hàng.',
+        data: doc
+      });
     }).catch((error) => {
-      console.log("🐼 ~ file: cartAPI.js:173 ~ data ~ error:", error)
+      console.log("🐼 ~ file: cartAPI.js:177 ~ awaitcart.save ~ error:", error)
     });
-    res.status(200).json({
-      success: true,
-      message: 'Nhân viên đã được thêm vào giỏ hàng.',
-      data: data
-    });
+
   } catch (error) {
     console.log(`❗  ${error}`.bgRed.white.strikethrough.bold);
     res.status(400).json({
@@ -234,7 +240,7 @@ router.get("/list/:id", async (req, res) => {
     //   "userID": id
     // });
 
-    const carts = await cartModels.findOne({
+    await cartModels.findOne({
       "userID": id
     }).populate({
       path: 'services.serviceID',
@@ -244,18 +250,18 @@ router.get("/list/:id", async (req, res) => {
       path: 'staffs.staffID',
       model: 'user',
       select: 'name email role job address phone gender citizenIdentityCard birthday avatar status' // Chọn các trường cần hiển thị từ bảng service
-    });
-
-    if (!carts) {
+    }).then((doc) => {
+      console.log(`✅ Gọi giỏ hàng của người dùng thành công`.green.bold);
+      return res.status(200).json(doc);
+    }).catch((error) => {
+      console.log("🐼 ~ file: cartAPI.js:257 ~ router.get ~ error:", error)
       return res.status(404).json({
         success: false,
         message: 'Giỏ hàng không tồn tại.'
       });
-    }
-    res.status(200).json(carts);
-    console.log(`✅ Gọi giỏ hàng của người dùng thành công`.green.bold);
+    });
   } catch (error) {
-    console.log(`🐼 ~ file: orderAPI.js:85 ~ router.get ~ error:`, error)
+    console.log("🐼 ~ file: cartAPI.js:268 ~ router.get ~ error:", error)
     res.status(500).json({
       message: error.message,
     });

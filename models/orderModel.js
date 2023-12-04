@@ -33,6 +33,10 @@ const orderSchema = mongoose.Schema({
         type: String,
         require: false
     },
+    started: {
+        type: Date,
+        require: true
+    },
     deadline: {
         type: Date,
         require: true
