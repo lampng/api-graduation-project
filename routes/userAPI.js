@@ -1142,23 +1142,14 @@ router.post("/login", async (req, res) => {
 // TODO: Gọi danh sách người dùng
 router.get("/list", async (req, res) => {
   try {
-    const user = await userModels.find({});
-    res.status(200).json(user);
-    console.log(`✅ Get list user Success`.green.bold);
-    // // //* Tạo người dùng mới
-    // const salt = await bcrypt.genSalt(10);
-    // const hashedPassword = await bcrypt.hash("123456", salt);
-    // const newUser = new userModels({
-    //   name: "Nguyễn Thanh Hoàng",
-    //   email: "nguyenthanhhon@gmail.com",
-    //   citizenIdentityCard: "123456789",
-    //   password: hashedPassword,
-    //   role: "Nhân viên",
-    //   job: "Photographer",
-    // });
-    // await newUser.save();
+    await userModels.find({}).then((doc) => {
+      console.log(`✅ Gọi danh sách người dùng thành công`.green.bold);
+      res.status(200).json(doc);
+    }).catch((error) => {
+      console.log("🐼 ~ file: userAPI.js:1149 ~ awaituserModels.find ~ error:", error)
+    });
   } catch (error) {
-    console.log(`❗  ${error.message}`.bgRed.white.strikethrough.bold);
+    console.log("🐼 ~ file: userAPI.js:1152 ~ router.get ~ error:", error)
     res.status(500).json({
       message: error.message,
     });
@@ -1170,9 +1161,15 @@ router.get("/detail/:id", async (req, res) => {
     const {
       id
     } = req.params;
-    const user = await userModels.findById(id);
-    res.status(200).json(user);
-    console.log(`✅ Gọi chi tiết người dùng thành công`.green.bold);
+    await userModels.findById(id).then((doc) => {
+      console.log(`✅ ✅ Gọi chi tiết người dùng thành công`.green.bold);
+      res.status(200).json(doc);
+    }).catch((error) => {
+      console.log("🐼 ~ file: userAPI.js:1168 ~ user ~ error:", error)
+      res.status(500).json({
+        message: error.message,
+      });
+    });
   } catch (error) {
     console.log(`❗  ${error.message}`.bgRed.white.strikethrough.bold);
     res.status(500).json({
@@ -1213,7 +1210,7 @@ router.put("/update/:id", upload.single("image"), async (req, res) => {
         cloudinary_id: result.public_id || user.cloudinary_id,
         active: true,
         status: req.body.status
-        };
+      };
       await userModels
         .findByIdAndUpdate(id, data, {
           new: true,
@@ -1432,15 +1429,20 @@ module.exports = router;
 // ! Cập nhật thông tin nhân viên trong các đơn hàng
 async function updateOrdersWithStaffInfo(staffID, newStaffInfo) {
   try {
-      // Tìm và cập nhật các đơn hàng có chứa staffID
-      const updateResult = await orderModel.updateMany(
-          { "staffs.staffID": staffID }, // Điều kiện tìm đơn hàng có staffID
-          { $set: { "staffs.$": newStaffInfo } } // Cập nhật thông tin nhân viên mới
-      );
+    // Tìm và cập nhật các đơn hàng có chứa staffID
+    const updateResult = await orderModel.updateMany({
+        "staffs.staffID": staffID
+      }, // Điều kiện tìm đơn hàng có staffID
+      {
+        $set: {
+          "staffs.$": newStaffInfo
+        }
+      } // Cập nhật thông tin nhân viên mới
+    );
 
-      return updateResult;
+    return updateResult;
   } catch (error) {
-      console.error("Error updating orders with staff info:", error);
-      throw error;
+    console.error("Error updating orders with staff info:", error);
+    throw error;
   }
 }
