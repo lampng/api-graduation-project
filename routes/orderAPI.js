@@ -84,7 +84,7 @@ router.get("/list", async (req, res) => {
             .populate({
                 path: 'client',
                 model: 'client',
-                select: 'name ' // Chọn các trường cần hiển thị từ bảng service
+                select: 'name address phone gender creatorID' // Chọn các trường cần hiển thị từ bảng service
             })
             .populate({
                 path: 'services.serviceID',
