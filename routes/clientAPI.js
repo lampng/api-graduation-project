@@ -14,6 +14,7 @@ var express = require("express");
 var router = express.Router();
 var nodemailer = require("nodemailer");
 var port = process.env.PORT || 1102;
+const moment = require('moment');
 
 router.get("/", (req, res) => {
   res.json({
@@ -25,10 +26,14 @@ router.get("/", (req, res) => {
     "Xoá khách hàng(DELETE):": `https://api-graduation-project-production.up.railway.app/client/delete/:id`,
   });
 });
+// ! Sắp xếp giảm dần
+
 // TODO: Gọi danh sách khách hàng
 router.get("/list", async (req, res) => {
   try {
     const clients = await clientModels.find({});
+
+    clients.sort((a, b) => b.createdAt - a.createdAt);
     //  * `creatorID` là dữ liệu từ bảng `userModels`.
     const creatorID = await userModels.find({});
 
@@ -41,6 +46,8 @@ router.get("/list", async (req, res) => {
     const updatedClients = clients.map((client) => ({
       ...client.toObject(), // * Sao chép thông tin từ mục khách hàng ban đầu
       creatorID: creatorMap[client.creatorID] || client.creatorID, // * Thay thế creatorID bằng tên người sở hữu tương ứng nếu có, nếu không thì giữ nguyên creatorID.
+      createdAt: moment(client.createdAt).format("DD-MM-YYYY HH:mm:ss", true),
+      updatedAt: moment(client.updatedAt).format("DD-MM-YYYY HH:mm:ss", true)
     }));
 
     res.status(200).json(updatedClients);

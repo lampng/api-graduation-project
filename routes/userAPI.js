@@ -1139,6 +1139,7 @@ router.post("/login", async (req, res) => {
     console.log("Sai email".bgRed.white.strikethrough.bold);
   }
 });
+// ! Sắp xếp giảm dần
 // TODO: Gọi danh sách người dùng
 router.get("/list", async (req, res) => {
   try {

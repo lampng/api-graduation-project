@@ -106,7 +106,7 @@ router.get("/list", async (req, res) => {
                 select: 'name email role job address phone gender citizenIdentityCard birthday avatar status', // Chọn các trường cần hiển thị từ bảng user
             }).then((doc) => {
                 console.log(`✅ Gọi danh sách đơn hàng thành công`.green.bold);
-                res.status(200).json(doc);
+                return res.status(200).json(doc);
             }).catch((error) => {
                 console.log("🐼 ~ file: orderAPI.js:106 ~ router.get ~ error:", error)
             });

@@ -236,9 +236,6 @@ router.get("/list/:id", async (req, res) => {
     id
   } = req.params
   try {
-    // const carts = await cartModels.findOne({
-    //   "userID": id
-    // });
 
     await cartModels.findOne({
       "userID": id

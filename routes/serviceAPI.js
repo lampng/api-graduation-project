@@ -72,6 +72,7 @@ router.post("/create/", upload.single("image"), async (req, res) => {
     });
   }
 })
+// ! Sắp xếp giảm dần
 // TODO: Gọi danh sách dịch vụ
 router.get("/list", async (req, res) => {
   try {
