@@ -1,5 +1,5 @@
 # API GRADUATION PROJECT
- - API LINK: https://api-graduation-project.vercel.app/
+ - API LINK: https://api-graduation-project-production.up.railway.app/
 
 ## API Reference
 
@@ -219,6 +219,27 @@
 | `userID` | `string` | **Required**.|
 | `serviceID` | `string` | **Required**.|
 
+- Thêm nhân viên vào giỏ hàng
+```http
+  POST /cart/addStaffToCart
+```
+
+| Body | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `userID` | `string` | **Required**.|
+| `staffID` | `string` | **Required**.|
+
+- Xoá nhân viên khỏi giỏ hàng
+```http
+  DELETE /cart/removeStaffFromCart
+```
+
+| Body | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `userID` | `string` | **Required**.|
+| `staffID` | `string` | **Required**.|
+
+
 - Gọi danh sách giỏ hàng của người dùng
 ```http
   GET /cart/list/${id} = id người dùng
@@ -238,9 +259,11 @@
 | :-------- | :------- | :------------------------- |
 | `userID` | `string` | **Required**. userID của người tạo đơn|
 | `client` | `string` | **Required**. khách hàng|
+| `started` | `string` | **Required**.|
 | `deadline` | `string` | **Required**.|
 | `location` | `string` | **Required**.|
 | `note` | `string` | **Not required**. ghi chú|
+| `status` | `string` | **Not required**. Trạng thái đơn hàng|
 
 - Xoá đơn hàng
 ```http
@@ -259,6 +282,7 @@
 | Body | Type     | Description                |
 | :-------- | :------- | :------------------------- |
 | `status` | `string` | **Not required**. Default: 'Chưa thực hiện'|
+| `started` | `string` | **Required**.|
 | `deadline` | `string` | **Required**.|
 | `location` | `string` | **Required**.|
 | `note` | `string` | **Not required**. ghi chú|
