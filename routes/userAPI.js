@@ -12,7 +12,9 @@ var bcrypt = require("bcryptjs");
 var express = require("express");
 var router = express.Router();
 var nodemailer = require("nodemailer");
+const user = require("../models/userModel");
 var port = process.env.PORT || 1102;
+const moment = require('moment');
 
 router.get("/", (req, res) => {
   res.json({
@@ -1139,16 +1141,25 @@ router.post("/login", async (req, res) => {
     console.log("Sai email".bgRed.white.strikethrough.bold);
   }
 });
-// ! Sắp xếp giảm dần
 // TODO: Gọi danh sách người dùng
 router.get("/list", async (req, res) => {
   try {
     await userModels.find({}).then((doc) => {
+      // TODO: Sắp xếp giảm dần
+      doc.sort((a, b) => b.createdAt - a.createdAt);
+
+      const formatDate = doc.map((user) => ({
+        ...user.toObject(),
+        createdAt: moment(user.createdAt).format("DD-MM-YYYY HH:mm:ss", true),
+        updatedAt: moment(user.updatedAt).format("DD-MM-YYYY HH:mm:ss", true)
+      }))
+
       console.log(`✅ Gọi danh sách người dùng thành công`.green.bold);
-      res.status(200).json(doc);
+      res.status(200).json(formatDate);
     }).catch((error) => {
       console.log("🐼 ~ file: userAPI.js:1149 ~ awaituserModels.find ~ error:", error)
     });
+
   } catch (error) {
     console.log("🐼 ~ file: userAPI.js:1152 ~ router.get ~ error:", error)
     res.status(500).json({

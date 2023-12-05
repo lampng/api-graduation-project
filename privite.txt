@@ -1,3 +1,48 @@
 git add .
 git commit -m "mess"
 git push origin master
+
+
+
+const { MongoClient } = require('mongodb');
+
+// Kết nối tới MongoDB
+const uri = 'mongodb://localhost:27017';
+const client = new MongoClient(uri);
+
+async function getPosts() {
+  try {
+    await client.connect();
+
+    const database = client.db('mydatabase');
+    const postsCollection = database.collection('posts');
+
+    const result = await postsCollection.aggregate([
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'userId',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      {
+        $unwind: '$user',
+      },
+      {
+        $project: {
+          _id: 0,
+          title: 1,
+          content: 1,
+          'user.name': 1,
+        },
+      },
+    ]).toArray();
+
+    console.log(result);
+  } finally {
+    await client.close();
+  }
+}
+
+getPosts().catch(console.error);

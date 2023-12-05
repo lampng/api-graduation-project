@@ -26,13 +26,14 @@ router.get("/", (req, res) => {
     "Xoá khách hàng(DELETE):": `https://api-graduation-project-production.up.railway.app/client/delete/:id`,
   });
 });
-// ! Sắp xếp giảm dần
+
 
 // TODO: Gọi danh sách khách hàng
 router.get("/list", async (req, res) => {
   try {
     const clients = await clientModels.find({});
 
+    // TODO: Sắp xếp giảm dần
     clients.sort((a, b) => b.createdAt - a.createdAt);
     //  * `creatorID` là dữ liệu từ bảng `userModels`.
     const creatorID = await userModels.find({});
