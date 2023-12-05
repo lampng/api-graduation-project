@@ -41,6 +41,7 @@
     "uuid": "^9.0.1"
   },
   "dependencies": {
-    "generate-password": "^1.7.0"
+    "generate-password": "^1.7.0",
+    "moment": "^2.29.4"
   }
 }

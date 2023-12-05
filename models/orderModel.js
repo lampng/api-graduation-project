@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const moment = require('moment');
 
 const orderSchema = mongoose.Schema({
     userID: {
@@ -34,12 +35,12 @@ const orderSchema = mongoose.Schema({
         require: false
     },
     started: {
-        type: Date,
-        require: true
+        type: String,
+        require: true,
     },
     deadline: {
-        type: Date,
-        require: true
+        type: String,
+        require: true,
     },
     location: {
         type: String,

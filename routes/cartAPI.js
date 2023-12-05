@@ -254,10 +254,10 @@ router.get("/list/:id", async (req, res) => {
       console.log(`✅ Gọi giỏ hàng của người dùng thành công`.green.bold);
       return res.status(200).json(doc);
     }).catch((error) => {
-      console.log("🐼 ~ file: cartAPI.js:257 ~ router.get ~ error:", error)
+      console.log("🐼 ~ file: cartAPI.js:257 ~ router.get ~ error: Giỏ hàng không tồn tại.", error)
       return res.status(404).json({
         success: false,
-        message: 'Giỏ hàng không tồn tại.'
+        message: '🐼 ~ file: cartAPI.js:257 ~ Giỏ hàng không tồn tại.'
       });
     });
   } catch (error) {

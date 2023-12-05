@@ -5,6 +5,8 @@ const clientModels = require("../models/clientModel");
 const cartModels = require("../models/cartModel.js");
 const orderModels = require("../models/orderModel.js");
 const ServiceModels = require("../models/ServiceModel");
+const moment = require('moment');
+
 require("dotenv").config();
 var express = require("express");
 var router = express.Router();
@@ -101,7 +103,7 @@ router.get("/list", async (req, res) => {
             .populate({
                 path: 'staffs.staffID',
                 model: 'user',
-                select: 'name email role job address phone gender citizenIdentityCard birthday avatar status' // Chọn các trường cần hiển thị từ bảng user
+                select: 'name email role job address phone gender citizenIdentityCard birthday avatar status', // Chọn các trường cần hiển thị từ bảng user
             }).then((doc) => {
                 console.log(`✅ Gọi danh sách đơn hàng thành công`.green.bold);
                 res.status(200).json(doc);
@@ -178,8 +180,8 @@ router.put("/update/:id", async (req, res) => {
         const data = {
             note: req.body.note || order.note,
             status: req.body.status || order.status,
-            started: req.body.started || order.started,
-            deadline: req.body.deadline || order.deadline,
+            started: moment(req.body.started).format("DD-MM-YYYY", true) || order.started,
+            deadline: moment(req.body.deadline).format("DD-MM-YYYY", true) || order.deadline,
             location: req.body.location || order.location,
         }
         await orderModels.findByIdAndUpdate(id, data).then((doc) => {
