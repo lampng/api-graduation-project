@@ -259,8 +259,8 @@
 | :-------- | :------- | :------------------------- |
 | `userID` | `string` | **Required**. userID của người tạo đơn|
 | `client` | `string` | **Required**. khách hàng|
-| `started` | `string` | **Required**.|
-| `deadline` | `string` | **Required**.|
+| `started` | `string` | **Required**.DD/MM/YYYY|
+| `deadline` | `string` | **Required**.DD/MM/YYYY|
 | `location` | `string` | **Required**.|
 | `note` | `string` | **Not required**. ghi chú|
 | `status` | `string` | **Not required**. Trạng thái đơn hàng|
@@ -282,8 +282,8 @@
 | Body | Type     | Description                |
 | :-------- | :------- | :------------------------- |
 | `status` | `string` | **Not required**. Default: 'Chưa thực hiện'|
-| `started` | `string` | **Required**.|
-| `deadline` | `string` | **Required**.|
+| `started` | `string` | **Required**. DD/MM/YYYY|
+| `deadline` | `string` | **Required**.DD/MM/YYYY|
 | `location` | `string` | **Required**.|
 | `note` | `string` | **Not required**. ghi chú|
 

@@ -26,7 +26,7 @@ router.get("/", (req, res) => {
     "Gọi danh sách giỏ hàng của người dùng(GET):": `https://api-graduation-project-production.up.railway.app/cart/list/`,
   });
 });
-// TODO: Thêm dịch vụ vào giỏ hàng
+// TODO: ✅ Thêm dịch vụ vào giỏ hàng 
 router.post("/addServiceToCart", async (req, res) => {
   const {
     userID,
@@ -81,7 +81,7 @@ router.post("/addServiceToCart", async (req, res) => {
     })
   }
 })
-// TODO: Xoá dịch vụ khỏi giỏ hàng
+// TODO: ✅ Xoá dịch vụ khỏi giỏ hàng 
 router.delete("/removeServiceFromCart", async (req, res) => {
   const {
     userID,
@@ -127,7 +127,7 @@ router.delete("/removeServiceFromCart", async (req, res) => {
     });
   }
 })
-// TODO: Thêm nhân viên thực hiện công việc vào giỏ hàng
+// TODO: ✅ Thêm nhân viên thực hiện công việc vào giỏ hàng 
 router.post("/addStaffToCart", async (req, res) => {
   const {
     userID,
@@ -185,7 +185,7 @@ router.post("/addStaffToCart", async (req, res) => {
     })
   }
 })
-// TODO: Xoá nhân viên thực hiện công việc khỏi giỏ hàng
+// TODO: ✅ Xoá nhân viên thực hiện công việc khỏi giỏ hàng 
 router.delete("/removeStaffFromCart", async (req, res) => {
   const {
     userID,
@@ -230,7 +230,7 @@ router.delete("/removeStaffFromCart", async (req, res) => {
     });
   }
 })
-// TODO: Giỏ hàng của người dùng
+// TODO: ✅ Giỏ hàng của người dùng 
 router.get("/list/:id", async (req, res) => {
   const {
     id

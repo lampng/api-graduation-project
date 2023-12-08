@@ -2,7 +2,7 @@ git add .
 git commit -m "mess"
 git push origin master
 
-
+npm i colors cloudinary body-parser bcryptjs bcrypt connect-mongodb-session console-success cors dotenv express jsonwebtoken method-override mongoose mongoose-slug-generator mongoose-unique-validator multer nodemailer nodemon passport passport-local passport-local-mongoose path uuid
 
 const { MongoClient } = require('mongodb');
 

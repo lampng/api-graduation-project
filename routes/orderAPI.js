@@ -21,7 +21,7 @@ router.get("/", (req, res) => {
         "Danh sách đơn hàng của người dùng(GET):": `https://api-graduation-project-production.up.railway.app/order/listOfUser/`,
     });
 });
-// TODO: Xác nhận đơn hàng
+// TODO: ✅ Xác nhận đơn hàng 
 router.post("/comfirmOrder", async (req, res) => {
     const {
         userID,
@@ -53,11 +53,12 @@ router.post("/comfirmOrder", async (req, res) => {
                 staffID: staff.staffID,
             })),
             priceTotal: cart.subTotal,
-            started: started,
-            deadline: deadline,
+            started: moment(started, "DD/MM/YYYY").format("DD/MM/YYYY"),
+            deadline: moment(deadline, "DD/MM/YYYY").format("DD/MM/YYYY"),
             location: location,
             note: note,
         })
+        console.log(`❕  ${moment(started).format("DD/MM/YYYY")}`.cyan.bold);
         console.log(`❕  ${cart.staffs.map(staff => ({
             staffID: staff.staffID
         }))}`.cyan.bold);
@@ -86,45 +87,67 @@ router.post("/comfirmOrder", async (req, res) => {
         });
     }
 })
-// TODO: Danh sách đơn hàng
+// TODO: ✅ Danh sách đơn hàng 
 router.get("/list", async (req, res) => {
     try {
-        await orderModels.find({})
+        const orders = await orderModels.find({})
             .populate({
                 path: 'client',
                 model: 'client',
-                select: 'name address phone gender creatorID' // Chọn các trường cần hiển thị từ bảng service
+                select: 'name address phone gender creatorID'
             })
             .populate({
                 path: 'services.serviceID',
                 model: 'service',
-                select: 'name description price image ' // Chọn các trường cần hiển thị từ bảng service
+                select: 'name description price image '
             })
             .populate({
                 path: 'staffs.staffID',
                 model: 'user',
                 select: 'name email role job address phone gender citizenIdentityCard birthday avatar status', // Chọn các trường cần hiển thị từ bảng user
             }).then((doc) => {
-                console.log(`✅ Gọi danh sách đơn hàng thành công`.green.bold);
-                return res.status(200).json(doc);
+                if (doc) {
+                    const ordersWithDays = doc.map(order => {
+                        const startedMoment = moment(order.started, "DD/MM/YYYY");
+                        const deadlineMoment = moment(order.deadline, "DD/MM/YYYY");
+
+                        // Tính toán số ngày giữa hai ngày
+                        const daysDifference = deadlineMoment.diff(startedMoment, 'days');
+
+                        // Thêm vào đối tượng đơn hàng
+                        return {
+                            ...order._doc, // Sử dụng _doc để lấy dữ liệu thô của Mongoose document
+                            daysBetween: daysDifference
+                        };
+                    });
+                    console.log(`✅ Gọi danh sách đơn hàng thành công`.green.bold);
+                    res.status(200).json(ordersWithDays);
+                } else {
+                    console.log(`❗ Không tìm thấy người dùng.`.red.bold);
+                    res.status(500).json({
+                        success: true,
+                        message: '❗ Không tìm thấy người dùng.',
+                    });
+                }
             }).catch((error) => {
-                console.log("🐼 ~ file: orderAPI.js:106 ~ router.get ~ error:", error)
+                console.log("🐼 ~ file: orderAPI.js:150 ~ router.get ~ error:", error)
             });
     } catch (error) {
-        console.log("🐼 ~ file: orderAPI.js:72 ~ router.get ~ error:", error)
+        console.log(`❗ Không tìm thấy dữ liệu.`.red.bold);
         res.status(500).json({
-            message: error.message,
+            success: false,
+            message: '❗ Không tìm thấy dữ liệu.',
         });
     }
 });
-// TODO: Danh sách đơn hàng của người dùng
+// TODO: ✅ Danh sách đơn hàng của người dùng 
 router.get("/listOfUser/:id", async (req, res) => {
     const {
-        userID
-    } = req.body
+        id
+    } = req.params
     try {
         await orderModels.find({
-                "userID": userID
+                "userID": id
             })
             .populate({
                 path: 'client',
@@ -141,10 +164,29 @@ router.get("/listOfUser/:id", async (req, res) => {
                 model: 'user',
                 select: 'name email role job address phone gender citizenIdentityCard birthday avatar status' // Chọn các trường cần hiển thị từ bảng user
             }).then((doc) => {
-                console.log(`✅ Gọi danh sách đơn hàng của người dùng thành công`.green.bold);
-                res.status(200).json(doc);
+                if (doc) {
+                    const ordersWithDays = doc.map(order => {
+                        const startedMoment = moment(order.started, "DD/MM/YYYY");
+                        const deadlineMoment = moment(order.deadline, "DD/MM/YYYY");
+
+                        // Tính toán số ngày giữa hai ngày
+                        const daysDifference = deadlineMoment.diff(startedMoment, 'days');
+
+                        // Thêm vào đối tượng đơn hàng
+                        return {
+                            ...order._doc, // Sử dụng _doc để lấy dữ liệu thô của Mongoose document
+                            daysBetween: daysDifference
+                        };
+                    });
+                    console.log(`✅ Gọi danh sách đơn hàng của người dùng thành công`.green.bold);
+                    res.status(200).json(ordersWithDays);
+                }
             }).catch((error) => {
-            console.log("🐼 ~ file: orderAPI.js:150 ~ router.get ~ error:", error)
+                console.log(`❗ Không tìm thấy dữ liệu.`.red.bold);
+                res.status(500).json({
+                    success: false,
+                    message: '❗ Không tìm thấy dữ liệu.',
+                });
             });
     } catch (error) {
         console.log("🐼 ~ file: orderAPI.js:153 ~ router.get ~ error:", error)
@@ -153,17 +195,24 @@ router.get("/listOfUser/:id", async (req, res) => {
         });
     }
 });
-// TODO: Xoá đơn hàng
+// TODO: ✅ Xoá đơn hàng 
 router.delete("/delete/:id", async (req, res) => {
     try {
         await orderModels.findByIdAndDelete(req.params.id).then((doc) => {
-            console.log(`❎ Xoá nhân viên thực hiện thành công`.green.bold);
-            res.status(200).json({
-                success: true,
-                message: '❎ Xoá nhân viên thực hiện thành công.',
-            });
+            if (doc) {
+                console.log(`❎ Xoá đơn hàng thành công`.green.bold);
+                res.status(200).json({
+                    success: true,
+                    message: '❎ Xoá đơn hàng thành công.',
+                });
+            } else {
+                res.status(200).json({
+                    success: true,
+                    message: '❗ Không tìm thấy đơn hàng.',
+                });
+            }
         }).catch((error) => {
-        console.log("🐼 ~ file: orderAPI.js:169 ~ awaitorderModels.findByIdAndDelete ~ error:", error)
+            console.log("🐼 ~ file: orderAPI.js:169 ~ awaitorderModels.findByIdAndDelete ~ error:", error)
         });
     } catch (error) {
         console.log("🐼 ~ file: orderAPI.js:172 ~ router.delete ~ error:", error)
@@ -172,7 +221,7 @@ router.delete("/delete/:id", async (req, res) => {
         });
     }
 });
-// TODO: Cập nhập đơn hàng
+// TODO: ✅ Cập nhập đơn hàng
 router.put("/update/:id", async (req, res) => {
     const id = req.params.id
     try {
@@ -180,8 +229,8 @@ router.put("/update/:id", async (req, res) => {
         const data = {
             note: req.body.note || order.note,
             status: req.body.status || order.status,
-            started: moment(req.body.started).format("DD-MM-YYYY", true) || order.started,
-            deadline: moment(req.body.deadline).format("DD-MM-YYYY", true) || order.deadline,
+            started: moment(req.body.started, "DD/MM/YYYY").format("DD/MM/YYYY") || order.started,
+            deadline: moment(req.body.deadline, "DD/MM/YYYY").format("DD/MM/YYYY") || order.deadline,
             location: req.body.location || order.location,
         }
         await orderModels.findByIdAndUpdate(id, data).then((doc) => {

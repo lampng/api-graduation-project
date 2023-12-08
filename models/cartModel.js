@@ -14,7 +14,6 @@ const serviceSchema = mongoose.Schema({
 });
 module.exports = mongoose.model("item", serviceSchema);
  
-// TODO: Bảng nhân viên thực hiện công việc
 const staffSchema = mongoose.Schema({
     userID: {
         type: mongoose.Schema.Types.ObjectId,

@@ -1174,7 +1174,7 @@ router.get("/detail/:id", async (req, res) => {
       id
     } = req.params;
     await userModels.findById(id).then((doc) => {
-      console.log(`✅ ✅ Gọi chi tiết người dùng thành công`.green.bold);
+      console.log(`✅ Gọi chi tiết người dùng thành công`.green.bold);
       res.status(200).json(doc);
     }).catch((error) => {
       console.log("🐼 ~ file: userAPI.js:1168 ~ user ~ error:", error)
