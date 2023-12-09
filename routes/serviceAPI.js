@@ -24,7 +24,7 @@ router.get("/", (req, res) => {
     "Xoá dịch vụ(DELETE):": `https://api-graduation-project-production.up.railway.app/service/delete/:id`,
   });
 });
-// TODO: Tạo dịch vụ
+// TODO: ✅ Tạo dịch vụ
 router.post("/create/", upload.single("image"), async (req, res) => {
   try {
     let service = await ServiceModels.findOne({
@@ -73,7 +73,7 @@ router.post("/create/", upload.single("image"), async (req, res) => {
   }
 })
 // ! Sắp xếp giảm dần
-// TODO: Gọi danh sách dịch vụ
+// TODO: ✅ Gọi danh sách dịch vụ
 router.get("/list", async (req, res) => {
   try {
     const service = await ServiceModels.find({});
@@ -86,7 +86,7 @@ router.get("/list", async (req, res) => {
     });
   }
 });
-// TODO: Gọi chi tiết dịch vụ ([:id] = id của dịch vụ)
+// TODO: ✅ Gọi chi tiết dịch vụ ([:id] = id của dịch vụ)
 router.get("/detail/:id", async (req, res) => {
   try {
     const {
@@ -105,140 +105,57 @@ router.get("/detail/:id", async (req, res) => {
     );
   }
 });
-// TODO: Cập nhập dịch vụ
+// TODO: ✅ Cập nhập dịch vụ
 router.put("/update/:id", upload.single("image"), async (req, res) => {
   try {
-    let check = await ServiceModels.findOne({
+    const check = await ServiceModels.findOne({
       name: req.body.name
     });
-    let service = await ServiceModels.findById(req.params.id)
-    if (check) {
-      // TODO: sử dụng removeDiacriticsAndSpaces để kiểm tra trùng lặp dịch vụ
-      // * removeDiacriticsAndSpaces: xoá dấu và khoảng cách để kiểm tra chính xác hơn.
-      if (removeDiacriticsAndSpaces(req.body.name) == removeDiacriticsAndSpaces(service.name)) {
-        if (req.file != null) {
-          if (service.cloudinary_id != null) {
-            await cloudinary.uploader.destroy(service.cloudinary_id);
-          }
-          const result = await cloudinary.uploader.upload(req.file.path, {
-            folder: "api-graduation-project/service", 
-          });
-          const data = {
-            name: req.body.name,
-            description: req.body.description,
-            price: req.body.price,
-            quantityImage: req.body.quantityImage,
-            image: result.secure_url || service.image,
-            cloudinary_id: result.public_id || service.cloudinary_id,
-          };
-          await ServiceModels
-            .findByIdAndUpdate(service.id, data, {
-              new: true,
-            })
-            .then((doc) => {
-              console.log(
-                `✅  Cập nhập dịch vụ (hình ảnh) thành công`.green.bold
-              );
-              res.status(200).json({
-                status: "Cập nhập dịch vụ (hình ảnh) thành công",
-              });
-            })
-            .catch((err) => {
-              console.log(`Lỗi catch: `.bgRed, err);
-            });
-        } else {
-          const data = {
-            name: req.body.name || service.name,
-            description: req.body.description || service.name,
-            price: req.body.price || service.name,
-            quantityImage: req.body.quantityImage || service.quantityImage,
-          };
-          await ServiceModels
-            .findByIdAndUpdate(service.id, data, {
-              new: true,
-            })
-            .then((doc) => {
-              console.log(
-                `✅  Cập nhập dịch vụ thành công`.green.bold
-              );
-              res.status(200).json({
-                status: "Cập nhập dịch vụ thành công",
-              });
-            })
-            .catch((err) => {
-              console.log(`Lỗi catch: `.bgRed, err);
-            });
-        }
-      } else {
-        return res.status(500).json({
-          Error: "Tên dịch vụ này đã tồn tại"
-        });
-      }
-    } else {
-      if (req.file != null) {
-        if (service.cloudinary_id != null) {
-          await cloudinary.uploader.destroy(service.cloudinary_id);
-        }
-        const result = await cloudinary.uploader.upload(req.file.path, {
-          folder: "api-graduation-project/service",
-        });
-        const data = {
-          name: req.body.name,
-          description: req.body.description,
-          price: req.body.price,
-          image: result.secure_url || service.avatar,
-          cloudinary_id: result.public_id || service.cloudinary_id,
-        };
-        await ServiceModels
-          .findByIdAndUpdate(service.id, data, {
-            new: true,
-          })
-          .then((doc) => {
-            updateOrdersWithServiceInfo(service.id, data)
-            console.log(
-              `✅  Cập nhập dịch vụ (hình ảnh) thành công`.green.bold
-            );
-            res.status(200).json({
-              status: "Cập nhập dịch vụ (hình ảnh) thành công",
-            });
-          })
-          .catch((err) => {
-            console.log(`Lỗi catch: `.bgRed, err);
-          });
-      } else {
-        const data = {
-          name: req.body.name || service.name,
-          description: req.body.description || service.name,
-          price: req.body.price || service.name,
-          quantityImage: req.body.quantityImage || service.quantityImage,
-        };
-        await ServiceModels
-          .findByIdAndUpdate(service.id, data, {
-            new: true,
-          })
-          .then((doc) => {
-            console.log(
-              `✅  Cập nhập dịch vụ thành công`.green.bold
-            );
-            res.status(200).json({
-              status: "Cập nhập dịch vụ thành công",
-            });
-          })
-          .catch((err) => {
-            console.log(`Lỗi catch: `.bgRed, err);
-          });
-      }
+    const service = await ServiceModels.findById(req.params.id);
 
+    const data = {
+      name: req.body.name || service.name,
+      description: req.body.description || service.description,
+      price: req.body.price || service.price,
+    };
+
+    if (check && removeDiacriticsAndSpaces(req.body.name) === removeDiacriticsAndSpaces(service.name)) {
+      return res.status(500).json({
+        Error: "Tên dịch vụ này đã tồn tại"
+      });
     }
 
+    if (req.file != null) {
+      if (service.cloudinary_id != null) {
+        await cloudinary.uploader.destroy(service.cloudinary_id);
+      }
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "api-graduation-project/service",
+      });
+      data.image = result.secure_url || service.image;
+      data.cloudinary_id = result.public_id || service.cloudinary_id;
+    } else {
+      data.image = service.image;
+      data.cloudinary_id = service.cloudinary_id;
+    }
+
+    await ServiceModels.findByIdAndUpdate(service.id, data, {
+      new: true
+    });
+
+    console.log(`✅ Cập nhập dịch vụ thành công`.green.bold);
+    res.status(200).json({
+      status: "Cập nhập dịch vụ thành công"
+    });
   } catch (error) {
-    console.log(`❗  Cập nhập dịch vụ thất bại`.bgRed.white.strikethrough.bold);
+    console.log(`❗ Cập nhập dịch vụ thất bại`.bgRed.white.strikethrough.bold);
     res.status(500).json({
       message: "Cập nhập dịch vụ thất bại",
     });
   }
 });
-// TODO: Xoá dịch vụ ([:id] = id của dịch vụ )
+
+// TODO: ✅ Xoá dịch vụ ([:id] = id của dịch vụ )
 router.delete("/delete/:id", async (req, res) => {
   try {
     const service = await ServiceModels.findByIdAndDelete(req.params.id);
@@ -259,20 +176,31 @@ router.delete("/delete/:id", async (req, res) => {
     });
   }
 });
+// TODO: Chặn xoá dịch vụ khi có trong hoá đơn chưa hoàn thành
+
 // ! Hàm cập nhật thông tin dịch vụ trong các đơn hàng
 async function updateOrdersWithServiceInfo(serviceID, newServiceInfo) {
   try {
-      // Tìm và cập nhật các đơn hàng có chứa serviceID
-      const updateResult = await orderModel.updateMany(
-          { "services.serviceID": serviceID }, // Điều kiện tìm đơn hàng có serviceID
-          { $set: { "services.$[elem].serviceID": newServiceInfo } }, // Cập nhật thông tin dịch vụ mới
-          { arrayFilters: [{ "elem.serviceID": serviceID }] } // Lọc các phần tử có serviceID
-      );
+    // Tìm và cập nhật các đơn hàng có chứa serviceID
+    const updateResult = await orderModel.updateMany({
+        "services.serviceID": serviceID
+      }, // Điều kiện tìm đơn hàng có serviceID
+      {
+        $set: {
+          "services.$[elem].serviceID": newServiceInfo
+        }
+      }, // Cập nhật thông tin dịch vụ mới
+      {
+        arrayFilters: [{
+          "elem.serviceID": serviceID
+        }]
+      } // Lọc các phần tử có serviceID
+    );
 
-      return updateResult;
+    return updateResult;
   } catch (error) {
-      console.error("Error updating orders with service info:", error);
-      throw error;
+    console.error("Error updating orders with service info:", error);
+    throw error;
   }
 }
 // ! Hàm loại bỏ dấu và khoảng cách
