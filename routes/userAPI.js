@@ -1,6 +1,7 @@
 require("colors");
 // mongodb user model
 const userModels = require("../models/userModel");
+const orderModels = require("../models/orderModel.js");
 require("dotenv").config();
 const session = require("express-session");
 //Tải lên ảnh
@@ -1316,32 +1317,63 @@ router.put("/change-password/:id", async (req, res) => {
     console.log(`❗  ${error}`.bgRed.white.strikethrough.bold);
   }
 });
-// TODO: Xoá người dùng ([:id] = id của người dùng)
+// TODO: ✅ Xoá người dùng ([:id] = id của người dùng)
+// router.delete("/delete/:id", async (req, res) => {
+//   try {
+//     const {
+//       id
+//     } = req.params;
+//     // Xoá người dùng
+//     const user = await userModels.findByIdAndDelete(id);
+//     if (!user) {
+//       return res.status(404).json({
+//         message: `Không tìm thấy người dùng`,
+//       });
+//     }
+//     // Xoá tệp trên Cloudinary liên quan đến người dùng
+//     if (user.cloudinary_id) {
+//       await cloudinary.uploader.destroy(user.cloudinary_id);
+//       console.log(
+//         `✅ Đã xoá tệp trên Cloudinary của người dùng: ${user.cloudinary_id}`
+//       );
+//     }
+//     console.log(`✅ Xoá thành công`);
+//     res.status(200).json(user);
+//   } catch (error) {
+//     console.log(`❗  ${error.message}`.bgRed.white.strikethrough.bold);
+//     res.status(500).json({
+//       message: error.message,
+//     });
+//   }
+// });
 router.delete("/delete/:id", async (req, res) => {
   try {
-    const {
-      id
-    } = req.params;
-    // Xoá người dùng
-    const user = await userModels.findByIdAndDelete(id);
-    if (!user) {
-      return res.status(404).json({
-        message: `Không tìm thấy người dùng`,
+    // * Kiểm tra xem người dùng có nằm trong hóa đơn nào không
+    const isUserInOrder = await orderModels.findOne({
+      'staffs.staffID': req.params.id
+    });
+    // * Nếu người dùng tồn tại trong hóa đơn, không cho phép xóa
+    if (isUserInOrder) {
+      return res.status(400).json({
+        message: "Người dùng này không thể xóa vì đã có trong hóa đơn."
       });
     }
-    // Xoá tệp trên Cloudinary liên quan đến người dùng
+    // * Nếu người dùng không nằm trong hóa đơn, tiếp tục quá trình xóa
+    const user = await userModels.findByIdAndDelete(req.params.id);
+    // * Xoá tệp trên Cloudinary liên quan đến người dùng
     if (user.cloudinary_id) {
       await cloudinary.uploader.destroy(user.cloudinary_id);
-      console.log(
-        `✅ Đã xoá tệp trên Cloudinary của người dùng: ${user.cloudinary_id}`
-      );
+      console.log(`✅ Đã xoá tệp trên Cloudinary của người dùng: ${user.cloudinary_id}`);
     }
     console.log(`✅ Xoá thành công`);
-    res.status(200).json(user);
+    res.status(200).json({
+      message: "người dùng đã được xóa thành công",
+      service: user.name
+    });
   } catch (error) {
-    console.log(`❗  ${error.message}`.bgRed.white.strikethrough.bold);
+    console.error(`❗ Không tìm thấy người dùng`);
     res.status(500).json({
-      message: error.message,
+      message: "Không tìm thấy người dùng hoặc có lỗi xảy ra"
     });
   }
 });

@@ -3,6 +3,7 @@ require("colors");
 const userModels = require("../models/userModel");
 const clientModels = require("../models/clientModel");
 const ServiceModels = require("../models/ServiceModel");
+const OrderModels = require("../models/orderModel.js")
 require("dotenv").config();
 const session = require("express-session");
 //Tải lên ảnh
@@ -154,25 +155,55 @@ router.put("/update/:id", upload.single("image"), async (req, res) => {
     });
   }
 });
-
 // TODO: ✅ Xoá dịch vụ ([:id] = id của dịch vụ )
+// router.delete("/delete/:id", async (req, res) => {
+//   try {
+//     const service = await ServiceModels.findByIdAndDelete(req.params.id);
+
+//     // Xoá tệp trên Cloudinary liên quan đến người dùng
+//     if (service.cloudinary_id) {
+//       await cloudinary.uploader.destroy(service.cloudinary_id);
+//       console.log(
+//         `✅ Đã xoá tệp trên Cloudinary của dịch vụ: ${service.cloudinary_id}`
+//       );
+//     }
+//     console.log(`✅ Xoá thành công`);
+//     res.status(200).json(service);
+//   } catch (error) {
+//     console.log(`❗  Không tìm thấy dịch vụ`.bgRed.white.strikethrough.bold);
+//     res.status(500).json({
+//       message: "Không tìm thấy dịch vụ",
+//     });
+//   }
+// });
 router.delete("/delete/:id", async (req, res) => {
   try {
+    // * Kiểm tra xem dịch vụ có nằm trong hóa đơn nào không
+    const isServiceInOrder = await OrderModels.findOne({
+      'services.serviceID': req.params.id
+    });
+    // * Nếu dịch vụ tồn tại trong hóa đơn, không cho phép xóa
+    if (isServiceInOrder) {
+      return res.status(400).json({
+        message: "Dịch vụ này không thể xóa vì đã có trong hóa đơn."
+      });
+    }
+    // * Nếu dịch vụ không nằm trong hóa đơn, tiếp tục quá trình xóa
     const service = await ServiceModels.findByIdAndDelete(req.params.id);
-
-    // Xoá tệp trên Cloudinary liên quan đến người dùng
+    // * Xoá tệp trên Cloudinary liên quan đến dịch vụ
     if (service.cloudinary_id) {
       await cloudinary.uploader.destroy(service.cloudinary_id);
-      console.log(
-        `✅ Đã xoá tệp trên Cloudinary của dịch vụ: ${service.cloudinary_id}`
-      );
+      console.log(`✅ Đã xoá tệp trên Cloudinary của dịch vụ: ${service.cloudinary_id}`);
     }
     console.log(`✅ Xoá thành công`);
-    res.status(200).json(service);
+    res.status(200).json({
+      message: "Dịch vụ đã được xóa thành công",
+      service: service.name
+    });
   } catch (error) {
-    console.log(`❗  Không tìm thấy dịch vụ`.bgRed.white.strikethrough.bold);
+    console.error(`❗ Không tìm thấy dịch vụ`);
     res.status(500).json({
-      message: "Không tìm thấy dịch vụ",
+      message: "Không tìm thấy dịch vụ hoặc có lỗi xảy ra"
     });
   }
 });

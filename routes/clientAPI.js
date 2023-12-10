@@ -2,6 +2,7 @@ require("colors");
 // mongodb user model
 const userModels = require("../models/userModel");
 const clientModels = require("../models/clientModel");
+const orderModels = require("../models/orderModel.js");
 require("dotenv").config();
 const session = require("express-session");
 //Tải lên ảnh
@@ -150,30 +151,64 @@ router.put("/update/:id", async (req, res) => {
     );
   }
 });
-// TODO: Xoá khách hàng ([:id] = id của khách hàng)
+// TODO: ✅ Xoá khách hàng ([:id] = id của khách hàng)
+// router.delete("/delete/:id", async (req, res) => {
+//   try {
+//     const {
+//       id
+//     } = req.params;
+//     // Xoá người dùng
+//     const client = await clientModels.findByIdAndDelete(id);
+//     if (!client) {
+//       return res.status(404).json({
+//         message: `Không tìm thấy người dùng`,
+//       });
+//     }
+//     // Xoá tệp trên Cloudinary liên quan đến người dùng
+//     if (client.cloudinary_id) {
+//       await cloudinary.uploader.destroy(client.cloudinary_id);
+//       console.log(
+//         `✅ Đã xoá tệp trên Cloudinary của người dùng: ${client.cloudinary_id}`
+//       );
+//     }
+//     console.log(`✅ Xoá thành công`);
+//     res.status(200).json(client);
+//   } catch (error) {
+//     console.log(`❗  ${error.message}`.bgRed.white.strikethrough.bold);
+//     res.status(500).json({
+//       message: error.message,
+//     });
+//   }
+// });
 router.delete("/delete/:id", async (req, res) => {
   try {
-    const {
-      id
-    } = req.params;
-    // Xoá người dùng
+    const { id } = req.params;
+
+    // * Kiểm tra xem khách hàng có nằm trong hóa đơn nào như là khách hàng hay nhân viên không
+    const isClientInOrderAsClient = await orderModels.findOne({ 'client': id });
+
+    // * Nếu khách hàng tồn tại trong hóa đơn, không cho phép xóa
+    if (isClientInOrderAsClient) {
+      return res.status(400).json({
+        message: "khách hàng này không thể xóa vì đã có trong hóa đơn."
+      });
+    }
+    // * Xoá người dùng
     const client = await clientModels.findByIdAndDelete(id);
     if (!client) {
       return res.status(404).json({
-        message: `Không tìm thấy người dùng`,
+        message: `Không tìm thấy khách hàng`,
       });
     }
-    // Xoá tệp trên Cloudinary liên quan đến người dùng
+    // * Xoá tệp trên Cloudinary liên quan đến khách hàng
     if (client.cloudinary_id) {
       await cloudinary.uploader.destroy(client.cloudinary_id);
-      console.log(
-        `✅ Đã xoá tệp trên Cloudinary của người dùng: ${client.cloudinary_id}`
-      );
+      console.log(`✅ Đã xoá tệp trên Cloudinary của khách hàng: ${client.cloudinary_id}`);
     }
     console.log(`✅ Xoá thành công`);
     res.status(200).json(client);
   } catch (error) {
-    console.log(`❗  ${error.message}`.bgRed.white.strikethrough.bold);
+    console.error(`❗ ${error.message}`);
     res.status(500).json({
       message: error.message,
     });
