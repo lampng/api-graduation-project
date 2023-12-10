@@ -236,19 +236,21 @@ router.get("/list/:id", async (req, res) => {
     id
   } = req.params
   try {
-
     await cartModels.findOne({
       "userID": id
     }).populate({
       path: 'services.serviceID',
       model: 'service',
-      select: 'name description price image ' // Chọn các trường cần hiển thị từ bảng service
+      select: 'name description price image '
     }).populate({
       path: 'staffs.staffID',
       model: 'user',
-      select: 'name email role job address phone gender citizenIdentityCard birthday avatar status' // Chọn các trường cần hiển thị từ bảng service
+      select: 'name email role job address phone gender citizenIdentityCard birthday avatar status'
     }).then((doc) => {
       console.log(`✅ Gọi giỏ hàng của người dùng thành công`.green.bold);
+      doc.services.sort((a, b) => {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      });
       return res.status(200).json(doc);
     }).catch((error) => {
       console.log("🐼 ~ file: cartAPI.js:257 ~ router.get ~ error: Giỏ hàng không tồn tại.", error)

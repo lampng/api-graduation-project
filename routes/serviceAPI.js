@@ -78,6 +78,9 @@ router.post("/create/", upload.single("image"), async (req, res) => {
 router.get("/list", async (req, res) => {
   try {
     const service = await ServiceModels.find({});
+    service.sort((a, b) => {
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    });
     res.status(200).json(service);
     console.log(`✅ Gọi danh sách dịch vụ thành công`.green.bold);
   } catch (error) {
@@ -209,31 +212,6 @@ router.delete("/delete/:id", async (req, res) => {
 });
 // TODO: Chặn xoá dịch vụ khi có trong hoá đơn chưa hoàn thành
 
-// ! Hàm cập nhật thông tin dịch vụ trong các đơn hàng
-async function updateOrdersWithServiceInfo(serviceID, newServiceInfo) {
-  try {
-    // Tìm và cập nhật các đơn hàng có chứa serviceID
-    const updateResult = await orderModel.updateMany({
-        "services.serviceID": serviceID
-      }, // Điều kiện tìm đơn hàng có serviceID
-      {
-        $set: {
-          "services.$[elem].serviceID": newServiceInfo
-        }
-      }, // Cập nhật thông tin dịch vụ mới
-      {
-        arrayFilters: [{
-          "elem.serviceID": serviceID
-        }]
-      } // Lọc các phần tử có serviceID
-    );
-
-    return updateResult;
-  } catch (error) {
-    console.error("Error updating orders with service info:", error);
-    throw error;
-  }
-}
 // ! Hàm loại bỏ dấu và khoảng cách
 function removeDiacriticsAndSpaces(str) {
   return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s/g, '');

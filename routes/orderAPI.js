@@ -120,6 +120,9 @@ router.get("/list", async (req, res) => {
                             daysBetween: daysDifference
                         };
                     });
+                    ordersWithDays.sort((a, b) => {
+                        return new Date(b.createdAt) - new Date(a.createdAt);
+                      });
                     console.log(`✅ Gọi danh sách đơn hàng thành công`.green.bold);
                     res.status(200).json(ordersWithDays);
                 } else {
@@ -178,6 +181,9 @@ router.get("/listOfUser/:id", async (req, res) => {
                             daysBetween: daysDifference
                         };
                     });
+                    daysDifference.sort((a, b) => {
+                        return new Date(b.createdAt) - new Date(a.createdAt);
+                      });
                     console.log(`✅ Gọi danh sách đơn hàng của người dùng thành công`.green.bold);
                     res.status(200).json(ordersWithDays);
                 }

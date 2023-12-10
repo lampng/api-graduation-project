@@ -16,16 +16,13 @@ const serviceSchema = mongoose.Schema({
         type: String,
         require: false,
     },
-    // quantityImage: {
-    //     type: Number,
-    //     default: 30,
-    //     require: true,
-    // },
     cloudinary_id: {
         type: String,
         require: false,
     },
-})
+}, {
+    timestamps: true,
+});
 const service = mongoose.model('service', serviceSchema);
 
 module.exports = service;
