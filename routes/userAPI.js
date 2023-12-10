@@ -1306,12 +1306,13 @@ router.put("/change-password/:id", async (req, res) => {
     } else {
       res.json({
         status: false,
-          status: "Mật khẩu cũ của bạn không đúng, vui lòng nhập lại",
+        message: "Mật khẩu cũ của bạn không đúng, vui lòng nhập lại",
       });
     }
   } catch (error) {
     res.status(500).json({
-      status: "Mật khẩu cũ của bạn không đúng, vui lòng nhập lại",
+      status: false,
+      message: "Mật khẩu cũ của bạn không đúng, vui lòng nhập lại",
     });
     console.log(`❗  ${error}`.bgRed.white.strikethrough.bold);
   }
