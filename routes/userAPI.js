@@ -1299,16 +1299,19 @@ router.put("/change-password/:id", async (req, res) => {
       await userModels.findByIdAndUpdate(id, data).then((doc) => {
         res.status(200).json({
           status: true,
-          message:"Đổi mật khẩu thành công"
+          status: "Đổi mật khẩu thành công",
         });
         console.log(`✅  Đổi mật khẩu thành công`.green.bold);
+      });
+    } else {
+      res.json({
+        status: false,
+          status: "Mật khẩu cũ của bạn không đúng, vui lòng nhập lại",
       });
     }
   } catch (error) {
     res.status(500).json({
-      status: false,
-      message:"Mật khẩu cũ của bạn không đúng, vui lòng nhập lại",
-
+      status: "Mật khẩu cũ của bạn không đúng, vui lòng nhập lại",
     });
     console.log(`❗  ${error}`.bgRed.white.strikethrough.bold);
   }
