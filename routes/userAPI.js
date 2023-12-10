@@ -1284,9 +1284,6 @@ router.put("/change-password/:id", async (req, res) => {
       id
     } = req.params;
     let check = await userModels.findById(id);
-    // const check = await userModels.findOne({
-    //   id,
-    // });
     //* Mã hoá mật khẩu
     const oldPass = req.body.oldpassword;
     const newPass = req.body.password;
@@ -1301,18 +1298,17 @@ router.put("/change-password/:id", async (req, res) => {
       };
       await userModels.findByIdAndUpdate(id, data).then((doc) => {
         res.status(200).json({
-          status: "Đổi mật khẩu thành công",
+          status: true,
+          message:"Đổi mật khẩu thành công"
         });
         console.log(`✅  Đổi mật khẩu thành công`.green.bold);
-      });
-    } else {
-      res.json({
-        status: "Mật khẩu cũ của bạn không đúng!",
       });
     }
   } catch (error) {
     res.status(500).json({
-      status: "Mật khẩu cũ của bạn không đúng, vui lòng nhập lại",
+      status: false,
+      message:"Mật khẩu cũ của bạn không đúng, vui lòng nhập lại",
+
     });
     console.log(`❗  ${error}`.bgRed.white.strikethrough.bold);
   }
@@ -1386,75 +1382,11 @@ router.get("/logout/:id", (req, res) => {
   console.log(`✅  Đăng xuất thành công`.green.bold);
 });
 // TODO: Quên mật khẩu
-router.get("/forgot-password", async (req, res) => {
-  try {
-    const email = req.body.email;
-    // * Kiểm tra email
-    await userModels.findOne({
-      email
-    }).then((data) => {
-      if (data) {
-        // * Gọi hàm random số để làm mã xác thực
-        const VerifyNumber = generateRandomNumberString(6);
-        // Lấy thời gian hiện tại
-        const timenow = new Date();
-        // Tính thời gian hết hạn 5 phút sau
-        const expirationTime = new Date(timenow.getTime() + 5 * 60 * 1000); // 5 phút
-        // Lưu trữ VerifyNumber và expirationTime tạm thời
-        temporaryVerifyNumber = {
-          code: VerifyNumber,
-          expiresAt: expirationTime,
-        };
-        console.log(`✅ ${VerifyNumber}`.green.bold);
 
-        res.status(200).json({
-          Status: "Mã xác thực đã được gửi đến email của bạn, mã xác thực sẽ hết hạn sau 5 phút",
-        });
-      } else {
-        console.log(`❌ Sai mail`.red.bold);
-        res.status(500).json({
-          status: "Sai mail",
-        });
-      }
-    });
-  } catch (error) {}
-});
 // TODO: Verify Email
-router.post("/verify", async (req, res) => {
-  const {
-    inputVerifyNumber
-  } = req.body;
 
-  if (temporaryVerifyNumber) {
-    const now = new Date();
-    if (inputVerifyNumber === temporaryVerifyNumber.code && now < temporaryVerifyNumber.expiresAt) {
-      // Mã xác thực hợp lệ
-      res.status(200).json({
-        Status: true,
-      });
-    } else {
-      // Mã xác thực đã hết hạn hoặc không hợp lệ
-      res.status(400).json({
-        Status: false,
-      });
-    }
-  } else {
-    // temporaryVerifyNumber không tồn tại
-    res.status(400).json({
-      Status: false,
-    });
-  }
-});
 //  TODO: Đổi mật khẩu
-// * đặt mật khẩu mới
-router.put("/reset-password", async (req, res) => {
-  try {
 
-  } catch (error) {
-    res.status(500).json(error);
-    console.log(`❗  ${error}`.bgRed.white.strikethrough.bold);
-  }
-});
 
 // * random number
 function generateRandomNumberString(length) {
