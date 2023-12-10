@@ -21,8 +21,9 @@ router.get("/", (req, res) => {
   res.json({
     status: "Đang phát triển",
     "Thêm dịch vụ vào giỏ hàng(POST):": `https://api-graduation-project-production.up.railway.app/cart/addServiceToCart/`,
-
-    "Xoá dịch vụ khỏi giỏ hàng(POST):": `https://api-graduation-project-production.up.railway.app/cart/removeServiceFromCart/`,
+    "Thêm dịch vụ vào giỏ hàng(POST):": `https://api-graduation-project-production.up.railway.app/cart/addStaffToCart/`,
+    "Xoá dịch vụ khỏi giỏ hàng(delete):": `https://api-graduation-project-production.up.railway.app/cart/removeServiceFromCart/`,
+    "Xoá nhân viên thực hiện công việc khỏi giỏ hàng (delete):": `https://api-graduation-project-production.up.railway.app/cart/removeStaffFromCart/`,
     "Gọi danh sách giỏ hàng của người dùng(GET):": `https://api-graduation-project-production.up.railway.app/cart/list/`,
   });
 });

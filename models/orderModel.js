@@ -48,7 +48,7 @@ const orderSchema = mongoose.Schema({
     },
     status: {
         type: String, // Trạng thái
-        default: 'Chưa thực hiện', // Trạng thái mặc định khi thêm vào giỏ hàng
+        default: 'Chưa thực hiện', // Trạng thái mặc định
     },
 }, {
     timestamps: true,

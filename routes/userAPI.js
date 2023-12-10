@@ -20,13 +20,6 @@ const moment = require('moment');
 router.get("/", (req, res) => {
   res.json({
     status: "API ON",
-    // "Đăng ký(POST):": `http://localhost:${port}/user/register`,
-    // "Đăng nhập(POST):": `http://localhost:${port}/user/login`,
-    // "Đăng xuất(GET):": `http://localhost:${port}/user/logout`,
-    // "Cập nhập người dùng(PUT):": `http://localhost:${port}/user/update/:id`,
-    // "Xoá người dùng(DELETE):": `http://localhost:${port}/user/delete/:id`,
-    // "Gọi danh sách người dùng(GET):": `http://localhost:${port}/user/list`,
-    // "Gọi chi tiết người dùng(GET):": `http://localhost:${port}/user/detail/:id`,
     "Đăng ký(POST):": `https://api-graduation-project-production.up.railway.app/user/register`,
     "Đăng nhập(POST):": `https://api-graduation-project-production.up.railway.app/user/login`,
     "Đăng xuất(GET):": `https://api-graduation-project-production.up.railway.app/user/logout/:id`, //* lưu ý: sử dụng id của session khi đăng nhập(khi đăng nhập trên điện thoại sẽ tự lưu vào local tạm thời của ứng dụng.)
