@@ -1299,7 +1299,7 @@ router.put("/change-password/:id", async (req, res) => {
       await userModels.findByIdAndUpdate(id, data).then((doc) => {
         res.status(200).json({
           status: true,
-          status: "Đổi mật khẩu thành công",
+          message: "Đổi mật khẩu thành công",
         });
         console.log(`✅  Đổi mật khẩu thành công`.green.bold);
       });
