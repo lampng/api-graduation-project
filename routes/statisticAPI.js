@@ -14,9 +14,10 @@ var router = express.Router();
 router.get("/", (req, res) => {
   res.json({
     status: "Đang phát triển",
+    "Thống kê dịch vụ sử dụng nhiều nhất (GET)": "https://api-graduation-project-production.up.railway.app/statistic/popular-services",
   });
 });
-// TODO: ✅ Gọi danh sách dịch vụ
+// TODO: Thống kê  dịch vụ sử dụng nhiều nhất
 router.get("/popular-services", async (req, res) => {
   try {
     const popularServices = await orderModels.aggregate([{
@@ -63,6 +64,13 @@ router.get("/popular-services", async (req, res) => {
     res.status(500).json({
       message: error.message,
     });
+  }
+});
+router.get("/revenue", async (req, res) => {
+  try {
+    
+  } catch (error) {
+    
   }
 });
 module.exports = router;

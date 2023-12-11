@@ -45,6 +45,7 @@ app.get("/", (req, res) => {
         "Service:": `https://api-graduation-project-production.up.railway.app/service/`,
         "Cart:": `https://api-graduation-project-production.up.railway.app/Cart/`,
         "Order:": `https://api-graduation-project-production.up.railway.app/order/`,
+        "Statistic:": `https://api-graduation-project-production.up.railway.app/statistic/`,
     })
 })
 const APIroute = require('./routes/userAPI');
