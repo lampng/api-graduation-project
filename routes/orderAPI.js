@@ -29,7 +29,8 @@ router.post("/comfirmOrder", async (req, res) => {
         client,
         started,
         deadline,
-        location
+        location,
+        imageQuantity
     } = req.body;
     try {
 
@@ -52,16 +53,13 @@ router.post("/comfirmOrder", async (req, res) => {
             staffs: cart.staffs.map(staff => ({
                 staffID: staff.staffID,
             })),
+            imageQuantity: imageQuantity,
             priceTotal: cart.subTotal,
-            started: moment(started, "DD/MM/YYYY").format("DD/MM/YYYY"),
+            started: moment(started, "HH:mm DD/MM/YYYY").format("HH:mm DD/MM/YYYY"),
             deadline: moment(deadline, "DD/MM/YYYY").format("DD/MM/YYYY"),
             location: location,
             note: note,
         })
-        console.log(`❕  ${moment(started).format("DD/MM/YYYY")}`.cyan.bold);
-        console.log(`❕  ${cart.staffs.map(staff => ({
-            staffID: staff.staffID
-        }))}`.cyan.bold);
         await newOrder.save().then((doc) => {
             console.log(`✅ Đơn hàng đã được tạo`.green.bold);
         }).catch((error) => {
