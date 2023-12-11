@@ -26,10 +26,6 @@ const orderSchema = mongoose.Schema({
             ref: "user",
         },
     }],
-    imageQuantity: {
-        type: Number,
-        require: true
-    },
     priceTotal: {
         type: Number,
         require: true

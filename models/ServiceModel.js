@@ -16,6 +16,10 @@ const serviceSchema = mongoose.Schema({
         type: String,
         require: false,
     },
+    imageQuantity: {
+        type: Number,
+        require: false,
+    },
     cloudinary_id: {
         type: String,
         require: false,

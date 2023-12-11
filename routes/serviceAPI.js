@@ -44,7 +44,7 @@ router.post("/create/", upload.single("image"), async (req, res) => {
           name: req.body.name,
           description: req.body.description,
           price: req.body.price,
-          quantityImage: req.body.quantityImage,
+          imageQuantity: req.body.imageQuantity,
           image: result.secure_url,
           cloudinary_id: result.public_id,
         })
@@ -121,6 +121,7 @@ router.put("/update/:id", upload.single("image"), async (req, res) => {
       name: req.body.name || service.name,
       description: req.body.description || service.description,
       price: req.body.price || service.price,
+      imageQuantity: req.body.imageQuantity,
     };
 
     if (check && removeDiacriticsAndSpaces(req.body.name) === removeDiacriticsAndSpaces(service.name)) {

@@ -30,7 +30,6 @@ router.post("/comfirmOrder", async (req, res) => {
         started,
         deadline,
         location,
-        imageQuantity
     } = req.body;
     try {
 
@@ -53,7 +52,6 @@ router.post("/comfirmOrder", async (req, res) => {
             staffs: cart.staffs.map(staff => ({
                 staffID: staff.staffID,
             })),
-            imageQuantity: imageQuantity,
             priceTotal: cart.subTotal,
             started: moment(started, "HH:mm DD/MM/YYYY").format("HH:mm DD/MM/YYYY"),
             deadline: moment(deadline, "DD/MM/YYYY").format("DD/MM/YYYY"),
@@ -88,7 +86,7 @@ router.post("/comfirmOrder", async (req, res) => {
 // TODO: ✅ Danh sách đơn hàng 
 router.get("/list", async (req, res) => {
     try {
-        const orders = await orderModels.find({})
+        await orderModels.find({})
             .populate({
                 path: 'client',
                 model: 'client',
