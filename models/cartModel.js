@@ -11,6 +11,7 @@ const serviceSchema = mongoose.Schema({
     },
 }, {
     timestamps: true,
+    _id: false
 });
 module.exports = mongoose.model("item", serviceSchema);
  
@@ -31,6 +32,7 @@ const staffSchema = mongoose.Schema({
     },
 }, {
     timestamps: true,
+    _id: false
 });
 module.exports = mongoose.model("staff", staffSchema);
 

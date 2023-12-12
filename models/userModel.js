@@ -13,7 +13,7 @@ const monthSchema = mongoose.Schema({
     default: 0
   }
 }, {
-  _id: false // Không tạo _id tự động cho các mục lương trong tháng
+  _id: false
 });
 
 const yearSchema = mongoose.Schema({
@@ -21,9 +21,9 @@ const yearSchema = mongoose.Schema({
     type: String,
     required: true
   },
-  months: [monthSchema] // Một mảng các mục lương trong tháng cho mỗi năm
+  months: [monthSchema]
 }, {
-  _id: false // Không tạo _id tự động cho các mục lương trong năm
+  _id: false 
 });
 const userSchema = mongoose.Schema({
   name: {
@@ -82,7 +82,15 @@ const userSchema = mongoose.Schema({
   status: {
     type: Boolean,
     default: true
-  }
+  },
+  confirmationCode: {
+    type: String,
+    required: false,
+  },
+  confirmationCodeExpiration: {
+    type: Date,
+    required: false,
+  },
 }, {
   timestamps: true,
 });

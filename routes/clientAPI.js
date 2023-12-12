@@ -4,17 +4,10 @@ const userModels = require("../models/userModel");
 const clientModels = require("../models/clientModel");
 const orderModels = require("../models/orderModel.js");
 require("dotenv").config();
-const session = require("express-session");
 //Tải lên ảnh
 const cloudinary = require("../middleware/cloudinary.js");
-const upload = require("../middleware/upload");
-const generator = require("generate-password");
-const path = require("path");
-var bcrypt = require("bcryptjs");
 var express = require("express");
 var router = express.Router();
-var nodemailer = require("nodemailer");
-var port = process.env.PORT || 1102;
 const moment = require('moment');
 
 router.get("/", (req, res) => {
@@ -153,34 +146,6 @@ router.put("/update/:id", async (req, res) => {
   }
 });
 // TODO: ✅ Xoá khách hàng ([:id] = id của khách hàng)
-// router.delete("/delete/:id", async (req, res) => {
-//   try {
-//     const {
-//       id
-//     } = req.params;
-//     // Xoá người dùng
-//     const client = await clientModels.findByIdAndDelete(id);
-//     if (!client) {
-//       return res.status(404).json({
-//         message: `Không tìm thấy người dùng`,
-//       });
-//     }
-//     // Xoá tệp trên Cloudinary liên quan đến người dùng
-//     if (client.cloudinary_id) {
-//       await cloudinary.uploader.destroy(client.cloudinary_id);
-//       console.log(
-//         `✅ Đã xoá tệp trên Cloudinary của người dùng: ${client.cloudinary_id}`
-//       );
-//     }
-//     console.log(`✅ Xoá thành công`);
-//     res.status(200).json(client);
-//   } catch (error) {
-//     console.log(`❗  ${error.message}`.bgRed.white.strikethrough.bold);
-//     res.status(500).json({
-//       message: error.message,
-//     });
-//   }
-// });
 router.delete("/delete/:id", async (req, res) => {
   try {
     const { id } = req.params;

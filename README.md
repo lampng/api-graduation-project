@@ -69,6 +69,32 @@
 | `oldpassword` | `string` | **Required**.|
 | `password` | `string` | **Required**.|
 
+- Quên mật khẩu
+```http
+  GET /user/forgot-password
+```
+| Body | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `email` | `string` | **Required**.|
+
+- Verify Email
+```http
+  POST /user/verify-confirmation-code
+```
+| Body | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `email` | `string` | **Required**. email ở phần quên mật khẩu|
+| `confirmationCode` | `string` | **Required**. mã xác thực ở trong mail|
+
+- Verify Email
+```http
+  PUT /user/reset-password
+```
+| Body | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `email` | `string` | **Required**. email ở phần quên mật khẩu|
+| `newPassword` | `string` | **Required**. Mật khẩu mới|
+
 
 - Xoá người dùng
 ```http

@@ -5,14 +5,10 @@ const clientModels = require("../models/clientModel");
 const ServiceModels = require("../models/ServiceModel");
 const OrderModels = require("../models/orderModel.js")
 require("dotenv").config();
-const session = require("express-session");
 //Tải lên ảnh
 const cloudinary = require("../middleware/cloudinary.js");
 const upload = require("../middleware/upload");
 var express = require("express");
-const {
-  array
-} = require("../middleware/upload");
 var router = express.Router();
 
 router.get("/", (req, res) => {
