@@ -1,4 +1,30 @@
 const mongoose = require("mongoose");
+const monthSchema = mongoose.Schema({
+  month: {
+    type: String,
+    required: true
+  },
+  salary: {
+    type: Number,
+    required: true
+  },
+  bonus: {
+    type: Number,
+    default: 0
+  }
+}, {
+  _id: false // Không tạo _id tự động cho các mục lương trong tháng
+});
+
+const yearSchema = mongoose.Schema({
+  year: {
+    type: String,
+    required: true
+  },
+  months: [monthSchema] // Một mảng các mục lương trong tháng cho mỗi năm
+}, {
+  _id: false // Không tạo _id tự động cho các mục lương trong năm
+});
 const userSchema = mongoose.Schema({
   name: {
     type: String,
@@ -52,6 +78,7 @@ const userSchema = mongoose.Schema({
     type: String,
     default: false,
   },
+  salary: [yearSchema],
   status: {
     type: Boolean,
     default: true

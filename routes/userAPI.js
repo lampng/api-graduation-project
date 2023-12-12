@@ -1384,19 +1384,151 @@ router.get("/logout/:id", (req, res) => {
 
 //  TODO: Đổi mật khẩu
 
+// TODO: Thêm lương + thưởng
+router.post("/salary/:id", async (req, res) => {
+  const {
+    year,
+    month,
+    salary,
+    bonus
+  } = req.body;
+  const userId = req.params.id;
 
-// * random number
-function generateRandomNumberString(length) {
-  const numbers = "0123456789";
-  let result = "";
+  try {
+    const foundUser = await userModels.findById(userId);
 
-  for (let i = 0; i < length; i++) {
-    const randomIndex = Math.floor(Math.random() * numbers.length);
-    result += numbers.charAt(randomIndex);
+    // * kiểm tra người dùng có tồn tại hay không
+    if (foundUser) {
+      // * tạo mảng lương cho người dùng
+      const newMonthSalary = {
+        month: month,
+        salary: salary,
+        bonus: bonus
+      };
+      // * Kiểm tra Mảng Lương Của Người Dùng - kiểm tra xem người dùng đã có dữ liệu lương hay chưa
+      if (foundUser.salary && foundUser.salary.length > 0) {
+        const existingYear = foundUser.salary.find(salaryItem => salaryItem.year === year);
+        // * Tìm năm tương ứng
+        if (existingYear) {
+          const existingMonth = existingYear.months.find(monthItem => monthItem.month === newMonthSalary.month);
+          // * Nếu năm đã tồn tại, tìm tháng tương ứng
+          if (existingMonth) {
+            // * Nếu tháng đã tồn tại, thông báo lỗi
+            // existingMonth.salary = newMonthSalary.salary;
+            // existingMonth.bonus = newMonthSalary.bonus;
+            res.status(500).json({
+              status: false,
+              message: `Lương ${year}/${month} của người dùng đã được tạo trước đó`,
+            });
+          } else {
+            // * Nếu tháng chưa tồn tại, thêm thông tin lương cho tháng mới
+            existingYear.months.push(newMonthSalary);
+          }
+        } else {
+          // * Nếu năm chưa tồn tại, tạo một năm mới với thông tin lương của tháng đó
+          foundUser.salary.push({
+            year: year,
+            months: [newMonthSalary]
+          });
+        }
+      } else {
+        // * Nếu mảng lương của người dùng chưa tồn tại, tạo mảng mới với thông tin lương của tháng đó
+        foundUser.salary = [{
+          year: year,
+          months: [newMonthSalary]
+        }];
+      }
+
+      await foundUser.save();
+      console.log(`✅ Lương cho người dùng đã được cập nhật`);
+      res.status(200).send("Lương đã được cập nhật");
+    } else {
+      res.status(404).send("Không tìm thấy người dùng");
+    }
+  } catch (error) {
+    console.error(`❌ Lỗi: ${error}`);
+    res.status(500).send(error.message);
   }
+});
+// TODO: Lấy toàn bộ danh sách lương của người dùng
+router.get("/salary/:id", async (req, res) => {
+  const userId = req.params.id;
+  const { year, month } = req.query;
 
-  return result;
-}
+  try {
+    const foundUser = await userModels.findById(userId);
+
+    if (foundUser) {
+      if (year && month) {
+        // Nếu có cả năm và tháng, lấy thông tin lương tháng của năm đó
+        const yearSalary = foundUser.salary.find(salary => salary.year === year);
+
+        if (yearSalary) {
+          const monthSalary = yearSalary.months.find(salary => salary.month === month);
+          if (monthSalary) {
+            res.status(200).json(monthSalary);
+          } else {
+            res.status(404).send(`Không có thông tin lương cho tháng ${month} năm ${year}`);
+          }
+        } else {
+          res.status(404).send(`Không có thông tin lương cho năm ${year}`);
+        }
+      } else if (year) {
+        // Nếu chỉ có năm, lấy toàn bộ danh sách lương của năm đó
+        const yearSalary = foundUser.salary.find(salary => salary.year === year);
+        if (yearSalary) {
+          res.status(200).json(yearSalary.months);
+        } else {
+          res.status(404).send(`Không có thông tin lương cho năm ${year}`);
+        }
+      } else {
+        // Nếu không có năm và tháng, lấy toàn bộ danh sách năm
+        res.status(200).json(foundUser.salary);
+      }
+    } else {
+      res.status(404).send("Không tìm thấy người dùng");
+    }
+  } catch (error) {
+    console.error(`❌ Lỗi: ${error}`);
+    res.status(500).send(error.message);
+  }
+});
+// TODO: Cập nhập lương của người dùng
+router.put("/salary/:userId", async (req, res) => {
+  const userId = req.params.userId;
+  const { year, month } = req.query;
+  const { salary, bonus } = req.body;
+
+  try {
+    const foundUser = await userModels.findById(userId);
+
+    if (foundUser) {
+      if (!year || !month) {
+        return res.status(400).send("Yêu cầu cung cấp cả 'year' và 'month' trong query params.");
+      }
+
+      const yearSalary = foundUser.salary.find(salaryItem => salaryItem.year === year);
+
+      if (yearSalary) {
+        const monthSalary = yearSalary.months.find(salaryItem => salaryItem.month === month);
+
+        if (monthSalary) {
+          // * Nếu tìm thấy thông tin lương của tháng, cập nhật thông tin lương
+          monthSalary.salary = salary;
+          monthSalary.bonus = bonus;
+        }
+      }
+      // * Lưu lại thông tin cập nhật
+      await foundUser.save();
+      res.status(200).send("Thông tin lương đã được cập nhật");
+    } else {
+      res.status(404).send("Không tìm thấy người dùng");
+    }
+  } catch (error) {
+    console.error(`❌ Lỗi: ${error}`);
+    res.status(500).send(error.message);
+  }
+});
 module.exports = router;
 
 // ! Cập nhật thông tin nhân viên trong các đơn hàng

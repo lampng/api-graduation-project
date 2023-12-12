@@ -66,7 +66,7 @@ router.get("/popular-services", async (req, res) => {
     });
   }
 });
-router.get("/revenue", async (req, res) => {
+router.get("/revenueOfStaff", async (req, res) => {
   try {
     
   } catch (error) {

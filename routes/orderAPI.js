@@ -103,6 +103,7 @@ router.get("/list", async (req, res) => {
                 select: 'name email role job address phone gender citizenIdentityCard birthday avatar status', // Chọn các trường cần hiển thị từ bảng user
             }).then((doc) => {
                 if (doc) {
+
                     const ordersWithDays = doc.map(order => {
                         const startedMoment = moment(order.started, "DD/MM/YYYY");
                         const deadlineMoment = moment(order.deadline, "DD/MM/YYYY");
@@ -117,7 +118,7 @@ router.get("/list", async (req, res) => {
                         };
                     });
                     ordersWithDays.sort((a, b) => {
-                        return new Date(b.createdAt) - new Date(a.createdAt);
+                        return new Date(a.createdAt) - new Date(b.createdAt);
                       });
                     console.log(`✅ Gọi danh sách đơn hàng thành công`.green.bold);
                     res.status(200).json(ordersWithDays);
