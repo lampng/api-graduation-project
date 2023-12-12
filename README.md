@@ -102,8 +102,8 @@
 
 | QUERY | Type     | Description                |
 | :-------- | :------- | :------------------------- |
-| `year` | `string` | **Required**.|
-| `month` | `string` | **Required**.|
+| `year` | `string` | **Not required**.|
+| `month` | `string` | **Not required**.|
 
 - Cập nhập lương người dùng
 ```http
