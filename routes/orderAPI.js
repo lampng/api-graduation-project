@@ -108,12 +108,12 @@ router.get("/list", async (req, res) => {
                         const startedMoment = moment(order.started, "DD/MM/YYYY");
                         const deadlineMoment = moment(order.deadline, "DD/MM/YYYY");
 
-                        // Tính toán số ngày giữa hai ngày
+                        // * Tính toán số ngày giữa hai ngày
                         const daysDifference = deadlineMoment.diff(startedMoment, 'days');
 
-                        // Thêm vào đối tượng đơn hàng
+                        // * Thêm vào đối tượng đơn hàng
                         return {
-                            ...order._doc, // Sử dụng _doc để lấy dữ liệu thô của Mongoose document
+                            ...order._doc, // * Sử dụng _doc để lấy dữ liệu thô của Mongoose document
                             daysBetween: daysDifference
                         };
                     });

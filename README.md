@@ -81,6 +81,61 @@
   GET /user/list
 ```
 
+- Thêm lương cho người dùng
+```http
+  POST /user/salary/:id
+```
+| Body | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `year` | `string` | **Required**.|
+| `month` | `string` | **Required**.|
+| `salary` | `number` | **Required**.|
+| `bonus` | `number` | **Required**.|
+
+- Gọi danh sách lương người dùng
+```http
+  GET /user/salary/:id
+```
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `id` | `string` | **Required**.|
+
+| QUERY | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `year` | `string` | **Required**.|
+| `month` | `string` | **Required**.|
+
+- Cập nhập lương người dùng
+```http
+  PUT /user/salary/:id
+```
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `id` | `string` | **Required**.|
+
+| QUERY | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `year` | `string` | **Required**.|
+| `month` | `string` | **Required**.|
+
+| Body | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `salary` | `number` | **Required**.|
+| `bonus` | `number` | **Required**.|
+
+- Xoá lương người dùng
+```http
+  DELETE /user/salary/:id
+```
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `id` | `string` | **Required**.|
+
+| QUERY | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `year` | `string` | **Required**.|
+| `month` | `string` | **Required**.|
+
 ### CLIENT
 
 - Thêm khách hàng mới
