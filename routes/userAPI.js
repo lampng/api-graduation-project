@@ -29,6 +29,9 @@ router.get('/', (req, res) => {
         'Gọi danh sách lương người dùng(GET):': `https://api-graduation-project-production.up.railway.app/user/salary/:id`,
         'Cập nhập lương người dùng(PUT):': `https://api-graduation-project-production.up.railway.app/user/salary/:id`,
         'Xoá lương người dùng(DELETE):': `https://api-graduation-project-production.up.railway.app/user/salary/:id`,
+        'Quên mật khẩu(GET):': `https://api-graduation-project-production.up.railway.app/user/forgot-password/`,
+        'Xác nhận mã được gửi về mail(POST):': `https://api-graduation-project-production.up.railway.app/user/verify-confirmation-code/`,
+        'Đặt lại mật khẩu mới(PUT):': `https://api-graduation-project-production.up.railway.app/user/reset-password/`,
     });
 });
 // TODO: Đăng ký người dùng
