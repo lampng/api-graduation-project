@@ -35,7 +35,7 @@ router.get("/list", async (req, res) => {
     const clients = await clientModels.find({});
 
     // TODO: Sắp xếp giảm dần
-    clients.sort((a, b) => a.createdAt - b.createdAt);
+    clients.sort((a, b) => b.createdAt - a.createdAt);
 
     //  * `creatorID` là dữ liệu từ bảng `userModels`.
     const creatorID = await userModels.find({});
