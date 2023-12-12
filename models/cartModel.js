@@ -25,6 +25,10 @@ const staffSchema = mongoose.Schema({
         require: true,
         ref: "user"
     },
+    serviceID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "service",
+    },
 }, {
     timestamps: true,
 });
@@ -44,10 +48,6 @@ const cartSchema = mongoose.Schema({
     services: [serviceSchema],
     staffs: [staffSchema],
     // * A hòn hiển thị tổng tiền dịch vụ bằng trường subTolal này!
-    // subTotal: {
-    //     type: Number,
-    //     require: true
-    // },
 }, {
     timestamps: true,
 });

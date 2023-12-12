@@ -21,21 +21,84 @@ router.get("/", (req, res) => {
         "Danh sách đơn hàng của người dùng(GET):": `https://api-graduation-project-production.up.railway.app/order/listOfUser/`,
     });
 });
-// TODO: ✅ Xác nhận đơn hàng 
-router.post("/comfirmOrder", async (req, res) => {
+// TODO: Xác nhận đơn hàng 
+// router.post("/comfirmOrder", async (req, res) => {
+//     const {
+//         userID,
+//         note,
+//         client,
+//         started,
+//         deadline,
+//         location,
+//     } = req.body;
+//     try {
+
+//         let cart = await cartModels.findOne({
+//             userID: userID
+//         })
+//         if (!cart) {
+//             return res.status(404).json({
+//                 success: false,
+//                 message: 'Giỏ hàng không tồn tại.'
+//             });
+//         }
+
+//         const newOrder = new orderModels({
+//             userID: cart.userID, //*Người tạo hoá đơn
+//             client: client,
+//             services: cart.services.map(service => ({
+//                 serviceID: service.serviceID,
+//             })),
+//             staffs: cart.staffs.map(staff => ({
+//                 staffID: staff.staffID,
+//             })),
+//             priceTotal: cart.subTotal,
+//             started: moment(started, "HH:mm DD/MM/YYYY").format("HH:mm DD/MM/YYYY"),
+//             deadline: moment(deadline, "DD/MM/YYYY").format("DD/MM/YYYY"),
+//             location: location,
+//             note: note,
+//         })
+//         await newOrder.save().then((doc) => {
+//             console.log(`✅ Đơn hàng đã được tạo`.green.bold);
+//         }).catch((error) => {
+//             console.log("🐼 ~ file: orderAPI.js:63 ~ awaitnewOrder.save ~ error:", error)
+//         });
+//         await cartModels.deleteOne({
+//             userID
+//         }).then((doc) => {
+//             console.log(`✅ Giỏ hàng của người dùng đã được xoá`.green.bold);
+//             res.status(200).json({
+//                 success: true,
+//                 message: 'Giỏ hàng của người dùng đã được xoá.'
+//             });
+//         }).catch((error) => {
+//             console.log("🐼 ~ file: orderAPI.js:74 ~ router.post ~ error:", error)
+//         });
+
+//     } catch (error) {
+//         console.log("🐼 ~ file: orderAPI.js:78 ~ router.post ~ error:", error)
+//         return res.status(500).json({
+//             success: false,
+//             message: 'Đã xảy ra lỗi khi tạo đơn hàng.'
+//         });
+//     }
+// })
+router.post("/confirmOrder/:id", async (req, res) => {
     const {
-        userID,
         note,
         client,
         started,
         deadline,
         location,
+        serviceID
     } = req.body;
-    try {
+    const userID = req.params.id;
 
+    try {
         let cart = await cartModels.findOne({
             userID: userID
-        })
+        });
+
         if (!cart) {
             return res.status(404).json({
                 success: false,
@@ -43,46 +106,58 @@ router.post("/comfirmOrder", async (req, res) => {
             });
         }
 
+        // Tìm dịch vụ cần xác nhận từ giỏ hàng
+        const serviceToConfirm = cart.services.find(service => service.serviceID.toString() === serviceID);
+        console.log(`❕  ${serviceToConfirm}`.cyan.bold);
+        if (!serviceToConfirm) {
+            return res.status(404).json({
+                success: false,
+                message: 'Dịch vụ không tồn tại trong giỏ hàng.'
+            });
+        }
+        const staffsOfService = cart.staffs.filter(staff => staff.serviceID.toString() === serviceID);
+
         const newOrder = new orderModels({
-            userID: cart.userID, //*Người tạo hoá đơn
+            userID: userID,
             client: client,
-            services: cart.services.map(service => ({
-                serviceID: service.serviceID,
+            services: [{
+                serviceID: serviceToConfirm.serviceID
+            }],
+            staffs: staffsOfService.map(staff => ({
+                staffID: staff.staffID
             })),
-            staffs: cart.staffs.map(staff => ({
-                staffID: staff.staffID,
-            })),
-            priceTotal: cart.subTotal,
+            priceTotal: serviceToConfirm.price, // Thay đổi giá thành phần này nếu giá dịch vụ khác với giá tổng giỏ hàng
             started: moment(started, "HH:mm DD/MM/YYYY").format("HH:mm DD/MM/YYYY"),
             deadline: moment(deadline, "DD/MM/YYYY").format("DD/MM/YYYY"),
             location: location,
             note: note,
-        })
-        await newOrder.save().then((doc) => {
-            console.log(`✅ Đơn hàng đã được tạo`.green.bold);
-        }).catch((error) => {
-            console.log("🐼 ~ file: orderAPI.js:63 ~ awaitnewOrder.save ~ error:", error)
         });
-        await cartModels.deleteOne({
-            userID
-        }).then((doc) => {
-            console.log(`✅ Giỏ hàng của người dùng đã được xoá`.green.bold);
-            res.status(200).json({
-                success: true,
-                message: 'Giỏ hàng của người dùng đã được xoá.'
-            });
-        }).catch((error) => {
-            console.log("🐼 ~ file: orderAPI.js:74 ~ router.post ~ error:", error)
+
+        await newOrder.save();
+
+        // * Xoá dịch vụ và nhân viên có serviceID tương tự từ giỏ hàng
+        await cartModels.findOneAndUpdate(
+            { userID: userID },
+            { 
+                $pull: { 
+                    services: { serviceID: serviceToConfirm.serviceID },
+                    staffs: { serviceID: serviceToConfirm.serviceID }
+                } 
+            }
+        );
+        return res.status(200).json({
+            success: true,
+            message: 'Đã xác nhận đơn hàng và xoá dịch vụ khỏi giỏ hàng.'
         });
 
     } catch (error) {
-        console.log("🐼 ~ file: orderAPI.js:78 ~ router.post ~ error:", error)
+        console.log("Error:", error);
         return res.status(500).json({
             success: false,
-            message: 'Đã xảy ra lỗi khi tạo đơn hàng.'
+            message: 'Đã xảy ra lỗi khi xác nhận đơn hàng.'
         });
     }
-})
+});
 // TODO: ✅ Danh sách đơn hàng 
 router.get("/list", async (req, res) => {
     try {
@@ -105,7 +180,7 @@ router.get("/list", async (req, res) => {
                 if (doc) {
 
                     const ordersWithDays = doc.map(order => {
-                        const startedMoment = moment(order.started, "DD/MM/YYYY");
+                        const startedMoment = moment(order.started, "HH:mm DD/MM/YYYY");
                         const deadlineMoment = moment(order.deadline, "DD/MM/YYYY");
 
                         // * Tính toán số ngày giữa hai ngày
@@ -119,7 +194,7 @@ router.get("/list", async (req, res) => {
                     });
                     ordersWithDays.sort((a, b) => {
                         return new Date(a.createdAt) - new Date(b.createdAt);
-                      });
+                    });
                     console.log(`✅ Gọi danh sách đơn hàng thành công`.green.bold);
                     res.status(200).json(ordersWithDays);
                 } else {
@@ -180,7 +255,7 @@ router.get("/listOfUser/:id", async (req, res) => {
                     });
                     daysDifference.sort((a, b) => {
                         return new Date(b.createdAt) - new Date(a.createdAt);
-                      });
+                    });
                     console.log(`✅ Gọi danh sách đơn hàng của người dùng thành công`.green.bold);
                     res.status(200).json(ordersWithDays);
                 }
@@ -254,6 +329,4 @@ router.put("/update/:id", async (req, res) => {
     }
 })
 // TODO: Hiển thị công việc của người dùng trong đơn hàng
-
-
 module.exports = router;

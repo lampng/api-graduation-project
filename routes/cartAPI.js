@@ -128,12 +128,72 @@ router.delete("/removeServiceFromCart", async (req, res) => {
     });
   }
 })
+
+// ! thêm 1 lần nhiều nhân viên
 // TODO: ✅ Thêm nhân viên thực hiện công việc vào giỏ hàng 
-router.post("/addStaffToCart", async (req, res) => {
+// router.post("/addStaffToCart", async (req, res) => {
+//   const {
+//     userID,
+//     staffID
+//   } = req.body;
+//   try {
+//     // * Tìm giỏ hàng của người dùng
+//     let cart = await cartModels.findOne({
+//       userID: userID
+//     })
+//     // * Nếu giỏi hàng người dùng chưa có nhân viên, tạo mới bảng nhân viên
+//     if (!cart) {
+//       cart = new cartModels({
+//         userID,
+//         staffs: [],
+//       });
+//     }
+//     let staffDetail = await userModels.findById(staffID)
+//     // * Kiểm tra xem nhân viên có tồn tại không
+//     if (!staffDetail) {
+//       return res.status(404).json({
+//         success: false,
+//         message: 'Nhân viên không tồn tại.'
+//       });
+//     }
+
+//     // * Kiểm tra xem nhân viên đã tồn tại trong giỏ hàng chưa
+//     const existingServiceIndex = cart.staffs.findIndex(staffs => staffs.staffID.toString() === staffID);
+//     if (existingServiceIndex !== -1) {
+//       return res.status(400).json({
+//         success: false,
+//         message: 'Nhân viên đã tồn tại trong giỏ hàng.'
+//       });
+//     }
+//     // * Thêm nhân viên thực hiện công việc vào giỏ hàng
+//     cart.staffs.push({
+//       staffID: staffDetail._id,
+//     });
+//     await cart.save().then((doc) => {
+//       console.log(`✅ Thêm nhân viên thực hiện thành công`.green.bold);
+//       res.status(200).json({
+//         success: true,
+//         message: 'Nhân viên đã được thêm vào giỏ hàng.',
+//         data: doc
+//       });
+//     }).catch((error) => {
+//       console.log("🐼 ~ file: cartAPI.js:177 ~ awaitcart.save ~ error:", error)
+//     });
+
+//   } catch (error) {
+//     console.log(`❗  ${error}`.bgRed.white.strikethrough.bold);
+//     res.status(400).json({
+//       type: "Không hợp lệ",
+//       err: error
+//     })
+//   }
+// })
+router.post("/addStaffToCart/:id", async (req, res) => {
   const {
-    userID,
+    serviceID,
     staffID
   } = req.body;
+  const userID = req.params.id
   try {
     // * Tìm giỏ hàng của người dùng
     let cart = await cartModels.findOne({
@@ -154,10 +214,18 @@ router.post("/addStaffToCart", async (req, res) => {
         message: 'Nhân viên không tồn tại.'
       });
     }
+    const serviceDetail = await ServiceModels.findById(serviceID);
+    // * Kiểm tra xem dịch vụ trong giỏ hàng có tồn tại không
+    if (!serviceDetail) {
+      return res.status(404).json({
+        success: false,
+        message: 'Dịch vụ không tồn tại trong giỏ hàng.'
+      });
+    }
 
     // * Kiểm tra xem nhân viên đã tồn tại trong giỏ hàng chưa
-    const existingServiceIndex = cart.staffs.findIndex(staffs => staffs.staffID.toString() === staffID);
-    if (existingServiceIndex !== -1) {
+    const existingStaffIndex = cart.staffs.findIndex(staff => staff.staffID.toString() === staffID && staff.serviceID.toString() === serviceID);
+    if (existingStaffIndex !== -1) {
       return res.status(400).json({
         success: false,
         message: 'Nhân viên đã tồn tại trong giỏ hàng.'
@@ -166,6 +234,7 @@ router.post("/addStaffToCart", async (req, res) => {
     // * Thêm nhân viên thực hiện công việc vào giỏ hàng
     cart.staffs.push({
       staffID: staffDetail._id,
+      serviceID: serviceDetail._id
     });
     await cart.save().then((doc) => {
       console.log(`✅ Thêm nhân viên thực hiện thành công`.green.bold);
@@ -186,12 +255,14 @@ router.post("/addStaffToCart", async (req, res) => {
     })
   }
 })
+
 // TODO: ✅ Xoá nhân viên thực hiện công việc khỏi giỏ hàng 
-router.delete("/removeStaffFromCart", async (req, res) => {
+router.delete("/removeStaffFromCart/:id", async (req, res) => {
   const {
-    userID,
+    serviceID,
     staffID
   } = req.body;
+  const userID = req.params.id
   try {
     // * Tìm giỏ hàng của người dùng
     let cart = await cartModels.findOne({
@@ -204,7 +275,7 @@ router.delete("/removeStaffFromCart", async (req, res) => {
       });
     }
     //* Tìm Vị trí của dịch vụ trong mảng services của giỏ hàng
-    const staffIndex = cart.staffs.findIndex(staff => staff.staffID.toString() === staffID);
+    const staffIndex = cart.staffs.findIndex(staff => staff.staffID.toString() === staffID && staff.serviceID.toString() === serviceID);
     if (staffIndex === -1) {
       return res.status(404).json({
         success: false,

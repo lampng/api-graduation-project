@@ -73,7 +73,6 @@ router.post("/create/", upload.single("image"), async (req, res) => {
     });
   }
 })
-// ! Sắp xếp giảm dần
 // TODO: ✅ Gọi danh sách dịch vụ
 router.get("/list", async (req, res) => {
   try {
@@ -160,26 +159,6 @@ router.put("/update/:id", upload.single("image"), async (req, res) => {
   }
 });
 // TODO: ✅ Xoá dịch vụ ([:id] = id của dịch vụ )
-// router.delete("/delete/:id", async (req, res) => {
-//   try {
-//     const service = await ServiceModels.findByIdAndDelete(req.params.id);
-
-//     // Xoá tệp trên Cloudinary liên quan đến người dùng
-//     if (service.cloudinary_id) {
-//       await cloudinary.uploader.destroy(service.cloudinary_id);
-//       console.log(
-//         `✅ Đã xoá tệp trên Cloudinary của dịch vụ: ${service.cloudinary_id}`
-//       );
-//     }
-//     console.log(`✅ Xoá thành công`);
-//     res.status(200).json(service);
-//   } catch (error) {
-//     console.log(`❗  Không tìm thấy dịch vụ`.bgRed.white.strikethrough.bold);
-//     res.status(500).json({
-//       message: "Không tìm thấy dịch vụ",
-//     });
-//   }
-// });
 router.delete("/delete/:id", async (req, res) => {
   try {
     // * Kiểm tra xem dịch vụ có nằm trong hóa đơn nào không

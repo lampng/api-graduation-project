@@ -276,28 +276,28 @@
 
 - Thêm nhân viên vào giỏ hàng
 ```http
-  POST /cart/addStaffToCart
+  POST /cart/addStaffToCart/:id = id người dùng
 ```
 
 | Body | Type     | Description                |
 | :-------- | :------- | :------------------------- |
-| `userID` | `string` | **Required**.|
+| `serviceID` | `string` | **Required**.|
 | `staffID` | `string` | **Required**.|
 
 - Xoá nhân viên khỏi giỏ hàng
 ```http
-  DELETE /cart/removeStaffFromCart
+  DELETE /cart/removeStaffFromCart/:id = id người dùng
 ```
 
 | Body | Type     | Description                |
 | :-------- | :------- | :------------------------- |
-| `userID` | `string` | **Required**.|
+| `serviceID` | `string` | **Required**.|
 | `staffID` | `string` | **Required**.|
 
 
 - Gọi danh sách giỏ hàng của người dùng
 ```http
-  GET /cart/list/${id} = id người dùng
+  GET /cart/list/:id = id người dùng
 ```
 
 | Parameter | Type     | Description                |
@@ -307,12 +307,12 @@
 
 - Xác nhận đơn hàng
 ```http
-  POST /order/comfirmOrder
+  POST /order/comfirmOrder/:id = id Người dùng
 ```
 
 | Body | Type     | Description                |
 | :-------- | :------- | :------------------------- |
-| `userID` | `string` | **Required**. userID của người tạo đơn|
+| `serviceID` | `string` | **Required**. Id của dịch vụ muốn xác nhận|
 | `client` | `string` | **Required**. khách hàng|
 | `started` | `string` | **Required**.DD/MM/YYYY|
 | `deadline` | `string` | **Required**.DD/MM/YYYY|
@@ -337,7 +337,7 @@
 | Body | Type     | Description                |
 | :-------- | :------- | :------------------------- |
 | `status` | `string` | **Not required**. Default: 'Chưa thực hiện'|
-| `started` | `string` | **Required**. DD/MM/YYYY|
+| `started` | `string` | **Required**. HH:mm DD/MM/YYYY|
 | `deadline` | `string` | **Required**.DD/MM/YYYY|
 | `location` | `string` | **Required**.|
 | `note` | `string` | **Not required**. ghi chú|

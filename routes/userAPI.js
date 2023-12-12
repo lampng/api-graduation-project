@@ -1226,7 +1226,6 @@ router.put("/update/:id", upload.single("image"), async (req, res) => {
           new: true,
         })
         .then((doc) => {
-          updateOrdersWithStaffInfo(id, data)
           res.json({
             status: "Cập nhập người (hình ảnh) dùng thành công",
           });
@@ -1315,34 +1314,6 @@ router.put("/change-password/:id", async (req, res) => {
   }
 });
 // TODO: ✅ Xoá người dùng ([:id] = id của người dùng)
-// router.delete("/delete/:id", async (req, res) => {
-//   try {
-//     const {
-//       id
-//     } = req.params;
-//     // Xoá người dùng
-//     const user = await userModels.findByIdAndDelete(id);
-//     if (!user) {
-//       return res.status(404).json({
-//         message: `Không tìm thấy người dùng`,
-//       });
-//     }
-//     // Xoá tệp trên Cloudinary liên quan đến người dùng
-//     if (user.cloudinary_id) {
-//       await cloudinary.uploader.destroy(user.cloudinary_id);
-//       console.log(
-//         `✅ Đã xoá tệp trên Cloudinary của người dùng: ${user.cloudinary_id}`
-//       );
-//     }
-//     console.log(`✅ Xoá thành công`);
-//     res.status(200).json(user);
-//   } catch (error) {
-//     console.log(`❗  ${error.message}`.bgRed.white.strikethrough.bold);
-//     res.status(500).json({
-//       message: error.message,
-//     });
-//   }
-// });
 router.delete("/delete/:id", async (req, res) => {
   try {
     // * Kiểm tra xem người dùng có nằm trong hóa đơn nào không
@@ -1510,9 +1481,11 @@ router.get("/salary/:id", async (req, res) => {
     }
   } catch (error) {
     console.error(`❌ Lỗi: ${error}`);
+    
+    console.log()
     res.status(404).json({
       status: false,
-      message: error.message,
+      message: `🐼 ~ file: userAPI.js:1485 ~ router.get ~ error: ${error}`, 
     });
   }
 });
@@ -1580,10 +1553,10 @@ router.delete("/salary/:userId", async (req, res) => {
         const monthIndex = yearSalary.months.findIndex(salaryItem => salaryItem.month === month);
 
         if (monthIndex !== -1) {
-          // Nếu tìm thấy thông tin lương của tháng, xoá thông tin đó
+          // * Nếu tìm thấy thông tin lương của tháng, xoá thông tin đó
           yearSalary.months.splice(monthIndex, 1);
 
-          // Lưu lại thông tin cập nhật
+          // * Lưu lại thông tin cập nhật
           await foundUser.save();
           return res.status(200).json({
             status: true,
@@ -1611,24 +1584,3 @@ router.delete("/salary/:userId", async (req, res) => {
   }
 });
 module.exports = router;
-
-// ! Cập nhật thông tin nhân viên trong các đơn hàng
-async function updateOrdersWithStaffInfo(staffID, newStaffInfo) {
-  try {
-    // Tìm và cập nhật các đơn hàng có chứa staffID
-    const updateResult = await orderModel.updateMany({
-        "staffs.staffID": staffID
-      }, // Điều kiện tìm đơn hàng có staffID
-      {
-        $set: {
-          "staffs.$": newStaffInfo
-        }
-      } // Cập nhật thông tin nhân viên mới
-    );
-
-    return updateResult;
-  } catch (error) {
-    console.error("Error updating orders with staff info:", error);
-    throw error;
-  }
-}
