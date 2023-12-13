@@ -1,7 +1,7 @@
 # API GRADUATION PROJECT
  - API LINK: https://api-graduation-project-production.up.railway.app/
-
-## API Reference
+## Overview
+API này đóng vai trò là phần phụ trợ cho dự án tốt nghiệp, cung cấp các endpoints để quản lý người dùng, thông tin khách hàng, dịch vụ, giỏ hàng và đơn đặt hàng.
 
 ### USER
 
@@ -16,7 +16,6 @@
 | `role` | `string` | **Required**.|
 | Nếu `role` có giá trị là là `Nhân viên` thì có thêm:|
 | `job` | `string` | **Required**.|
-
 
 - Đăng nhập
 ```http
