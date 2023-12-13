@@ -1977,7 +1977,7 @@ body {
                         >
                           <tr>
                             <td align="left" class="es-p20">
-                              <h3>Xin chào, ${req.body.email}</h3>
+                              <h3>Xin chào, ${req.query.email}</h3>
                               <p><br /></p>
                               <p>
                               Bạn đã yêu cầu đặt lại mật khẩu cho tài khoản của mình. Đây là mã xác nhận để hoàn tất quá trình đặt lại mật khẩu.
