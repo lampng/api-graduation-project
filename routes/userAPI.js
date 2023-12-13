@@ -1123,7 +1123,6 @@ router.post('/login', async (req, res) => {
         console.log('Lỗi server'.bgRed.white.strikethrough.bold);
     }
 });
-
 // TODO: Gọi danh sách người dùng
 router.get('/list', async (req, res) => {
     try {
@@ -1205,8 +1204,8 @@ router.put('/update/:id', upload.single('image'), async (req, res) => {
     }
 });
 //  TODO: Đổi mật khẩu
-// * Nhập mật khẩu cũ để xác thực, nếu đúng sẽ cho đặt mật khẩu mới
 router.put('/change-password/:id', async (req, res) => {
+    // * Nhập mật khẩu cũ để xác thực, nếu đúng sẽ cho đặt mật khẩu mới
     try {
         const { id } = req.params;
         const check = await userModels.findById(id);
@@ -1246,7 +1245,6 @@ router.put('/change-password/:id', async (req, res) => {
         console.log(`❗  ${error.message}`.bgRed.white.strikethrough.bold);
     }
 });
-
 // TODO: ✅ Xoá người dùng ([:id] = id của người dùng)
 router.delete('/delete/:id', async (req, res) => {
     try {
@@ -1289,7 +1287,7 @@ router.get('/logout/:id', (req, res) => {
 });
 // TODO: Quên mật khẩu
 router.get('/forgot-password', async (req, res) => {
-    const { email } = req.body;
+    const { email } = req.query;
     try {
         // Tìm người dùng với email
         const user = await userModels.findOne({ email });
@@ -1313,10 +1311,10 @@ router.get('/forgot-password', async (req, res) => {
         });
 
         var mailOptions = {
-          from: process.env.EMAIL,
-          to: req.body.email,
-          subject: 'Xác nhận đặt lại mật khẩu',
-          html: `
+            from: process.env.EMAIL,
+            to: email,
+            subject: 'Xác nhận đặt lại mật khẩu',
+            html: `
   <!DOCTYPE html>
 <html ⚡4email data-css-strict>
 <head>
@@ -2274,16 +2272,19 @@ body {
 </html>
 
   `,
-      };
+        };
 
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
                 console.log(error);
             } else {
                 console.log('Email sent');
+                res.status(200).json({
+                    status: true,
+                    message: 'Mã xác nhận cơ sở dữ liệu đã được gửi đến email của bạn',
+                });
             }
         });
-        res.status(200).json({ status: true, message: 'Mã xác nhận cơ sở dữ liệu đã được gửi đến email của bạn' });
     } catch (error) {
         console.log(`❗  Error: ${error.message}`.bgRed.white.strikethrough.bold);
     }
