@@ -19,6 +19,7 @@ router.get('/', (req, res) => {
         'Xoá đơn hàng(DELETE):': `https://api-graduation-project-production.up.railway.app/order/delete/`,
         'Danh sách đơn hàng(GET):': `https://api-graduation-project-production.up.railway.app/order/list/`,
         'Danh sách đơn hàng của người dùng(GET):': `https://api-graduation-project-production.up.railway.app/order/listOfUser/`,
+        'Danh sách công việc của nhân viên(GET):': `https://api-graduation-project-production.up.railway.app/order/listOfStaff/:StaffID`,
     });
 });
 // TODO: Xác nhận đơn hàng
