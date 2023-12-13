@@ -73,7 +73,7 @@
 ```http
   GET /user/forgot-password
 ```
-| Body | Type     | Description                |
+| QUERY | Type     | Description                |
 | :-------- | :------- | :------------------------- |
 | `email` | `string` | **Required**.|
 
@@ -329,6 +329,7 @@
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
 | `userID` | `string` | **Required**.|
+
 ### ORDER
 
 - Xác nhận đơn hàng
@@ -381,3 +382,11 @@
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
 | `userID` | `string` | **Required**.|
+
+- Danh sách công việc của nhân viên
+```http
+  GET /order/listOfStaff
+```
+| QUERY | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `staffID` | `string` | **Required**.|
