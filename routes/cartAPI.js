@@ -164,7 +164,7 @@ router.post('/addStaffToCart/:id', async (req, res) => {
                 message: 'Nhân viên đã tồn tại trong giỏ hàng.',
             });
         }
-        // * Thêm nhân viên thực hiện công việc vào giỏ hàng
+        // * Thêm nhân viên thực hiện công việc vào giỏ hàng 
         cart.staffs.push({
             staffID: staffDetail._id,
             serviceID: serviceDetail._id,
