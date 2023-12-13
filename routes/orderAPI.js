@@ -61,7 +61,7 @@ router.post('/confirmOrder/:id', async (req, res) => {
             staffs: staffsOfService.map((staff) => ({
                 staffID: staff.staffID,
             })),
-            priceTotal: serviceToConfirm.price, // Thay đổi giá thành phần này nếu giá dịch vụ khác với giá tổng giỏ hàng
+            priceTotal: serviceToConfirm.price,
             started: moment(started, 'HH:mm DD/MM/YYYY').format('HH:mm DD/MM/YYYY'),
             deadline: moment(deadline, 'DD/MM/YYYY').format('DD/MM/YYYY'),
             location: location,
@@ -300,11 +300,11 @@ router.put('/update/:id', async (req, res) => {
     try {
         let order = await orderModels.findById(id);
         const data = {
-            note: req.body.note || order.note,
+            // note: req.body.note || order.note,
             status: req.body.status || order.status,
-            started: moment(req.body.started, 'DD/MM/YYYY').format('DD/MM/YYYY') || order.started,
-            deadline: moment(req.body.deadline, 'DD/MM/YYYY').format('DD/MM/YYYY') || order.deadline,
-            location: req.body.location || order.location,
+            // started: moment(req.body.started, 'DD/MM/YYYY').format('DD/MM/YYYY') || order.started,
+            // deadline: moment(req.body.deadline, 'DD/MM/YYYY').format('DD/MM/YYYY') || order.deadline,
+            // location: req.body.location || order.location,
         };
         await orderModels
             .findByIdAndUpdate(id, data)
@@ -326,5 +326,27 @@ router.put('/update/:id', async (req, res) => {
         });
     }
 });
+// router.put('/updateStatus/:id', async (req, res) => {
+//     const id = req.params.id;
+//     try {
+//         let order = await orderModels.findById(id);
+//         const data = {
+//             status: req.body.status || order.status,
+//         };
+//         await orderModels
+//             .findByIdAndUpdate(id, data)
+//             .then((doc) => {
+//                 res.status(200).json({
+//                     status: 'Cập nhật ',
+//                 });
+//             })
+//             .catch((err) => {
+//                 console.log('🐼 ~ file: orderAPI.js:194 ~ awaitorderModels.findByIdAndUpdate ~ err:', err);
+//                 res.status(500).json({
+//                     status: 'Cập nhật trảng thằt bằi',
+//                 });
+//             });
+//     } catch (error) {
+// })
 // TODO: Hiển thị công việc của người dùng trong đơn hàng
 module.exports = router;

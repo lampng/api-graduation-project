@@ -167,7 +167,7 @@ router.post('/addStaffToCart/:id', async (req, res) => {
         // * Thêm nhân viên thực hiện công việc vào giỏ hàng 
         cart.staffs.push({
             staffID: staffDetail._id,
-            serviceID: serviceDetail._id,
+            serviceID: serviceDetail._id, 
         });
         await cart
             .save()
