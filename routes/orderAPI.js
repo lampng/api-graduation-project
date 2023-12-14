@@ -158,7 +158,7 @@ router.get('/list', async (req, res) => {
             "Chưa thực hiện": 1,
             "Đang thực hiện": 2,
             "Hoàn thành": 3,
-            "Huỷ": 4
+            "Đã huỷ": 4
         };
 
         const orders = await orderModels.find({
