@@ -94,64 +94,131 @@ router.post('/confirmOrder/:id', async (req, res) => {
 });
 // TODO: ✅ Danh sách đơn hàng
 //  ! Hiển thị đơn hàng có trạng thái chưa xác thực lên trên
+// router.get('/list', async (req, res) => {
+//     try {
+//         await orderModels
+//             .find({})
+//             .populate({
+//                 path: 'client',
+//                 model: 'client',
+//                 select: 'name address phone gender creatorID',
+//             })
+//             .populate({
+//                 path: 'services.serviceID',
+//                 model: 'service',
+//                 select: 'name description price image ',
+//             })
+//             .populate({
+//                 path: 'staffs.staffID',
+//                 model: 'user',
+//                 select: 'name email role job address phone gender citizenIdentityCard birthday avatar status', // Chọn các trường cần hiển thị từ bảng user
+//             })
+//             .then((doc) => {
+//                 if (doc) {
+//                     const ordersWithDays = doc.map((order) => {
+//                         const startedMoment = moment(order.started, 'HH:mm DD/MM/YYYY');
+//                         const deadlineMoment = moment(order.deadline, 'DD/MM/YYYY');
+
+//                         // * Tính toán số ngày giữa hai ngày
+//                         const daysDifference = deadlineMoment.diff(startedMoment, 'days');
+
+//                         // * Thêm vào đối tượng đơn hàng
+//                         return {
+//                             ...order._doc, // * Sử dụng _doc để lấy dữ liệu thô của Mongoose document
+//                             daysBetween: daysDifference,
+//                         };
+//                     });
+//                     ordersWithDays.sort((a, b) => {
+//                         return new Date(a.createdAt) - new Date(b.createdAt);
+//                     });
+//                     console.log(`✅ Gọi danh sách đơn hàng thành công`.green.bold);
+//                     res.status(200).json(ordersWithDays);
+//                 } else {
+//                     console.log(`❗ Không tìm thấy người dùng.`.red.bold);
+//                     res.status(500).json({
+//                         success: true,
+//                         message: '❗ Không tìm thấy người dùng.',
+//                     });
+//                 }
+//             })
+//             .catch((error) => {
+//                 console.log('🐼 ~ file: orderAPI.js:150 ~ router.get ~ error:', error);
+//             });
+//     } catch (error) {
+//         console.log(`❗ Không tìm thấy dữ liệu.`.red.bold);
+//         res.status(500).json({
+//             success: false,
+//             message: '❗ Không tìm thấy dữ liệu.',
+//         });
+//     }
+// });
 router.get('/list', async (req, res) => {
     try {
-        await orderModels
-            .find({})
-            .populate({
-                path: 'client',
-                model: 'client',
-                select: 'name address phone gender creatorID',
-            })
-            .populate({
-                path: 'services.serviceID',
-                model: 'service',
-                select: 'name description price image ',
-            })
-            .populate({
-                path: 'staffs.staffID',
-                model: 'user',
-                select: 'name email role job address phone gender citizenIdentityCard birthday avatar status', // Chọn các trường cần hiển thị từ bảng user
-            })
-            .then((doc) => {
-                if (doc) {
-                    const ordersWithDays = doc.map((order) => {
-                        const startedMoment = moment(order.started, 'HH:mm DD/MM/YYYY');
-                        const deadlineMoment = moment(order.deadline, 'DD/MM/YYYY');
+        const orderStatusPriority = {
+            "Chưa thực hiện": 1,
+            "Đang thực hiện": 2,
+            "Hoàn thành": 3,
+            "Huỷ": 4
+        };
 
-                        // * Tính toán số ngày giữa hai ngày
-                        const daysDifference = deadlineMoment.diff(startedMoment, 'days');
+        const orders = await orderModels.find({
+            status: {
+                $in: ["Chưa thực hiện", "Đang thực hiện", "Hoàn thành", "Đã huỷ"]
+            }
+        })
+        .populate({
+            path: 'client',
+            model: 'client',
+            select: 'name address phone gender creatorID',
+        })
+        .populate({
+            path: 'services.serviceID',
+            model: 'service',
+            select: 'name description price image',
+        })
+        .populate({
+            path: 'staffs.staffID',
+            model: 'user',
+            select: 'name email role job address phone gender citizenIdentityCard birthday avatar status',
+        })
+        .exec();
 
-                        // * Thêm vào đối tượng đơn hàng
-                        return {
-                            ...order._doc, // * Sử dụng _doc để lấy dữ liệu thô của Mongoose document
-                            daysBetween: daysDifference,
-                        };
-                    });
-                    ordersWithDays.sort((a, b) => {
-                        return new Date(a.createdAt) - new Date(b.createdAt);
-                    });
-                    console.log(`✅ Gọi danh sách đơn hàng thành công`.green.bold);
-                    res.status(200).json(ordersWithDays);
-                } else {
-                    console.log(`❗ Không tìm thấy người dùng.`.red.bold);
-                    res.status(500).json({
-                        success: true,
-                        message: '❗ Không tìm thấy người dùng.',
-                    });
-                }
-            })
-            .catch((error) => {
-                console.log('🐼 ~ file: orderAPI.js:150 ~ router.get ~ error:', error);
+        if (orders.length > 0) {
+            const ordersWithDays = orders.map((order) => {
+                const startedMoment = moment(order.started, 'HH:mm DD/MM/YYYY');
+                const deadlineMoment = moment(order.deadline, 'DD/MM/YYYY');
+                const daysDifference = deadlineMoment.diff(startedMoment, 'days');
+
+                return {
+                    ...order._doc,
+                    daysBetween: daysDifference,
+                    statusPriority: orderStatusPriority[order.status] || 0 // Gán thứ tự ưu tiên trạng thái
+                };
             });
+
+            ordersWithDays.sort((a, b) => {
+                // Sắp xếp theo thứ tự ưu tiên của trạng thái
+                return a.statusPriority - b.statusPriority || new Date(a.createdAt) - new Date(b.createdAt);
+            });
+
+            console.log(`✅ Gọi danh sách đơn hàng thành công`.green.bold);
+            res.status(200).json(ordersWithDays);
+        } else {
+            console.log(`❗ Không tìm thấy đơn hàng với trạng thái đã chỉ định.`.red.bold);
+            res.status(404).json({
+                success: false,
+                message: '❗ Không tìm thấy đơn hàng với trạng thái đã chỉ định.',
+            });
+        }
     } catch (error) {
-        console.log(`❗ Không tìm thấy dữ liệu.`.red.bold);
+        console.log(`❗ Lỗi khi truy vấn dữ liệu đơn hàng: ${error}`.red.bold);
         res.status(500).json({
             success: false,
-            message: '❗ Không tìm thấy dữ liệu.',
+            message: '❗ Đã xảy ra lỗi khi truy vấn dữ liệu đơn hàng.',
         });
     }
 });
+
 // TODO: ✅ Danh sách đơn hàng của người dùng
 router.get('/listOfUser/:id', async (req, res) => {
     const { id } = req.params;
@@ -326,27 +393,7 @@ router.put('/update/:id', async (req, res) => {
         });
     }
 });
-// router.put('/updateStatus/:id', async (req, res) => {
-//     const id = req.params.id;
-//     try {
-//         let order = await orderModels.findById(id);
-//         const data = {
-//             status: req.body.status || order.status,
-//         };
-//         await orderModels
-//             .findByIdAndUpdate(id, data)
-//             .then((doc) => {
-//                 res.status(200).json({
-//                     status: 'Cập nhật ',
-//                 });
-//             })
-//             .catch((err) => {
-//                 console.log('🐼 ~ file: orderAPI.js:194 ~ awaitorderModels.findByIdAndUpdate ~ err:', err);
-//                 res.status(500).json({
-//                     status: 'Cập nhật trảng thằt bằi',
-//                 });
-//             });
-//     } catch (error) {
-// })
+
+
 // TODO: Hiển thị công việc của người dùng trong đơn hàng
 module.exports = router;

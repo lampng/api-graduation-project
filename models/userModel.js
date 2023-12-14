@@ -95,81 +95,151 @@ const userSchema = mongoose.Schema({
   timestamps: true,
 });
 
-
 const user = mongoose.model("user", userSchema);
 
-// const usersWithoutSalary = [
-//   {
-//     name: "Alice Johnson",
-//     email: "alice@example.com",
-//     password: "alicepass789",
-//     role: "Nhân viên",
-//     job: "Marketing Manager",
-//     address: "789 Oak St, Village",
-//     phone: "1112223333",
-//     gender: "Nữ",
-//     citizenIdentityCard: "IJKL456789",
-//     birthday: "15/09/1988",
-//     active: "true",
-//     status: true
-//   },
-//   {
-//     name: "Robert Brown",
-//     email: "robert@example.com",
-//     password: "robertpass123",
-//     role: "Nhân viên",
-//     job: "Product Manager",
-//     address: "567 Pine St, Town",
-//     phone: "4445556666",
-//     gender: "Nam",
-//     citizenIdentityCard: "MNOP123456",
-//     birthday: "20/03/1982",
-//     active: "false",
-//     status: true
-//   },
-//   {
-//     name: "Sophie Wilson",
-//     email: "sophie@example.com",
-//     password: "sophiepass567",
-//     role: "Nhân viên",
-//     job: "Sales Representative",
-//     address: "321 Cedar St, City",
-//     phone: "777-888-9999",
-//     gender: "Nữ",
-//     citizenIdentityCard: "QRST789012",
-//     birthday: "10/11/1995",
-//     active: "true",
-//     status: true
-//   },
-//   {
-//     name: "Michael Davis",
-//     email: "michael@example.com",
-//     password: "michaelpass456",
-//     role: "Nhân viên",
-//     job: "Engineer",
-//     address: "987 Maple St, Suburb",
-//     phone: "2223334444",
-//     gender: "Nam",
-//     citizenIdentityCard: "UVWX345678",
-//     birthday: "25/07/1993",
-//     active: "false",
-//     status: true
-//   },
-//   {
-//     name: "Emily Thompson",
-//     email: "emily@example.com",
-//     password: "emilypass789",
-//     role: "Nhân viên",
-//     job: "HR Manager",
-//     address: "456 Walnut St, Town",
-//     phone: "5556667777",
-//     gender: "Nữ",
-//     citizenIdentityCard: "YZAB901234",
-//     birthday: "05/12/1980",
-//     active: "true",
-//     status: true
-//   }
-// ]
+const usersWithoutSalary = [
+  {
+    name: "Lành Thanh Tâm",
+    email: "thanhtam@gmail.com",
+    password: "OqNwCmHlW0dUDL",
+    role: "Nhân viên",
+    job: "Nhiếp Ảnh Gia",
+    address: "65 Hoàng Văn Thụ, Hải Châu, Đà Nẵng",
+    phone: "0866030644",
+    gender: "Nam",
+    citizenIdentityCard: "17011418463768402",
+    birthday: "6/30/2000",
+    active: "true",
+    status: true
+  },
+  {
+    name: "Nguyễn Duy Đạt",
+    email: "nguyeduydat@gmail.com",
+    password: "KW2cTlvHaf4J",
+    role: "Nhân viên",
+    job: "Nhiếp Ảnh Gia",
+    address: "23 Tiên Sơn 10, Hải Châu, Đà Nẵng",
+    phone: "0866055433",
+    gender: "Nam",
+    citizenIdentityCard: "16794953362191060",
+    birthday: "1/27/2000",
+    active: "true",
+    status: true
+  },
+  {
+    name: "Hoàng Nhã Khiêm",
+    email: "khiem@gmail.com",
+    password: "FWX3bFitM6xZtZe5AJ2",
+    role: "Nhân viên",
+    job: "Nhiếp Ảnh Gia",
+    address: "16 Phan Bội Châu, Hải Châu",
+    phone: "0866080446",
+    gender: "Nam",
+    citizenIdentityCard: "16726564704546670",
+    birthday: "5/2/2000",
+    active: "true",
+    status: true
+  },
+  {
+    name: "Nguyễn Ngọc Bảo Linh",
+    email: "baolinh@gmail.com",
+    password: "9AvMqbj",
+    role: "Nhân viên",
+    job: "Trợ lý Photographer",
+    address: "K183/17 Phan Thanh, Thanh Khê, Đà Nẵng",
+    phone: "0866114525",
+    gender: "Nữ",
+    citizenIdentityCard: "17336067739048938",
+    birthday: "10/4/2000",
+    active: "true",
+    status: true
+  },
+  {
+    name: "Bùi Hoàng Anh",
+    email: "hoanganh@gmail.com",
+    password: "WfO1qPsO5oJmSnwu",
+    role: "Nhân viên",
+    job: "Trợ lý Photographer",
+    address: "64K Nguyễn Sơn, Phường Hòa Cường Nam, Quận Hải Châu, Đà Nẵng",
+    phone: "0866117494",
+    gender: "Nam",
+    citizenIdentityCard: "16796065136663580",
+    birthday: "11/12/2000",
+    active: "true",
+    status: true
+  },
+  {
+    name: "Nguyễn Nhung",
+    email: "nhung@gmail.com",
+    password: "H7qFyexzs7yRtIify",
+    role: "Nhân viên",
+    job: "Make-up và Trang Phục",
+    address: "K511/29, Trưng Nữ Vương, Phường Hòa Thuận Tây, Quận Hải Châu, Đà Nẵng",
+    phone: "0866118442",
+    gender: "Nữ",
+    citizenIdentityCard: "17418879459718208",
+    birthday: "12/15/2000",
+    active: "true",
+    status: true
+  },
+  {
+    name: "Phan Thị Yến Nhi",
+    email: "yenhi@gmail.com",
+    password: "jyja8zjl9kv",
+    role: "Nhân viên",
+    job: "Make-up và Trang Phục",
+    address: "207 Trần Tấn Mới, TTTP Quận Hải Châu",
+    phone: "0866119770",
+    gender: "Nữ",
+    citizenIdentityCard: "17513673452766578",
+    birthday: "3/31/2000",
+    active: "true",
+    status: true
+  },
+  {
+    name: "Nguyễn Việt Thắng",
+    email: "thang@gmail.com",
+    password: "Lfa9tdas",
+    role: "Nhân viên",
+    job: "Hậu kỳ",
+    address: "09, Trường Thi 4, Phường Hòa Thuận Tây, Quận Hải Châu, Đà Nẵng",
+    phone: "0866131446",
+    gender: "Nam",
+    citizenIdentityCard: "17513673452766578",
+    birthday: "3/31/2000",
+    active: "true",
+    status: true
+  },
+  {
+    name: "Nguyễn Tấn Phát",
+    email: "tanphat@gmail.com",
+    password: "rVxL7S80K",
+    role: "Nhân viên",
+    job: "Chỉnh sửa ảnh",
+    address: "Lê Thanh Nghị, Phường Hòa Cường Bắc, Quận Hải Châu, Đà Nẵng",
+    phone: "00866144009",
+    gender: "Nam",
+    citizenIdentityCard: "17513673452766578",
+    birthday: "3/31/2000",
+    active: "true",
+    status: true
+  },
+  {
+    name: "Nguyễn Vĩnh Trường",
+    email: "nesif@gmail.com",
+    password: "4TxJJAWvEx",
+    role: "Nhân viên",
+    job: "Kỹ thuật",
+    address: "Đường 2/9, Phường Hòa Cường Bắc, Quận Hải Châu, Đà Nẵng",
+    phone: "0866151755",
+    gender: "Nam",
+    citizenIdentityCard: "17513673452766578",
+    birthday: "3/31/2000",
+    active: "true",
+    status: true
+  },
+  
+]
 // user.create(usersWithoutSalary)
 //   .then(createdUsers => {
 //     console.log("Dữ liệu người dùng đã được thêm vào cơ sở dữ liệu:", createdUsers);
