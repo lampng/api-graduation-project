@@ -139,7 +139,7 @@ router.get('/list', async (req, res) => {
             });
 
             ordersWithDays.sort((a, b) => {
-                return a.statusPriority - b.statusPriority || new Date(a.createdAt) - new Date(b.createdAt);
+                return a.statusPriority - b.statusPriority || new Date(b.createdAt) - new Date(a.createdAt);
             });
             console.log(`✅ Gọi danh sách đơn hàng thành công`.green.bold);
             res.status(200).json(ordersWithDays);
@@ -207,7 +207,7 @@ router.get('/listOfUser/:id', async (req, res) => {
                         };
                     });
                     ordersWithDays.sort((a, b) => {
-                        return a.statusPriority - b.statusPriority || new Date(a.createdAt) - new Date(b.createdAt);
+                        return a.statusPriority - b.statusPriority || new Date(b.createdAt) - new Date(a.createdAt);
                     });
                     console.log(`✅ Gọi danh sách đơn hàng của người dùng thành công`.green.bold);
                     res.status(200).json(ordersWithDays);
@@ -273,7 +273,7 @@ router.get('/listOfStaff', async (req, res) => {
                         };
                     });
                     ordersWithDays.sort((a, b) => {
-                        return a.statusPriority - b.statusPriority || new Date(a.createdAt) - new Date(b.createdAt);
+                        return a.statusPriority - b.statusPriority || new Date(b.createdAt) - new Date(a.createdAt);
                     });
                     console.log(`✅ Gọi danh sách đơn hàng của nhân viên thành công`.green.bold);
                     res.status(200).json(ordersWithDays);

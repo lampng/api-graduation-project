@@ -116,10 +116,10 @@ router.put("/update/:id", upload.single("image"), async (req, res) => {
       name: req.body.name || service.name,
       description: req.body.description || service.description,
       price: req.body.price || service.price,
-      imageQuantity: req.body.imageQuantity,
+      imageQuantity: req.body.imageQuantity || service.imageQuantity,
     };
     
-    // if (check && removeDiacriticsAndSpaces(req.body.name) === removeDiacriticsAndSpaces(service.name)) {
+    // if (check.name && removeDiacriticsAndSpaces(req.body.name) === removeDiacriticsAndSpaces(service.name)) {
     //   return res.status(500).json({
     //     Error: "Tên dịch vụ này đã tồn tại"
     //   });
