@@ -54,8 +54,6 @@ router.post('/addServiceToCart', async (req, res) => {
         cart.services.push({
             serviceID: serviceDetail._id,
         });
-        // const servicePrice = serviceDetail.price;
-        // cart.subTotal += servicePrice;
         await cart
             .save()
             .then((doc) => {

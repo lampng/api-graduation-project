@@ -17,6 +17,10 @@ const clientSchema = mongoose.Schema({
         ref: 'user',
         require: true
     },
+    birthday:{
+        type: String,
+        require: false
+    },
     gender:{
         type: String,
         require: false

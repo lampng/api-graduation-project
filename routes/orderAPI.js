@@ -141,7 +141,6 @@ router.get('/list', async (req, res) => {
             ordersWithDays.sort((a, b) => {
                 return a.statusPriority - b.statusPriority || new Date(a.createdAt) - new Date(b.createdAt);
             });
-
             console.log(`✅ Gọi danh sách đơn hàng thành công`.green.bold);
             res.status(200).json(ordersWithDays);
         } else {

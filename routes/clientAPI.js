@@ -87,6 +87,7 @@ router.post('/create', async (req, res) => {
                         name: req.body.name,
                         address: req.body.address,
                         phone: req.body.phone,
+                        birthday: moment(req.body.birthday, 'DD/MM/YYYY').format('DD/MM/YYYY'),
                         gender: req.body.gender,
                         creatorID: req.body.creatorID,
                     });
@@ -117,6 +118,7 @@ router.put('/update/:id', async (req, res) => {
             address: req.body.address,
             phone: req.body.phone,
             gender: req.body.gender,
+            birthday: moment(req.body.birthday, 'DD/MM/YYYY').format('DD/MM/YYYY'),
         };
         await clientModels
             .findByIdAndUpdate(id, data)
