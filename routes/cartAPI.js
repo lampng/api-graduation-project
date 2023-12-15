@@ -96,14 +96,22 @@ router.delete('/removeServiceFromCart', async (req, res) => {
         // //* Xoá dịch vụ khỏi mảng services
         cart.services.splice(serviceIndex, 1);
 
+        // Xoá nhân viên có serviceID giống với serviceID vừa được xoá
+        const removedStaffs = cart.staffs.filter((staff) => staff.serviceID.toString() === serviceID);
+
+        // Lọc những nhân viên có serviceID giống với serviceID của dịch vụ và xoá chúng khỏi mảng staffs
+        cart.staffs = cart.staffs.filter((staff) => staff.serviceID.toString() !== serviceID);
         // Lưu giỏ hàng mới vào cơ sở dữ liệu
         await cart
             .save()
             .then((doc) => {
-                console.log(`❎ Dịch vụ đã được xoá khỏi giỏ hàng`.green.bold);
+                console.log(
+                    `❎ Dịch vụ đã được xoá khỏi giỏ hàng và ${removedStaffs.length} nhân viên liên quan cũng đã được xoá`
+                        .green.bold,
+                );
                 res.status(200).json({
                     success: true,
-                    message: 'Dịch vụ đã được xoá khỏi giỏ hàng.',
+                    message: `Dịch vụ đã được xoá khỏi giỏ hàng và ${removedStaffs.length} nhân viên liên quan cũng đã được xoá.`,
                 });
             })
             .catch((error) => {
