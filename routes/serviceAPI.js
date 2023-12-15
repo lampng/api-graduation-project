@@ -118,12 +118,12 @@ router.put("/update/:id", upload.single("image"), async (req, res) => {
       price: req.body.price || service.price,
       imageQuantity: req.body.imageQuantity,
     };
-
-    if (check && removeDiacriticsAndSpaces(req.body.name) === removeDiacriticsAndSpaces(service.name)) {
-      return res.status(500).json({
-        Error: "Tên dịch vụ này đã tồn tại"
-      });
-    }
+    
+    // if (check && removeDiacriticsAndSpaces(req.body.name) === removeDiacriticsAndSpaces(service.name)) {
+    //   return res.status(500).json({
+    //     Error: "Tên dịch vụ này đã tồn tại"
+    //   });
+    // }
 
     if (req.file != null) {
       if (service.cloudinary_id != null) {
