@@ -150,6 +150,7 @@ router.delete('/delete/:id', async (req, res) => {
         // * Nếu khách hàng tồn tại trong hóa đơn, không cho phép xóa
         if (isClientInOrderAsClient) {
             return res.status(400).json({
+                status: false,
                 message: 'khách hàng này không thể xóa vì đã có trong hóa đơn.',
             });
         }
