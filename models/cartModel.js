@@ -13,7 +13,7 @@ const serviceSchema = mongoose.Schema({
     timestamps: true,
     _id: false
 });
-module.exports = mongoose.model("item", serviceSchema);
+module.exports = mongoose.model("itemService", serviceSchema);
  
 const staffSchema = mongoose.Schema({
     userID: {

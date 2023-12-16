@@ -37,6 +37,19 @@ router.get('/', (req, res) => {
 // TODO: Đăng ký người dùng
 router.post('/register', async (req, res) => {
     try {
+        // Báo lỗi khi nhập thiếu hoặc không nhập thông tin
+        if (
+            req.body.name == '' ||
+            req.body.email == '' ||
+            req.body.citizenIdentityCard == '' ||
+            req.body.role == '' ||
+            req.body.job == ''
+        ) {
+            return res.status(400).json({
+                success: false,
+                message: 'Vui lòng điền đầy đủ thông tin.',
+            });
+        }
         // * Kiểm tra đã có ai đã sử dụng email chưa
         const emailCheck = await userModels.findOne({
             email: req.body.email,
@@ -1078,6 +1091,11 @@ router.post('/register', async (req, res) => {
 // TODO: Đăng nhập
 router.post('/login', async (req, res) => {
     try {
+        if (req.body.email === '' || req.body.password === '') {
+            return res.status(400).json({
+                message: 'Vui lòng nhập đủ thông tin',
+            });
+        }
         const { email, password } = req.body;
         const check = await userModels.findOne({ email });
 
@@ -1086,7 +1104,6 @@ router.post('/login', async (req, res) => {
             console.log(`Sai email hoặc mật khẩu`.bgRed.white.strikethrough.bold);
             return;
         }
-
         const isMatch = await bcrypt.compare(password, check.password);
 
         if (isMatch) {
@@ -1155,6 +1172,12 @@ router.get('/list', async (req, res) => {
 router.get('/detail/:id', async (req, res) => {
     try {
         const { id } = req.params;
+        if (id == '') {
+            return res.status(400).json({
+                success: false,
+                message: 'Vui lòng điền đầy đủ thông tin.',
+            });
+        }
         const doc = await userModels.findById(id);
         console.log(`✅ Gọi chi tiết người dùng thành công`.green.bold);
         res.status(200).json(doc);
@@ -1169,7 +1192,18 @@ router.put('/update/:id', upload.single('image'), async (req, res) => {
     try {
         const { id } = req.params;
         const user = await userModels.findById(id);
-
+        if (
+            req.body.name === '' ||
+            req.body.email === '' ||
+            req.body.role === '' ||
+            req.body.job === '' ||
+            req.body.gender == '' ||
+            req.body.birthday == ''
+        ) {
+            return res.status(400).json({
+                message: 'Vui lòng nhập đủ thông tin',
+            });
+        }
         if (req.file != null) {
             // * Kiểm tra và cập nhật thông tin người dùng kèm hình ảnh
             if (user.cloudinary_id != null) {
@@ -1208,6 +1242,11 @@ router.put('/change-password/:id', async (req, res) => {
     // * Nhập mật khẩu cũ để xác thực, nếu đúng sẽ cho đặt mật khẩu mới
     try {
         const { id } = req.params;
+        if (id == '') {
+            return res.status(400).json({
+                message: 'Vui lòng nhập đủ thông tin',
+            });
+        }
         const check = await userModels.findById(id);
 
         // * Mã hoá mật khẩu mới
@@ -1248,6 +1287,11 @@ router.put('/change-password/:id', async (req, res) => {
 // TODO: ✅ Xoá người dùng ([:id] = id của người dùng)
 router.delete('/delete/:id', async (req, res) => {
     try {
+        if (req.params.id == '') {
+            return res.status(400).json({
+                message: 'Vui lòng nhập đủ thông tin',
+            });
+        }
         // * Kiểm tra xem người dùng có nằm trong hóa đơn nào không
         const isUserInOrder = await orderModels.findOne({
             'staffs.staffID': req.params.id,
@@ -1268,7 +1312,7 @@ router.delete('/delete/:id', async (req, res) => {
         console.log(`✅ Xoá thành công`);
         res.status(200).json({
             message: 'người dùng đã được xóa thành công',
-            service: user.name,
+            name: user.name,
         });
     } catch (error) {
         console.error(`❗ Không tìm thấy người dùng`);
@@ -1288,6 +1332,17 @@ router.get('/logout/:id', (req, res) => {
 // TODO: Quên mật khẩu
 router.get('/forgot-password', async (req, res) => {
     const { email } = req.query;
+    if (email == '') {
+        return res.status(400).json({
+            success: false,
+            message: 'Vui lòng nhập đủ thông tin',
+        });
+    }
+    if (email === '') {
+        return res.status(400).json({
+            message: 'Vui lòng nhập đủ thông tin',
+        });
+    }
     try {
         // Tìm người dùng với email
         const user = await userModels.findOne({ email });
@@ -2292,7 +2347,13 @@ body {
 // TODO: Verify Email
 router.post('/verify-confirmation-code', async (req, res) => {
     const { email, confirmationCode } = req.body;
-
+    req.body.job === '';
+    if (email === '' || confirmationCode === '') {
+        return res.status(400).json({
+            success: false,
+            message: 'Vui lòng nhập đủ thông tin',
+        });
+    }
     try {
         const user = await userModels.findOne({ email });
 
@@ -2315,6 +2376,12 @@ router.post('/verify-confirmation-code', async (req, res) => {
 //  TODO: Đổi mật khẩu
 router.put('/reset-password', async (req, res) => {
     const { email, newPassword } = req.body;
+    if (email === '' || newPassword === '') {
+        return res.status(400).json({
+            success: false,
+            message: 'Vui lòng nhập đủ thông tin',
+        });
+    }
     try {
         const user = await userModels.findOne({ email });
         if (!user) {
@@ -2335,7 +2402,12 @@ router.put('/reset-password', async (req, res) => {
 router.post('/salary/:id', async (req, res) => {
     const { year, month, salary, bonus } = req.body;
     const userId = req.params.id;
-
+    if (year === '' || month === '' || salary === '' || bonus === '') {
+        return res.status(400).json({
+            success: false,
+            message: 'Vui lòng nhập đủ thông tin',
+        });
+    }
     try {
         const foundUser = await userModels.findById(userId);
 
@@ -2391,7 +2463,12 @@ router.post('/salary/:id', async (req, res) => {
 router.get('/salary/:id', async (req, res) => {
     const userId = req.params.id;
     const { year, month } = req.query;
-
+    if (userId === '' ) {
+      return res.status(400).json({
+          success: false,
+          message: 'Vui lòng nhập đủ thông tin',
+      });
+  }
     try {
         const foundUser = await userModels.findById(userId);
 
@@ -2452,7 +2529,12 @@ router.put('/salary/:id', async (req, res) => {
     const userId = req.params.id;
     const { year, month } = req.query;
     const { salary, bonus } = req.body;
-
+    if (year === '' || month === '' || salary === '' || bonus === '') {
+      return res.status(400).json({
+          success: false,
+          message: 'Vui lòng nhập đủ thông tin',
+      });
+  }
     try {
         const foundUser = await userModels.findById(userId);
 
@@ -2496,7 +2578,12 @@ router.put('/salary/:id', async (req, res) => {
 router.delete('/salary/:userId', async (req, res) => {
     const userId = req.params.userId;
     const { year, month } = req.query;
-
+    if (year === '' || month === '' || userId === '') {
+      return res.status(400).json({
+          success: false,
+          message: 'Vui lòng nhập đủ thông tin',
+      });
+  }
     try {
         const foundUser = await userModels.findById(userId);
 

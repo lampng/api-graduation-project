@@ -23,11 +23,19 @@ router.get('/', (req, res) => {
     });
 });
 // TODO: Xác nhận đơn hàng
+// * : Tìm giỏ hàng từ params ? tìm dịch vụ : return Giỏ hàng không tồn tại
+// * : Tìm dịch vụ ? Xác nhận công việc thành công : không tìm thấy dịch vụ trong giỏ hàng
 router.post('/confirmOrder/:id', async (req, res) => {
     const { note, client, started, deadline, location, serviceID } = req.body;
     const userID = req.params.id;
 
     try {
+        if (client === '' || started === '' || deadline === '') {
+            return res.status(404).json({
+                success: false,
+                message: 'Vui lòng điền thông tin',
+            });
+        }
         let cart = await cartModels.findOne({
             userID: userID,
         });
@@ -163,6 +171,12 @@ router.get('/list', async (req, res) => {
 router.get('/listOfUser/:id', async (req, res) => {
     const { id } = req.params;
     try {
+        if (id == "" ) {
+            return res.status(400).json({
+                success: false,
+                message: 'Vui lòng điền đầy đủ thông tin.',
+            })
+        }
         const orderStatusPriority = {
             "Chưa thực hiện": 1,
             "Đang thực hiện": 2,
@@ -231,6 +245,12 @@ router.get('/listOfUser/:id', async (req, res) => {
 router.get('/listOfStaff', async (req, res) => {
     const { staffID } = req.query;
     try {
+        if (staffID == "" ) {
+            return res.status(400).json({
+                success: false,
+                message: 'Vui lòng điền đầy đủ thông tin.',
+            })
+        }
         const orderStatusPriority = {
             "Chưa thực hiện": 1,
             "Đang thực hiện": 2,
@@ -296,6 +316,12 @@ router.get('/listOfStaff', async (req, res) => {
 // TODO: ✅ Xoá đơn hàng
 router.delete('/delete/:id', async (req, res) => {
     try {
+        if (req.params.id == "" ) {
+            return res.status(400).json({
+                success: false,
+                message: 'Vui lòng điền đầy đủ thông tin.',
+            })
+        }
         await orderModels
             .findByIdAndDelete(req.params.id)
             .then((doc) => {
@@ -326,13 +352,15 @@ router.delete('/delete/:id', async (req, res) => {
 router.put('/update/:id', async (req, res) => {
     const id = req.params.id;
     try {
+        if (id == "" ) {
+            return res.status(400).json({
+                success: false,
+                message: 'Vui lòng điền đầy đủ thông tin.',
+            })
+        }
         let order = await orderModels.findById(id);
         const data = {
-            // note: req.body.note || order.note,
             status: req.body.status || order.status,
-            // started: moment(req.body.started, 'DD/MM/YYYY').format('DD/MM/YYYY') || order.started,
-            // deadline: moment(req.body.deadline, 'DD/MM/YYYY').format('DD/MM/YYYY') || order.deadline,
-            // location: req.body.location || order.location,
         };
         await orderModels
             .findByIdAndUpdate(id, data)

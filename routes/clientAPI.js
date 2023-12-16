@@ -73,9 +73,22 @@ router.get('/detail/:id', async (req, res) => {
 // TODO: Tạo khách hàng mới
 router.post('/create', async (req, res) => {
     try {
+        if (
+            req.body.name === '' ||
+            req.body.address === '' ||
+            // req.body.phone === '' ||
+            req.body.email === '' ||
+            req.body.gender === '' ||
+            req.body.birthday === ''
+        ) {
+            return res.status(500).json({
+                Error: 'Vui lòng không để trống thông tin',
+            });
+        }
         await userModels
             .findOne({
                 phone: req.body.phone,
+                email: req.body.email,
             })
             .then((data) => {
                 if (data) {

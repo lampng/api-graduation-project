@@ -22,6 +22,12 @@ router.get('/', (req, res) => {
 router.post('/addServiceToCart', async (req, res) => {
     const { userID, serviceID } = req.body;
     try {
+        if (userID == "" || serviceID == "") {
+            return res.status(400).json({
+                success: false,
+                message: 'Vui lòng điền đầy đủ thông tin.',
+            })
+        }
         // * Tìm giỏ hàng của người dùng
         let cart = await cartModels.findOne({
             userID: userID,
@@ -75,6 +81,12 @@ router.post('/addServiceToCart', async (req, res) => {
 router.delete('/removeServiceFromCart', async (req, res) => {
     const { userID, serviceID } = req.body;
     try {
+        if (userID == "" || serviceID == "") {
+            return res.status(400).json({
+                success: false,
+                message: 'Vui lòng điền đầy đủ thông tin.',
+            })
+        }
         // * Tìm giỏ hàng của người dùng
         let cart = await cartModels.findOne({
             userID: userID,
@@ -126,12 +138,17 @@ router.delete('/removeServiceFromCart', async (req, res) => {
     }
 });
 
-// ! thêm 1 lần nhiều nhân viên
 // TODO: ✅ Thêm nhân viên thực hiện công việc vào giỏ hàng
 router.post('/addStaffToCart/:id', async (req, res) => {
     const { serviceID, staffID } = req.body;
     const userID = req.params.id;
     try {
+        if (userID == "" || serviceID == "" || staffID == "") {
+            return res.status(400).json({
+                success: false,
+                message: 'Vui lòng điền đầy đủ thông tin.',
+            })
+        }
         // * Tìm giỏ hàng của người dùng
         let cart = await cartModels.findOne({
             userID: userID,
@@ -202,6 +219,12 @@ router.delete('/removeStaffFromCart/:id', async (req, res) => {
     const { serviceID, staffID } = req.body;
     const userID = req.params.id;
     try {
+        if (userID == "" || serviceID == "" || staffID == "") {
+            return res.status(400).json({
+                success: false,
+                message: 'Vui lòng điền đầy đủ thông tin.',
+            })
+        }
         // * Tìm giỏ hàng của người dùng
         let cart = await cartModels.findOne({
             userID: userID,
@@ -249,6 +272,12 @@ router.delete('/removeStaffFromCart/:id', async (req, res) => {
 router.get('/list/:id', async (req, res) => {
     const { id } = req.params;
     try {
+        if (id == "" ) {
+            return res.status(400).json({
+                success: false,
+                message: 'Vui lòng điền đầy đủ thông tin.',
+            })
+        }
         await cartModels
             .findOne({
                 userID: id,

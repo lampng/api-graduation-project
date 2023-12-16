@@ -21,7 +21,7 @@ const orderSchema = mongoose.Schema({
     }],
     staffs: [{
         staffID: {
-            type: mongoose.Schema.Types.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,   
             require: true,
             ref: "user",
         },

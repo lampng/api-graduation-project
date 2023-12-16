@@ -41,7 +41,6 @@ router.get("/popular-services", async (req, res) => {
       }
     ]);
 
-    // Vì truy vấn aggregate không trả về thông tin chi tiết của dịch vụ,
     // chúng ta cần tìm trong collection ServiceModels để lấy chi tiết.
     const servicesDetails = await serviceModels.find({
       '_id': {
