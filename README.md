@@ -5,7 +5,7 @@ API này đóng vai trò là phần phụ trợ cho dự án tốt nghiệp, cun
 
 ### USER
 
-- Đăng ký - chỉ dành cho quản lý và admin
+- Đăng ký - chỉ dành cho admin
 ```http
   POST /user/register
 ```
