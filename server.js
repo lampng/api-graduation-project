@@ -40,12 +40,12 @@ route(app)
 app.get("/", (req, res) => {
     res.json({
         status: "API ON",
-        "User:": `https://api-graduation-project-production.up.railway.app/user/`,
-        "Client:": `https://api-graduation-project-production.up.railway.app/client/`,
-        "Service:": `https://api-graduation-project-production.up.railway.app/service/`,
-        "Cart:": `https://api-graduation-project-production.up.railway.app/Cart/`,
-        "Order:": `https://api-graduation-project-production.up.railway.app/order/`,
-        "Statistic:": `https://api-graduation-project-production.up.railway.app/statistic/`,
+        "User(Người dùng):": `https://api-graduation-project-production.up.railway.app/user/`,
+        "Client(Khách hàng):": `https://api-graduation-project-production.up.railway.app/client/`,
+        "Service(Dịch vụ):": `https://api-graduation-project-production.up.railway.app/service/`,
+        "Cart(Đơn hàng):": `https://api-graduation-project-production.up.railway.app/Cart/`,
+        "Order(Công việc):": `https://api-graduation-project-production.up.railway.app/order/`,
+        "Statistic(Thống kê):": `https://api-graduation-project-production.up.railway.app/statistic/`,
     })
 })
 const APIroute = require('./routes/userAPI');

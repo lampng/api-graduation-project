@@ -105,33 +105,34 @@ router.post('/confirmOrder/:id', async (req, res) => {
 router.get('/list', async (req, res) => {
     try {
         const orderStatusPriority = {
-            "Chưa thực hiện": 1,
-            "Đang thực hiện": 2,
-            "Hoàn thành": 3,
-            "Đã hủy": 4
+            'Chưa thực hiện': 1,
+            'Đang thực hiện': 2,
+            'Hoàn thành': 3,
+            'Đã hủy': 4,
         };
 
-        const orders = await orderModels.find({
-            status: {
-                $in: ["Chưa thực hiện", "Đang thực hiện", "Hoàn thành", "Đã hủy"]
-            }
-        })
-        .populate({
-            path: 'client',
-            model: 'client',
-            select: 'name address phone gender creatorID',
-        })
-        .populate({
-            path: 'services.serviceID',
-            model: 'service',
-            select: 'name description price image',
-        })
-        .populate({
-            path: 'staffs.staffID',
-            model: 'user',
-            select: 'name email role job address phone gender citizenIdentityCard birthday avatar status',
-        })
-        .exec();
+        const orders = await orderModels
+            .find({
+                status: {
+                    $in: ['Chưa thực hiện', 'Đang thực hiện', 'Hoàn thành', 'Đã hủy'],
+                },
+            })
+            .populate({
+                path: 'client',
+                model: 'client',
+                select: 'name address phone gender creatorID',
+            })
+            .populate({
+                path: 'services.serviceID',
+                model: 'service',
+                select: 'name description price image',
+            })
+            .populate({
+                path: 'staffs.staffID',
+                model: 'user',
+                select: 'name email role job address phone gender citizenIdentityCard birthday avatar status',
+            })
+            .exec();
 
         if (orders.length > 0) {
             const ordersWithDays = orders.map((order) => {
@@ -142,7 +143,7 @@ router.get('/list', async (req, res) => {
                 return {
                     ...order._doc,
                     daysBetween: daysDifference,
-                    statusPriority: orderStatusPriority[order.status] || 0 // Gán thứ tự ưu tiên trạng thái
+                    statusPriority: orderStatusPriority[order.status] || 0, // Gán thứ tự ưu tiên trạng thái
                 };
             });
 
@@ -171,25 +172,25 @@ router.get('/list', async (req, res) => {
 router.get('/listOfUser/:id', async (req, res) => {
     const { id } = req.params;
     try {
-        if (id == "" ) {
+        if (id == '') {
             return res.status(400).json({
                 success: false,
                 message: 'Vui lòng điền đầy đủ thông tin.',
-            })
+            });
         }
         const orderStatusPriority = {
-            "Chưa thực hiện": 1,
-            "Đang thực hiện": 2,
-            "Hoàn thành": 3,
-            "Đã hủy": 4
+            'Chưa thực hiện': 1,
+            'Đang thực hiện': 2,
+            'Hoàn thành': 3,
+            'Đã hủy': 4,
         };
 
         await orderModels
             .find({
                 userID: id,
                 status: {
-                    $in: ["Chưa thực hiện", "Đang thực hiện", "Hoàn thành", "Đã hủy"]
-                }
+                    $in: ['Chưa thực hiện', 'Đang thực hiện', 'Hoàn thành', 'Đã hủy'],
+                },
             })
             .populate({
                 path: 'client',
@@ -217,7 +218,7 @@ router.get('/listOfUser/:id', async (req, res) => {
                         return {
                             ...order._doc,
                             daysBetween: daysDifference,
-                            statusPriority: orderStatusPriority[order.status] || 0 // Gán thứ tự ưu tiên trạng thái
+                            statusPriority: orderStatusPriority[order.status] || 0, // Gán thứ tự ưu tiên trạng thái
                         };
                     });
                     ordersWithDays.sort((a, b) => {
@@ -245,24 +246,24 @@ router.get('/listOfUser/:id', async (req, res) => {
 router.get('/listOfStaff', async (req, res) => {
     const { staffID } = req.query;
     try {
-        if (staffID == "" ) {
+        if (staffID == '') {
             return res.status(400).json({
                 success: false,
                 message: 'Vui lòng điền đầy đủ thông tin.',
-            })
+            });
         }
         const orderStatusPriority = {
-            "Chưa thực hiện": 1,
-            "Đang thực hiện": 2,
-            "Hoàn thành": 3,
-            "Đã hủy": 4
+            'Chưa thực hiện': 1,
+            'Đang thực hiện': 2,
+            'Hoàn thành': 3,
+            'Đã hủy': 4,
         };
         await orderModels
             .find({
                 'staffs.staffID': staffID,
                 status: {
-                    $in: ["Chưa thực hiện", "Đang thực hiện", "Hoàn thành", "Đã hủy"]
-                }
+                    $in: ['Chưa thực hiện', 'Đang thực hiện', 'Hoàn thành', 'Đã hủy'],
+                },
             })
             .populate({
                 path: 'client',
@@ -289,7 +290,7 @@ router.get('/listOfStaff', async (req, res) => {
                         return {
                             ...order._doc,
                             daysBetween: daysDifference,
-                            statusPriority: orderStatusPriority[order.status] || 0 // Gán thứ tự ưu tiên trạng thái
+                            statusPriority: orderStatusPriority[order.status] || 0, // Gán thứ tự ưu tiên trạng thái
                         };
                     });
                     ordersWithDays.sort((a, b) => {
@@ -316,11 +317,11 @@ router.get('/listOfStaff', async (req, res) => {
 // TODO: ✅ Xoá đơn hàng
 router.delete('/delete/:id', async (req, res) => {
     try {
-        if (req.params.id == "" ) {
+        if (req.params.id == '') {
             return res.status(400).json({
                 success: false,
                 message: 'Vui lòng điền đầy đủ thông tin.',
-            })
+            });
         }
         await orderModels
             .findByIdAndDelete(req.params.id)
@@ -352,11 +353,11 @@ router.delete('/delete/:id', async (req, res) => {
 router.put('/update/:id', async (req, res) => {
     const id = req.params.id;
     try {
-        if (id == "" ) {
+        if (id == '') {
             return res.status(400).json({
                 success: false,
                 message: 'Vui lòng điền đầy đủ thông tin.',
-            })
+            });
         }
         let order = await orderModels.findById(id);
         const data = {
@@ -382,7 +383,6 @@ router.put('/update/:id', async (req, res) => {
         });
     }
 });
-
 
 // TODO: Hiển thị công việc của người dùng trong đơn hàng
 module.exports = router;
