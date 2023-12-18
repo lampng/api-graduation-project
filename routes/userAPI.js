@@ -1327,7 +1327,7 @@ router.get('/logout/:id', (req, res) => {
     const id = req.params.id;
     req.sessionStore.destroy(id);
     console.log(`✅  Đăng xuất thành công`.green.bold);
-    return res.status(400).json({
+    return res.status(200).json({
         success: true,
         message: 'Đăng xuất thành công',
     });
