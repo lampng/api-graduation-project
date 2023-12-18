@@ -1328,8 +1328,8 @@ router.get('/logout/:id', (req, res) => {
     req.sessionStore.destroy(id);
     console.log(`✅  Đăng xuất thành công`.green.bold);
     return res.status(400).json({
-        success: true,
-        message: 'Đăng xuất thành công',
+      status: true,
+      message: 'Đăng xuất thành công',
     });
 });
 // TODO: Quên mật khẩu
