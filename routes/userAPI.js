@@ -1326,8 +1326,11 @@ router.delete('/delete/:id', async (req, res) => {
 router.get('/logout/:id', (req, res) => {
     const id = req.params.id;
     req.sessionStore.destroy(id);
-    res.send('Đăng xuất thành công');
     console.log(`✅  Đăng xuất thành công`.green.bold);
+    return res.status(400).json({
+        success: true,
+        message: 'Đăng xuất thành công',
+    });
 });
 // TODO: Quên mật khẩu
 router.get('/forgot-password', async (req, res) => {
@@ -2463,12 +2466,12 @@ router.post('/salary/:id', async (req, res) => {
 router.get('/salary/:id', async (req, res) => {
     const userId = req.params.id;
     const { year, month } = req.query;
-    if (userId === '' ) {
-      return res.status(400).json({
-          success: false,
-          message: 'Vui lòng nhập đủ thông tin',
-      });
-  }
+    if (userId === '') {
+        return res.status(400).json({
+            success: false,
+            message: 'Vui lòng nhập đủ thông tin',
+        });
+    }
     try {
         const foundUser = await userModels.findById(userId);
 
@@ -2530,11 +2533,11 @@ router.put('/salary/:id', async (req, res) => {
     const { year, month } = req.query;
     const { salary, bonus } = req.body;
     if (year === '' || month === '' || salary === '' || bonus === '') {
-      return res.status(400).json({
-          success: false,
-          message: 'Vui lòng nhập đủ thông tin',
-      });
-  }
+        return res.status(400).json({
+            success: false,
+            message: 'Vui lòng nhập đủ thông tin',
+        });
+    }
     try {
         const foundUser = await userModels.findById(userId);
 
@@ -2579,11 +2582,11 @@ router.delete('/salary/:userId', async (req, res) => {
     const userId = req.params.userId;
     const { year, month } = req.query;
     if (year === '' || month === '' || userId === '') {
-      return res.status(400).json({
-          success: false,
-          message: 'Vui lòng nhập đủ thông tin',
-      });
-  }
+        return res.status(400).json({
+            success: false,
+            message: 'Vui lòng nhập đủ thông tin',
+        });
+    }
     try {
         const foundUser = await userModels.findById(userId);
 
