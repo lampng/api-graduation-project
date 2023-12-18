@@ -2633,6 +2633,7 @@ router.delete('/salary/:userId', async (req, res) => {
 });
 module.exports = router;
 
+
 // ! Hàm lưu mã xác nhận vào cơ sở dữ liệu
 async function storeConfirmationCode(userId, code, expirationTimeInSeconds) {
     try {
